@@ -68,9 +68,20 @@ export default function RestaurantCard({
                     <span>{openingHours}</span>
                 </div>
 
-                <button className="text-white text-xs bg-red-700 px-2 py-0.5 rounded-full hover:bg-red-800 transition">
-                    MENU ANSEHEN
-                </button>
+                <Link href={`/restaurant/${id}/menu`} className="inline-flex">
+                    <div className="flex items-center bg-red-800 px-1.5 py-0.5 rounded-l-full">
+                        <Image
+                            src="/images/menu icon.png"
+                            alt="Menu"
+                            width={16}
+                            height={16}
+                            className="object-contain"
+                        />
+                    </div>
+                    <div className="text-white text-xs bg-red-700 px-2 py-0.5 rounded-r-full hover:bg-red-800 transition">
+                        MENU ANSEHEN
+                    </div>
+                </Link>
 
                 <p className="text-gray-700 text-xs mt-1 line-clamp-3">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy euismod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.

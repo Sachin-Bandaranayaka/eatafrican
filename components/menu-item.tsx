@@ -34,25 +34,31 @@ export default function MenuItem({
     };
 
     return (
-        <div className="relative bg-yellow-100 rounded-lg border-4 border-yellow-500 overflow-hidden">
-            {/* African mask decorative borders - using colored rectangles as placeholders */}
-            <div className="absolute top-0 left-0 bottom-0 w-[42px] bg-gradient-to-r from-yellow-800 to-amber-700 flex flex-col items-center pt-2">
-                <div className="w-8 h-8 bg-black rounded-full mb-1"></div>
-                <div className="w-8 h-10 bg-black rounded-b-lg mb-1"></div>
-                <div className="w-6 h-8 bg-black rounded-t-lg mb-1"></div>
-                <div className="w-8 h-8 bg-black rounded-full mb-1"></div>
-                <div className="w-6 h-10 bg-black rounded-b-lg"></div>
+        <div className="relative bg-yellow-100 rounded-lg border-[4px] border-yellow-600 overflow-hidden">
+            {/* African mask decorative borders */}
+            <div className="absolute left-0 top-0 h-full w-10">
+                <div className="absolute top-0 left-0 h-full w-full">
+                    <Image
+                        src="/images/masks/mask.png"
+                        alt="African mask"
+                        fill
+                        className="object-cover object-left"
+                    />
+                </div>
             </div>
-            <div className="absolute top-0 right-0 bottom-0 w-[42px] bg-gradient-to-l from-yellow-800 to-amber-700 flex flex-col items-center pt-2">
-                <div className="w-8 h-8 bg-black rounded-full mb-1"></div>
-                <div className="w-8 h-10 bg-black rounded-b-lg mb-1"></div>
-                <div className="w-6 h-8 bg-black rounded-t-lg mb-1"></div>
-                <div className="w-8 h-8 bg-black rounded-full mb-1"></div>
-                <div className="w-6 h-10 bg-black rounded-b-lg"></div>
+            <div className="absolute right-0 top-0 h-full w-10">
+                <div className="absolute top-0 right-0 h-full w-full transform scale-x-[-1]">
+                    <Image
+                        src="/images/masks/mask.png"
+                        alt="African mask"
+                        fill
+                        className="object-cover object-left"
+                    />
+                </div>
             </div>
 
             {/* Content with padding to accommodate the masks */}
-            <div className="ml-[45px] mr-[170px] py-3 px-2">
+            <div className="ml-12 mr-[170px] py-3 px-2">
                 <h3 className="font-bold text-gray-800">{name}</h3>
 
                 <div className="flex flex-row gap-1 items-center text-gray-600 text-xs">
