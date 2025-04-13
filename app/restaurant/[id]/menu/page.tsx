@@ -162,43 +162,45 @@ export default function RestaurantMenuPage({ params }: { params: Promise<{ id: s
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="ml-auto flex items-center gap-4">
-                                <button className="bg-amber-600 text-white text-xs uppercase font-medium py-1.5 px-4 rounded-md">
-                                    CHANGE LOCATION
+                            <div className="ml-auto flex items-center gap-2">
+                                <button className="bg-white rounded-full w-8 h-8 flex items-center justify-center">
+                                    <Heart size={16} className="text-gray-700" />
                                 </button>
-                                <div className="flex gap-2">
-                                    <button className="bg-white rounded-full w-8 h-8 flex items-center justify-center">
-                                        <Heart size={16} className="text-gray-700" />
-                                    </button>
-                                    <button className="bg-white rounded-full w-8 h-8 flex items-center justify-center">
-                                        <Share size={16} className="text-gray-700" />
-                                    </button>
-                                </div>
+                                <button className="bg-white rounded-full w-8 h-8 flex items-center justify-center">
+                                    <Share size={16} className="text-gray-700" />
+                                </button>
                             </div>
+                        </div>
+
+                        {/* Change Location Button */}
+                        <div className="mb-6">
+                            <button className="bg-amber-600 text-white text-xs uppercase font-medium py-2 px-6 rounded-md w-full md:w-auto">
+                                CHANGE LOCATION
+                            </button>
                         </div>
 
                         {/* Menu Categories Navigation */}
                         <div className="flex justify-center gap-4 mb-6">
                             <button
-                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "main" ? "bg-red-800" : "bg-red-700"} border border-red-900`}
+                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "main" ? "bg-red-800" : "bg-red-700"} border-2 border-white`}
                                 onClick={() => setActiveCategory("main")}
                             >
                                 MAIN DISHES
                             </button>
                             <button
-                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "snacks" ? "bg-red-800" : "bg-red-700"} border border-red-900`}
+                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "snacks" ? "bg-red-800" : "bg-red-700"} border-2 border-white`}
                                 onClick={() => setActiveCategory("snacks")}
                             >
                                 SNACKS
                             </button>
                             <button
-                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "drinks" ? "bg-red-800" : "bg-red-700"} border border-red-900`}
+                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "drinks" ? "bg-red-800" : "bg-red-700"} border-2 border-white`}
                                 onClick={() => setActiveCategory("drinks")}
                             >
                                 DRINKS
                             </button>
                             <button
-                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "reviews" ? "bg-red-800" : "bg-red-700"} border border-red-900`}
+                                className={`px-6 py-2 text-xs font-semibold text-white rounded-full ${activeCategory === "reviews" ? "bg-red-800" : "bg-red-700"} border-2 border-white`}
                                 onClick={() => setActiveCategory("reviews")}
                             >
                                 REVIEWS
