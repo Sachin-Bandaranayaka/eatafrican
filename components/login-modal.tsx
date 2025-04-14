@@ -13,14 +13,14 @@ type ModalView = 'login' | 'register' | 'forgotPassword' | 'loginSuccess' | 'reg
 
 // Helper component for consistent modal layout - UPDATED
 const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2 sm:p-4">
         {/* Outer container for positioning chef */}
-        <div className="relative">
+        <div className="relative w-full max-w-3xl">
             {/* Main Modal Box - Lighter background */}
-            <div className="relative bg-amber-600 rounded-lg w-full max-w-3xl overflow-visible shadow-xl">
+            <div className="relative bg-amber-600 rounded-lg w-full overflow-visible shadow-xl">
                 {/* Top-right chef group image - moved behind everything */}
                 <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-                    <div className="absolute top-10 right-10 w-72 h-72 pointer-events-none">
+                    <div className="absolute top-10 right-10 w-60 h-60 sm:w-72 sm:h-72 pointer-events-none hidden sm:block">
                         <Image
                             src="/images/login-group-chef.png"
                             alt="Group of African chefs"
@@ -40,21 +40,21 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
                 </button>
 
                 {/* Title Section - Now inside the modal */}
-                <div className="pt-5 pl-0 z-10 relative">
-                    <h2 className="text-xl font-bold text-white bg-amber-900 py-2 px-8 pr-12 rounded-r-full rounded-l-none shadow-md uppercase inline-block">
+                <div className="pt-4 sm:pt-5 pl-0 z-10 relative">
+                    <h2 className="text-lg sm:text-xl font-bold text-white bg-amber-900 py-1.5 sm:py-2 px-6 sm:px-8 sm:pr-12 rounded-r-full rounded-l-none shadow-md uppercase inline-block">
                         {title}
                     </h2>
                 </div>
 
                 {/* Inner Content Area - Adjusted padding */}
-                <div className="flex flex-col md:flex-row pt-5 p-4 md:p-6 relative z-10">
+                <div className="flex flex-col md:flex-row pt-4 sm:pt-5 p-3 sm:p-4 md:p-6 relative z-10">
                     {/* Children will now contain both form and right-side info for login view */}
                     {children}
                 </div>
             </div>
 
             {/* Chef image - Positioned bottom-left relative to outer container */}
-            <div className="absolute bottom-2 left-2 w-36 h-52 pointer-events-none z-20">
+            <div className="absolute -bottom-4 -left-2 w-28 h-40 sm:bottom-2 sm:left-2 sm:w-36 sm:h-52 pointer-events-none z-20">
                 <Image
                     src="/images/login-person.png"
                     alt="African chef"
@@ -68,7 +68,7 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
 
 // Separate wrapper for success messages which have a different layout
 const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2 sm:p-4">
         <div className="relative bg-amber-700 rounded-lg w-full max-w-xl overflow-hidden">
             <button
                 onClick={onClose}
@@ -77,10 +77,10 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
             >
                 <X size={20} />
             </button>
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col">
                 <div className="p-4 w-full">
-                    <h2 className="text-lg font-bold text-white mb-3 bg-amber-800 text-center py-1 px-2 rounded uppercase">{title}</h2>
-                    <div className="relative h-44 mb-3">
+                    <h2 className="text-base sm:text-lg font-bold text-white mb-3 bg-amber-800 text-center py-1 px-2 rounded uppercase">{title}</h2>
+                    <div className="relative h-32 sm:h-44 mb-3 mx-auto w-32 sm:w-44">
                         <Image
                             src="/images/login-person.png"
                             alt="African chef"
@@ -92,7 +92,7 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
                 </div>
             </div>
             {/* Chef image - smaller for this layout */}
-            <div className="absolute bottom-2 right-2 w-24 h-36 pointer-events-none">
+            <div className="absolute bottom-2 right-2 w-20 h-32 sm:w-24 sm:h-36 pointer-events-none">
                 <Image
                     src="/images/login-person.png"
                     alt="African chef"
@@ -135,42 +135,81 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         case 'register':
             return (
                 <ModalWrapper onClose={onClose} title="REGISTRATION">
-                    <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
-                        <div>
-                            <label className="text-sm text-white mb-1 block">E-mail</label>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-gray-300 rounded p-1.5 text-sm" />
+                    <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6 w-full">
+                        {/* Left side - registration form */}
+                        <div className="w-full md:w-1/2">
+                            <form className="space-y-3 sm:space-y-4 bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow" onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
+                                <div>
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">E-mail</label>
+                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
+                                </div>
+                                <div>
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">Password</label>
+                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
+                                </div>
+                                <div>
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">Confirm Password</label>
+                                    <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
+                                </div>
+                                <div className="text-xs text-amber-900 pt-1">
+                                    <p className="font-semibold">Your Password must include</p>
+                                    <ul className="list-none space-y-0.5 pl-1">
+                                        <li>-At least 8 characters</li>
+                                        <li>-At least one uppercase and one lowercase letter</li>
+                                        <li>-At least one special character or a number</li>
+                                    </ul>
+                                </div>
+                                <div className="pt-2 sm:pt-3 flex justify-center">
+                                    <button type="submit" className="relative bg-red-900 text-white rounded-full py-1.5 px-6 sm:px-8 text-sm font-bold hover:bg-red-800 shadow-md">
+                                        <span className="relative z-10">REGISTER</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div>
-                            <label className="text-sm text-white mb-1 block">Password</label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full border border-gray-300 rounded p-1.5 text-sm" />
+
+                        {/* Right side - info boxes */}
+                        <div className="w-full md:w-1/2 space-y-3">
+                            {/* "Already have an account?" Box */}
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow">
+                                <h3 className="font-bold text-center text-base">Already have an account?</h3>
+                                <div className="flex justify-center pt-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setView('login')}
+                                        className="relative bg-red-900 text-white rounded-full py-1.5 px-6 sm:px-8 text-sm font-bold hover:bg-red-800 shadow-md"
+                                    >
+                                        <span className="relative z-10">LOGIN</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Just browsing box */}
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow">
+                                <h3 className="font-bold text-base">Just browsing?</h3>
+                                <p className="text-sm leading-relaxed">
+                                    No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
+                                </p>
+                                <div className="pt-1">
+                                    <button
+                                        type="button"
+                                        onClick={onClose} // Close modal to continue as guest
+                                        className="relative w-full bg-red-900 text-white rounded-full py-1.5 px-4 text-sm font-semibold hover:bg-red-800 shadow-md"
+                                    >
+                                        <span className="relative z-10">CONTINUE AS GUEST</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label className="text-sm text-white mb-1 block">Confirm Password</label>
-                            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="w-full border border-gray-300 rounded p-1.5 text-sm" />
-                        </div>
-                        <div className="text-xs text-amber-200 pt-1">
-                            <p>Your Password must include</p>
-                            <ul className="list-disc list-inside pl-2">
-                                <li>At least 8 characters</li>
-                                <li>At least one uppercase and one lowercase letter</li>
-                                <li>At least one special character or a number</li>
-                            </ul>
-                        </div>
-                        <div className="pt-2">
-                            <button type="submit" className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 shadow-md">
-                                <span className="relative z-10">REGISTER</span>
-                                <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
-                                <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
-                                <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
-                            </button>
-                        </div>
-                        <div className="text-center mt-2 text-sm">
-                            <span className="text-white">Already have an account?</span>{" "}
-                            <button type="button" onClick={() => setView('login')} className="text-amber-200 font-bold hover:underline">
-                                LOGIN
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </ModalWrapper>
             );
         case 'forgotPassword':
@@ -212,29 +251,74 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             );
         case 'registerSuccess':
             return (
-                <SuccessModalWrapper onClose={onClose} title="WELCOME">
-                    <div className="bg-white/90 rounded-lg p-4 space-y-3">
-                        <p className="text-amber-900 text-base font-semibold">
-                            Welcome to your new favorite food destination. Your account is ready!
-                        </p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                            <li className="flex items-center"><span className="mr-2">🇰🇪</span> Karibu!</li>
-                            <li className="flex items-center"><span className="mr-2">🇬🇭</span> Akwaaba!</li>
-                            <li className="flex items-center"><span className="mr-2">🇳🇬</span> Ekabo!</li>
-                            <li className="flex items-center"><span className="mr-2">🇪🇹</span> Enkwan dehna met'u!</li>
-                            <li className="flex items-center"><span className="mr-2">🇪🇷</span> T'ena yihabkha!</li>
-                        </ul>
-                        <p className="text-gray-700 text-sm pt-2">
-                            Whether it's spicy suya, soft injera, or smoky tilapia, your next delicious bite is just a click away.
-                        </p>
-                        <p className="text-gray-700 text-sm flex items-center gap-2">
-                            <span className="text-xl">📧</span> We've sent you a confirmation email. Please check it to complete your registration.
-                        </p>
-                        <p className="text-amber-900 text-sm font-semibold pt-2">
-                            Let's make every meal a celebration of African heritage.
-                        </p>
+                <ModalWrapper onClose={onClose} title="WELCOME">
+                    <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6 w-full">
+                        {/* Left side - Welcome message */}
+                        <div className="w-full md:w-1/2">
+                            <div className="bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow space-y-3">
+                                <p className="text-amber-900 text-base font-bold">
+                                    Welcome to your new favorite food destination. Your account is ready!
+                                </p>
+
+                                <ul className="space-y-2 pl-1">
+                                    <li className="flex items-center text-sm">
+                                        <span className="mr-2">🇰🇪</span> Karibu!
+                                    </li>
+                                    <li className="flex items-center text-sm">
+                                        <span className="mr-2">🇬🇭</span> Akwaaba!
+                                    </li>
+                                    <li className="flex items-center text-sm">
+                                        <span className="mr-2">🇳🇬</span> Ekabo!
+                                    </li>
+                                    <li className="flex items-center text-sm">
+                                        <span className="mr-2">🇪🇹</span> Enkwan dehna met'u!
+                                    </li>
+                                    <li className="flex items-center text-sm">
+                                        <span className="mr-2">🇪🇷</span> T'ena yihabkha!
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Right side - Additional info */}
+                        <div className="w-full md:w-1/2 space-y-3">
+                            <div className="bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow space-y-3">
+                                <p className="text-sm text-amber-900">
+                                    Whether it's spicy suya, soft injera, or smoky tilapia, your next delicious bite is just a click away.
+                                </p>
+
+                                <p className="text-sm text-amber-900 flex items-start gap-2">
+                                    <span className="text-xl">📧</span>
+                                    <span>We've sent you a confirmation email. Please check it to complete your registration.</span>
+                                </p>
+
+                                <p className="text-amber-900 text-sm font-bold pt-1">
+                                    Let's make every meal a celebration of African heritage.
+                                </p>
+                            </div>
+
+                            {/* "Just browsing?" Box for consistency */}
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow">
+                                <h3 className="font-bold text-base">Just browsing?</h3>
+                                <p className="text-sm leading-relaxed">
+                                    No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
+                                </p>
+                                <div className="pt-1">
+                                    <button
+                                        type="button"
+                                        onClick={onClose} // Close modal to continue as guest
+                                        className="relative w-full bg-red-900 text-white rounded-full py-1.5 px-4 text-sm font-semibold hover:bg-red-800 shadow-md"
+                                    >
+                                        <span className="relative z-10">CONTINUE AS GUEST</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </SuccessModalWrapper>
+                </ModalWrapper>
             );
         case 'resetSent':
             return (
@@ -254,33 +338,33 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             return (
                 <ModalWrapper onClose={onClose} title="LOGIN">
                     {/* Login view now includes both columns inside the wrapper's children */}
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
+                    <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6 w-full">
                         {/* Left side - login form */}
                         <div className="w-full md:w-1/2">
-                            <form className="space-y-4 bg-amber-50/90 p-6 rounded-lg shadow" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                            <form className="space-y-3 sm:space-y-4 bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
                                 <div>
                                     <label className="text-sm text-amber-900 font-medium mb-1 block">E-mail</label>
-                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-800" />
+                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
                                 </div>
                                 <div>
                                     <label className="text-sm text-amber-900 font-medium mb-1 block">Password</label>
-                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-800" />
+                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
                                 </div>
                                 <div className="text-right">
                                     <button type="button" onClick={() => setView('forgotPassword')} className="text-red-900 text-xs hover:underline font-semibold">
                                         Forgot Password?
                                     </button>
                                 </div>
-                                <div className="pt-3 flex justify-center">
+                                <div className="pt-2 sm:pt-3 flex justify-center">
                                     {/* LOGIN Button - Darker red/brown with yellow outline and 3D effect */}
-                                    <button type="submit" className="relative bg-red-900 text-white rounded-full py-1.5 px-8 text-sm font-bold hover:bg-red-800 shadow-md">
+                                    <button type="submit" className="relative bg-red-900 text-white rounded-full py-1.5 px-6 sm:px-8 text-sm font-bold hover:bg-red-800 shadow-md">
                                         <span className="relative z-10">LOGIN</span>
                                         <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
                                         <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
                                         <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
                                     </button>
                                 </div>
-                                <div className="text-center mt-3 text-sm">
+                                <div className="text-center mt-2 sm:mt-3 text-sm">
                                     <span className="text-amber-900">New Here?</span>{" "}
                                     <button type="button" onClick={() => setView('register')} className="text-red-900 font-bold hover:underline">
                                         Create Account
@@ -291,8 +375,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                         {/* Right side - info boxes */}
                         <div className="w-full md:w-1/2 space-y-3">
-                            {/* Empty space to make the image more visible */}
-                            <div className="h-40"></div>
+                            {/* Empty space to make the image more visible - only on larger screens */}
+                            <div className="h-0 md:h-40 hidden md:block"></div>
 
                             {/* Info Boxes - Lighter background */}
                             <div className="bg-amber-50 rounded-lg p-3 space-y-1 text-amber-900 shadow">
@@ -310,7 +394,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                 <button
                                     type="button"
                                     onClick={onClose} // Close modal to continue as guest
-                                    className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 shadow-md"
+                                    className="relative w-full bg-red-900 text-white rounded-full py-1.5 px-4 text-xs font-semibold hover:bg-red-800 shadow-md"
                                 >
                                     <span className="relative z-10">CONTINUE AS GUEST</span>
                                     <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
