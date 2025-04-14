@@ -15,12 +15,12 @@ type ModalView = 'login' | 'register' | 'forgotPassword' | 'loginSuccess' | 'reg
 const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; title: string }> = ({ children, onClose, title }) => (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2 sm:p-4">
         {/* Outer container for positioning chef */}
-        <div className="relative w-full max-w-3xl">
+        <div className="relative w-full max-w-4xl">
             {/* Main Modal Box - Lighter background */}
             <div className="relative bg-amber-600 rounded-lg w-full overflow-visible shadow-xl">
                 {/* Top-right chef group image - moved behind everything */}
                 <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-                    <div className="absolute top-10 right-10 w-60 h-60 sm:w-72 sm:h-72 pointer-events-none hidden sm:block">
+                    <div className="absolute top-6 right-8 w-64 h-64 sm:w-96 sm:h-96 pointer-events-none hidden sm:block">
                         <Image
                             src="/images/login-group-chef.png"
                             alt="Group of African chefs"
@@ -47,14 +47,14 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
                 </div>
 
                 {/* Inner Content Area - Adjusted padding */}
-                <div className="flex flex-col md:flex-row pt-4 sm:pt-5 p-3 sm:p-4 md:p-6 relative z-10">
+                <div className="flex flex-col md:flex-row pt-4 sm:pt-5 p-4 sm:p-6 md:p-8 relative z-10">
                     {/* Children will now contain both form and right-side info for login view */}
                     {children}
                 </div>
             </div>
 
             {/* Chef image - Positioned bottom-left relative to outer container */}
-            <div className="absolute -bottom-4 -left-2 w-28 h-40 sm:bottom-2 sm:left-2 sm:w-36 sm:h-52 pointer-events-none z-20">
+            <div className="absolute -bottom-8 -left-6 w-40 h-64 sm:bottom-0 sm:left-0 sm:w-52 sm:h-80 pointer-events-none z-20">
                 <Image
                     src="/images/login-person.png"
                     alt="African chef"
@@ -80,7 +80,7 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
             <div className="flex flex-col">
                 <div className="p-4 w-full">
                     <h2 className="text-base sm:text-lg font-bold text-white mb-3 bg-amber-800 text-center py-1 px-2 rounded uppercase">{title}</h2>
-                    <div className="relative h-32 sm:h-44 mb-3 mx-auto w-32 sm:w-44">
+                    <div className="relative h-40 sm:h-60 mb-6 mx-auto w-40 sm:w-60">
                         <Image
                             src="/images/login-person.png"
                             alt="African chef"
@@ -92,7 +92,7 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
                 </div>
             </div>
             {/* Chef image - smaller for this layout */}
-            <div className="absolute bottom-2 right-2 w-20 h-32 sm:w-24 sm:h-36 pointer-events-none">
+            <div className="absolute bottom-2 right-2 w-28 h-40 sm:w-32 sm:h-48 pointer-events-none">
                 <Image
                     src="/images/login-person.png"
                     alt="African chef"
@@ -189,13 +189,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                 </div>
                             </div>
 
-                            {/* Just browsing box */}
-                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow">
+                            {/* Just browsing box - Added mt-8 to push down */}
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow mt-24">
                                 <h3 className="font-bold text-base">Just browsing?</h3>
                                 <p className="text-sm leading-relaxed">
                                     No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
                                 </p>
-                                <div className="pt-1">
+                                <div className="pt-2">
                                     <button
                                         type="button"
                                         onClick={onClose} // Close modal to continue as guest
@@ -215,25 +215,53 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         case 'forgotPassword':
             return (
                 <ModalWrapper onClose={onClose} title="RESET PASSWORD">
-                    <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); handleForgotPassword(); }}>
-                        <div>
-                            <label className="text-sm text-white mb-1 block">E-mail</label>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-gray-300 rounded p-1.5 text-sm" />
+                    <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6 w-full">
+                        {/* Left side - Reset Password form */}
+                        <div className="w-full md:w-1/2">
+                            <form className="space-y-3 sm:space-y-4 bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow" onSubmit={(e) => { e.preventDefault(); handleForgotPassword(); }}>
+                                <div>
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">E-mail</label>
+                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 sm:p-2 text-sm text-gray-800" />
+                                </div>
+                                <div className="pt-3 flex justify-center">
+                                    <button type="submit" className="relative bg-red-900 text-white rounded-full py-1.5 px-6 sm:px-8 text-sm font-bold hover:bg-red-800 shadow-md">
+                                        <span className="relative z-10">SUBMIT</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                                <div className="text-center mt-2 text-sm">
+                                    <button type="button" onClick={() => setView('login')} className="text-red-900 font-bold hover:underline">
+                                        BACK TO LOGIN
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div className="pt-2">
-                            <button type="submit" className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 shadow-md">
-                                <span className="relative z-10">SUBMIT</span>
-                                <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
-                                <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
-                                <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
-                            </button>
+
+                        {/* Right side - Just browsing info */}
+                        <div className="w-full md:w-1/2 space-y-3 flex flex-col justify-end">
+                            {/* Just browsing box */}
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow mt-24">
+                                <h3 className="font-bold text-base">Just browsing?</h3>
+                                <p className="text-sm leading-relaxed">
+                                    No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
+                                </p>
+                                <div className="pt-2">
+                                    <button
+                                        type="button"
+                                        onClick={onClose} // Close modal to continue as guest
+                                        className="relative w-full bg-red-900 text-white rounded-full py-1.5 px-4 text-sm font-semibold hover:bg-red-800 shadow-md"
+                                    >
+                                        <span className="relative z-10">CONTINUE AS GUEST</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-center mt-2 text-sm">
-                            <button type="button" onClick={() => setView('login')} className="text-amber-200 font-bold hover:underline">
-                                BACK TO LOGIN
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </ModalWrapper>
             );
         case 'loginSuccess':
@@ -298,12 +326,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             </div>
 
                             {/* "Just browsing?" Box for consistency */}
-                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow">
+                            <div className="bg-amber-50 rounded-lg p-4 space-y-2 text-amber-900 shadow mt-24">
                                 <h3 className="font-bold text-base">Just browsing?</h3>
                                 <p className="text-sm leading-relaxed">
                                     No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
                                 </p>
-                                <div className="pt-1">
+                                <div className="pt-2">
                                     <button
                                         type="button"
                                         onClick={onClose} // Close modal to continue as guest
@@ -322,16 +350,21 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             );
         case 'resetSent':
             return (
-                <SuccessModalWrapper onClose={onClose} title="EMAIL SENT">
-                    <div className="bg-white/90 rounded-lg p-4 text-center">
-                        <p className="text-amber-900 text-base font-semibold mb-2">
-                            Check Your Email, Chale!
-                        </p>
-                        <p className="text-gray-700 text-sm">
-                            We don dey send password reset link to your email now-now! Abeg, check your inbox (and your spam folder too o). The link go expire after 30 minutes for security reasons. No wahala!
-                        </p>
+                <ModalWrapper onClose={onClose} title="EMAIL SENT">
+                    <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6 w-full">
+                        {/* Main content */}
+                        <div className="w-full md:w-3/4 mx-auto">
+                            <div className="bg-amber-50/90 p-4 sm:p-6 rounded-lg shadow space-y-3">
+                                <p className="text-amber-900 text-base font-bold">
+                                    Check Your Email, Chale!
+                                </p>
+                                <p className="text-amber-900 text-sm">
+                                    We don dey send password reset link to your email now-now! Abeg, check your inbox (and your spam folder too o). The link go expire after 30 minutes for security reasons. No wahala!
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </SuccessModalWrapper>
+                </ModalWrapper>
             );
         case 'login':
         default:
@@ -376,7 +409,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         {/* Right side - info boxes */}
                         <div className="w-full md:w-1/2 space-y-3">
                             {/* Empty space to make the image more visible - only on larger screens */}
-                            <div className="h-0 md:h-40 hidden md:block"></div>
+                            <div className="h-0 md:h-80 hidden md:block"></div>
 
                             {/* Info Boxes - Lighter background */}
                             <div className="bg-amber-50 rounded-lg p-3 space-y-1 text-amber-900 shadow">
@@ -385,9 +418,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                     Elevate your experience on our platform. Access your order history, save favorites for quick reordering, and enjoy a seamless checkout.
                                 </p>
                             </div>
-                            <div className="bg-amber-50 rounded-lg p-3 space-y-1 text-amber-900 shadow">
+
+                            {/* Added vertical margin (mt-8) to push the Just browsing box down */}
+                            <div className="bg-amber-50 rounded-lg p-3 space-y-1 text-amber-900 shadow mt-24">
                                 <h3 className="font-bold text-sm">Just browsing?</h3>
-                                <p className="text-xs mb-2 leading-relaxed">
+                                <p className="text-xs mb-3 leading-relaxed">
                                     No worries! Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
                                 </p>
                                 {/* CONTINUE AS GUEST Button - Amber/Yellow */}
