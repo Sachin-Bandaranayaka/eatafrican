@@ -18,6 +18,18 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
         <div className="relative">
             {/* Main Modal Box - Lighter background */}
             <div className="relative bg-amber-600 rounded-lg w-full max-w-3xl overflow-visible shadow-xl">
+                {/* Top-right chef group image - moved behind everything */}
+                <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+                    <div className="absolute top-10 right-10 w-72 h-72 pointer-events-none">
+                        <Image
+                            src="/images/login-group-chef.png"
+                            alt="Group of African chefs"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                </div>
+
                 {/* Close Button - Positioned relative to the amber box */}
                 <button
                     onClick={onClose}
@@ -27,27 +39,27 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
                     <X size={20} />
                 </button>
 
-                {/* Title Section - Positioned absolutely top-left */}
-                <div className="absolute -top-4 left-4 z-10">
-                    <h2 className="text-lg font-bold text-white bg-amber-900 py-1.5 px-6 rounded-md shadow-md uppercase">
+                {/* Title Section - Now inside the modal */}
+                <div className="pt-5 pl-0 z-10 relative">
+                    <h2 className="text-xl font-bold text-white bg-amber-900 py-2 px-8 pr-12 rounded-r-full rounded-l-none shadow-md uppercase inline-block">
                         {title}
                     </h2>
                 </div>
 
-                {/* Inner Content Area - Added padding top for title space */}
-                <div className="flex flex-col md:flex-row pt-10 p-4 md:p-6">
+                {/* Inner Content Area - Adjusted padding */}
+                <div className="flex flex-col md:flex-row pt-5 p-4 md:p-6 relative z-10">
                     {/* Children will now contain both form and right-side info for login view */}
                     {children}
                 </div>
             </div>
 
             {/* Chef image - Positioned bottom-left relative to outer container */}
-            <div className="absolute -bottom-4 -left-4 w-28 h-40 md:w-36 md:h-48 pointer-events-none z-20">
+            <div className="absolute bottom-2 left-2 w-36 h-52 pointer-events-none z-20">
                 <Image
-                    src="/images/chef-male.png"
-                    alt="Chef"
+                    src="/images/login-person.png"
+                    alt="African chef"
                     fill
-                    className="object-contain"
+                    className="object-contain object-bottom"
                 />
             </div>
         </div>
@@ -68,10 +80,10 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
             <div className="flex flex-col md:flex-row">
                 <div className="p-4 w-full">
                     <h2 className="text-lg font-bold text-white mb-3 bg-amber-800 text-center py-1 px-2 rounded uppercase">{title}</h2>
-                    <div className="relative h-36 mb-3">
+                    <div className="relative h-44 mb-3">
                         <Image
-                            src="/images/chefs1.png"
-                            alt="African chefs in traditional attire"
+                            src="/images/login-person.png"
+                            alt="African chef"
                             fill
                             className="object-contain"
                         />
@@ -80,12 +92,12 @@ const SuccessModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => 
                 </div>
             </div>
             {/* Chef image - smaller for this layout */}
-            <div className="absolute -bottom-1 -right-1 w-20 h-28 pointer-events-none">
+            <div className="absolute bottom-2 right-2 w-24 h-36 pointer-events-none">
                 <Image
-                    src="/images/chef-male.png"
-                    alt="Chef"
+                    src="/images/login-person.png"
+                    alt="African chef"
                     fill
-                    className="object-contain"
+                    className="object-contain object-bottom"
                 />
             </div>
         </div>
@@ -145,8 +157,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             </ul>
                         </div>
                         <div className="pt-2">
-                            <button type="submit" className="w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 border border-amber-300">
-                                REGISTER
+                            <button type="submit" className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 shadow-md">
+                                <span className="relative z-10">REGISTER</span>
+                                <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
                             </button>
                         </div>
                         <div className="text-center mt-2 text-sm">
@@ -167,8 +182,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-gray-300 rounded p-1.5 text-sm" />
                         </div>
                         <div className="pt-2">
-                            <button type="submit" className="w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 border border-amber-300">
-                                SUBMIT
+                            <button type="submit" className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-sm font-semibold hover:bg-red-800 shadow-md">
+                                <span className="relative z-10">SUBMIT</span>
+                                <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
                             </button>
                         </div>
                         <div className="text-center mt-2 text-sm">
@@ -239,29 +257,32 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
                         {/* Left side - login form */}
                         <div className="w-full md:w-1/2">
-                            <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                            <form className="space-y-4 bg-amber-50/90 p-6 rounded-lg shadow" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
                                 <div>
-                                    <label className="text-sm text-white mb-1 block">E-mail</label>
-                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 text-sm text-gray-800" />
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">E-mail</label>
+                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-800" />
                                 </div>
                                 <div>
-                                    <label className="text-sm text-white mb-1 block">Password</label>
-                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-1.5 text-sm text-gray-800" />
+                                    <label className="text-sm text-amber-900 font-medium mb-1 block">Password</label>
+                                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-800" />
                                 </div>
                                 <div className="text-right">
-                                    <button type="button" onClick={() => setView('forgotPassword')} className="text-amber-200 text-xs hover:underline font-semibold">
+                                    <button type="button" onClick={() => setView('forgotPassword')} className="text-red-900 text-xs hover:underline font-semibold">
                                         Forgot Password?
                                     </button>
                                 </div>
-                                <div className="pt-2">
-                                    {/* LOGIN Button - Darker red/brown */}
-                                    <button type="submit" className="w-full bg-red-950 text-white rounded-lg py-1.5 px-4 text-sm font-bold hover:bg-red-900 border border-amber-400 shadow-md">
-                                        LOGIN
+                                <div className="pt-3 flex justify-center">
+                                    {/* LOGIN Button - Darker red/brown with yellow outline and 3D effect */}
+                                    <button type="submit" className="relative bg-red-900 text-white rounded-full py-1.5 px-8 text-sm font-bold hover:bg-red-800 shadow-md">
+                                        <span className="relative z-10">LOGIN</span>
+                                        <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                        <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                        <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
                                     </button>
                                 </div>
-                                <div className="text-center mt-2 text-sm">
-                                    <span className="text-white">New Here?</span>{" "}
-                                    <button type="button" onClick={() => setView('register')} className="text-amber-200 font-bold hover:underline">
+                                <div className="text-center mt-3 text-sm">
+                                    <span className="text-amber-900">New Here?</span>{" "}
+                                    <button type="button" onClick={() => setView('register')} className="text-red-900 font-bold hover:underline">
                                         Create Account
                                     </button>
                                 </div>
@@ -270,14 +291,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                         {/* Right side - info boxes */}
                         <div className="w-full md:w-1/2 space-y-3">
-                            <div className="relative h-32 mb-3 hidden md:block"> {/* Image only shown on right for forms now */}
-                                <Image
-                                    src="/images/chefs1.png"
-                                    alt="African chefs in traditional attire"
-                                    fill
-                                    className="object-contain rounded-md"
-                                />
-                            </div>
+                            {/* Empty space to make the image more visible */}
+                            <div className="h-40"></div>
+
                             {/* Info Boxes - Lighter background */}
                             <div className="bg-amber-50 rounded-lg p-3 space-y-1 text-amber-900 shadow">
                                 <h3 className="font-bold text-sm">Why log in?</h3>
@@ -294,9 +310,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                 <button
                                     type="button"
                                     onClick={onClose} // Close modal to continue as guest
-                                    className="w-full bg-amber-500 text-white rounded-full py-1 px-4 text-xs font-semibold hover:bg-amber-600 border border-amber-300 shadow-sm"
+                                    className="relative w-full bg-red-900 text-white rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 shadow-md"
                                 >
-                                    CONTINUE AS GUEST
+                                    <span className="relative z-10">CONTINUE AS GUEST</span>
+                                    <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                                    <span className="absolute inset-0 rounded-full border-4 border-yellow-500" style={{ borderTopWidth: '3px', borderBottomWidth: '5px', borderLeftWidth: '4px', borderRightWidth: '4px' }}></span>
+                                    <span className="absolute inset-0 rounded-full outline outline-2 outline-amber-800" style={{ outlineOffset: '1px' }}></span>
                                 </button>
                             </div>
                         </div>
