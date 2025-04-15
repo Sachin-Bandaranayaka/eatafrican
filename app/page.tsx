@@ -29,7 +29,7 @@ export default function Home() {
           <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 pb-12 md:pb-16">
             {/* Heading Text */}
             <div className="text-center max-w-xl mb-8 md:mb-10">
-              <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+              <h1 className="text-white text-base md:text-lg mb-10">
                 {t('order_food_title')}
               </h1>
               <p className="text-white text-base md:text-lg">
