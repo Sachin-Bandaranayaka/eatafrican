@@ -13,20 +13,20 @@ export default function HowItWorks({ isOpen, onClose }: HowItWorksProps) {
 
     return (
         <div className="modal-overlay flex items-center justify-center fixed inset-0 bg-black/50 z-50">
-            <div className="modal-container relative max-w-xs bg-[#f0e6d9] rounded-lg shadow-lg">
+            <div className="modal-container02 relative max-w-xs bg-[#f0e6d9] rounded-lg shadow-lg">
                 <button
                     onClick={onClose}
-                    className="absolute top-1.5 right-1.5 text-black hover:text-amber-700 z-10"
+                    className="absolute top-10 right-1.5 text-black hover:text-amber-700 z-10"
                     aria-label="Close"
                 >
                     <X size={18} />
                 </button>
 
-                <div className="flex justify-between items-start p-2.5">
-                    <div className="bg-amber-900 text-white py-1.5 px-4 rounded-r-xl border-r-2 border-t-2 border-b-2 border-amber-600 -ml-9 rounded-l-none">
+                <div className="flex justify-between items-start p-0">
+                    <div className="bg-amber-900 text-white mt-8 py-1.5  px-4 rounded-r-2xl border-r-2 border-t-2 border-b-2 border-amber-600 -ml-9 rounded-l-none">
                         <h2 className="text-sm font-bold uppercase">HOW IT WORKS</h2>
                     </div>
-                    <div className="relative w-20 h-20 md:w-28 md:h-28 flex-shrink-0 ml-2">
+                    <div className="relative w-28 h-28 md:w-40 md:h-40 flex-shrink-0 ml-2 mb-2 mr-1">
                         <Image
                             src="/images/chefs-group.png"
                             alt="Chefs group"
