@@ -45,7 +45,7 @@ export default function LocationSelection() {
 
     return (
         // Main container with amber background, rounded corners, padding, and max-width
-        <div className="bg-amber-600/90 rounded-lg p-5 md:p-7 w-full max-w-md md:max-w-2xl mx-auto relative shadow-xl">
+        <div className="bg-white/50 rounded-lg p-5 md:p-7 w-full max-w-md md:max-w-2xl mx-auto relative shadow-xl ml-4">
             {/* Removed the explicit title H2 here as it's handled in page.tsx */}
 
             {/* Grid for selection areas */}
@@ -53,12 +53,12 @@ export default function LocationSelection() {
                 {/* Left side - Country selection */}
                 <div className="p-2">
                     <div className="bg-[#fff2cc] text-center py-1 px-4 rounded-r-lg mb-3 inline-block ml-20">
-                        <h3 className="font-semibold text-amber-900 text-xs uppercase">COUNTRY SPECIALTY</h3>
+                        <h3 className="font-semibold text-black text-xs uppercase">COUNTRY SPECIALTY</h3>
                     </div>
 
-                    <div className="space-y-2 pl-16 sm:pl-24 md:pl-20">
+                    <div className="space-y-2 pl-8 sm:pl-12 md:pl-10 mt-2">
                         {countrySpecialties.map((country) => (
-                            <label key={country} className="custom-radio text-white flex items-center cursor-pointer">
+                            <label key={country} className="custom-radio text-black flex items-center cursor-pointer">
                                 <input
                                     type="radio"
                                     name="country"
@@ -73,34 +73,39 @@ export default function LocationSelection() {
                 </div>
 
                 {/* Right side - Location selection */}
-                <div className="p-2">
+                {/* <div className="p-2">
                     <div className="bg-[#fff2cc] text-center py-1 px-4 rounded-r-lg mb-3 inline-block">
                         <h3 className="font-semibold text-amber-900 text-xs uppercase">LOCATION</h3>
                     </div>
 
                     <div className="space-y-2 pr-16 sm:pr-24 md:pr-20">
-{Object.entries(locations).map(([location, count]) => (
-    <label
-        key={location}
-        className={`custom-radio text-white flex items-center cursor-pointer ${!selectedCountry ? "cursor-not-allowed opacity-50" : ""}`}
-    >
-        <input
-            type="radio"
-            name="location"
-            checked={selectedLocation === location}
-            onChange={() => handleLocationSelect(location as Location)}
-            className="appearance-none mr-2"
-            disabled={!selectedCountry}
-        />
-        <span className="text-sm font-medium">{location} ({count})</span>
-    </label>
-))}
+                        {Object.entries(locations).map(([location, count]) => (
+                            <label
+                                key={location}
+                                className={`custom-radio text-white flex items-center cursor-pointer ${!selectedCountry ? "cursor-not-allowed opacity-50" : ""}`}
+                            >
+                                <input
+                                    type="radio"
+                                    name="location"
+                                    checked={selectedLocation === location}
+                                    onChange={() => handleLocationSelect(location as Location)}
+                                    className="appearance-none mr-2"
+                                    disabled={!selectedCountry}
+                                />
+                                <span className="text-sm font-medium">{location} ({count})</span>
+                            </label>
+                        ))}
                     </div>
+                </div> */}
+
+                <div className="bg-[#fff2cc] text-start py-0.5 px-2 rounded-3xl mb-3 inline-block mt-14 mr-8">
+                    <h3 className="font-semibold text-black text-xs uppercase p-3">CHOOSE AN AFRICAN SPECIALTY TO EXPLORE ITS DETAILS AND LOCATIONS WITH RESTAURANTS OFFERING IT</h3>
                 </div>
+
             </div>
 
             {/* Chef Images - Adjusted positioning to fit within the card without overlapping menu items */}
-            <div className="absolute left-2 bottom-0 w-32 h-48 sm:w-36 sm:h-52 md:w-40 md:h-56 z-10 translate-x-[-30%]">
+            <div className="absolute left-2 bottom-0 w-24 h-36 sm:w-28 sm:h-40 md:w-32 md:h-44 z-10 translate-x-[-30%]">
                 <Image
                     src="/images/chef-male.png"
                     alt="Male Chef"
@@ -110,7 +115,7 @@ export default function LocationSelection() {
                 />
             </div>
 
-            <div className="absolute right-2 bottom-0 w-32 h-48 sm:w-36 sm:h-52 md:w-40 md:h-56 z-10 translate-x-[30%]">
+            <div className="absolute right-2 bottom-0 w-24 h-36 sm:w-28 sm:h-40 md:w-32 md:h-44 z-10 translate-x-[30%]">
                 <Image
                     src="/images/chef-female.png"
                     alt="Female Chef"
@@ -120,35 +125,44 @@ export default function LocationSelection() {
                 />
             </div>
 
-{/* Buttons - Adjusted styling and structure */}
-<div className="flex flex-col sm:flex-row justify-center gap-3 mt-6 md:mt-8 relative z-20">
-    {selectedCountry && (
-        <button
-            // onClick={() => openCuisineModal(getCuisineType(selectedCountry).toLowerCase() as CuisineInfoModalContent)} // TODO: Enable when modal exists
-            className="bg-amber-100 text-amber-900 border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-amber-200 transition duration-200 whitespace-nowrap"
-        >
-            ABOUT {getCuisineType(selectedCountry)} CUISINE
-        </button>
-    )}
-    {selectedCountry && selectedLocation && (
-        <Link href={`/restaurants?country=${encodeURIComponent(selectedCountry)}&location=${encodeURIComponent(selectedLocation)}`} passHref legacyBehavior>
-            <a className="inline-block">
-                <button
-                    className="w-full sm:w-auto bg-red-900 text-white border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                >
-                    SEE RESTAURANTS
-                </button>
-            </a>
-        </Link>
-    )}
-    {!selectedCountry || !selectedLocation ? <div className="h-[34px]"></div> : null} {/* Placeholder for alignment */}
-</div>
+            {/* Buttons - Adjusted styling and structure */}
+            <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6 md:mt-8 relative z-20">
+                {selectedCountry && (
+                    <button
+                        // onClick={() => openCuisineModal(getCuisineType(selectedCountry).toLowerCase() as CuisineInfoModalContent)} // TODO: Enable when modal exists
+                        className="bg-amber-100 text-amber-900 border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-amber-200 transition duration-200 whitespace-nowrap"
+                    >
+                        ABOUT {getCuisineType(selectedCountry)} CUISINE
+                    </button>
+                )}
+                {selectedCountry && selectedLocation && (
+                    <Link href={`/restaurants?country=${encodeURIComponent(selectedCountry)}&location=${encodeURIComponent(selectedLocation)}`} passHref legacyBehavior>
+                        <a className="inline-block">
+                            <button
+                                className="w-full sm:w-auto bg-red-900 text-white border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                            >
+                                SEE RESTAURANTS
+                            </button>
+                        </a>
+                    </Link>
+                )}
+                {!selectedCountry || !selectedLocation ? <div className="h-[34px]"></div> : null} {/* Placeholder for alignment */}
+            </div>
 
             {/* TODO: Add Cuisine Info Modal component instance here */}
             {/* <CuisineInfoModal isOpen={cuisineModalOpen !== null} onClose={() => setCuisineModalOpen(null)} content={cuisineModalOpen} /> */}
         </div>
     );
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -200,14 +214,14 @@ export default function LocationSelection() {
 
 //     return (
 //         // Main container with amber background, rounded corners, padding, and max-width
-//         <div className="bg-amber-600/90 rounded-lg p-5 md:p-7 w-full max-w-md md:max-w-2xl mx-auto relative shadow-xl">
+//         <div className="bg-white/50 rounded-lg p-5 md:p-7 w-full max-w-md md:max-w-2xl mx-auto relative shadow-xl ml-4">
 //             {/* Removed the explicit title H2 here as it's handled in page.tsx */}
 
 //             {/* Grid for selection areas */}
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 //                 {/* Left side - Country selection */}
 //                 <div className="p-2">
-//                     <div className="bg-[#fff2cc] text-center py-1 px-4 rounded-r-lg mb-3 inline-block">
+//                     <div className="bg-[#fff2cc] text-center py-1 px-4 rounded-r-lg mb-3 inline-block ml-20">
 //                         <h3 className="font-semibold text-amber-900 text-xs uppercase">COUNTRY SPECIALTY</h3>
 //                     </div>
 
@@ -235,13 +249,17 @@ export default function LocationSelection() {
 
 //                     <div className="space-y-2 pr-16 sm:pr-24 md:pr-20">
 //                         {Object.entries(locations).map(([location, count]) => (
-//                             <label key={location} className="custom-radio text-white flex items-center cursor-pointer">
+//                             <label
+//                                 key={location}
+//                                 className={`custom-radio text-white flex items-center cursor-pointer ${!selectedCountry ? "cursor-not-allowed opacity-50" : ""}`}
+//                             >
 //                                 <input
 //                                     type="radio"
 //                                     name="location"
 //                                     checked={selectedLocation === location}
 //                                     onChange={() => handleLocationSelect(location as Location)}
 //                                     className="appearance-none mr-2"
+//                                     disabled={!selectedCountry}
 //                                 />
 //                                 <span className="text-sm font-medium">{location} ({count})</span>
 //                             </label>
@@ -281,22 +299,22 @@ export default function LocationSelection() {
 //                         ABOUT {getCuisineType(selectedCountry)} CUISINE
 //                     </button>
 //                 )}
-//                 {!selectedCountry && <div className="h-[34px]"></div>} {/* Placeholder for alignment */}
-
-//                 <Link href={selectedCountry && selectedLocation ? `/restaurants?country=${encodeURIComponent(selectedCountry)}&location=${encodeURIComponent(selectedLocation)}` : "#"} passHref legacyBehavior>
-//                     <a className={`inline-block ${!selectedCountry || !selectedLocation ? 'opacity-50 cursor-not-allowed' : ''}`}>
-//                         <button
-//                             className="w-full sm:w-auto bg-red-900 text-white border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-//                             disabled={!selectedCountry || !selectedLocation}
-//                         >
-//                             SEE RESTAURANTS
-//                         </button>
-//                     </a>
-//                 </Link>
+//                 {selectedCountry && selectedLocation && (
+//                     <Link href={`/restaurants?country=${encodeURIComponent(selectedCountry)}&location=${encodeURIComponent(selectedLocation)}`} passHref legacyBehavior>
+//                         <a className="inline-block">
+//                             <button
+//                                 className="w-full sm:w-auto bg-red-900 text-white border-2 border-amber-400 rounded-full py-1 px-4 text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+//                             >
+//                                 SEE RESTAURANTS
+//                             </button>
+//                         </a>
+//                     </Link>
+//                 )}
+//                 {!selectedCountry || !selectedLocation ? <div className="h-[34px]"></div> : null} {/* Placeholder for alignment */}
 //             </div>
 
 //             {/* TODO: Add Cuisine Info Modal component instance here */}
 //             {/* <CuisineInfoModal isOpen={cuisineModalOpen !== null} onClose={() => setCuisineModalOpen(null)} content={cuisineModalOpen} /> */}
 //         </div>
 //     );
-// } 
+// }
