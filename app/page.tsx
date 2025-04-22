@@ -5,34 +5,43 @@ import { useLocationContext } from '../lib/location-context'; // Adjusted path
 import LocationSelection from '../components/location-selection'; // Importing Location Selection
 import HowItWorks from '../components/how-it-works'; // Adjusted path
 import DeliveryGuide from '../components/delivery-guide'; // Adjusted path
+import HowItWorksMobile from '../components/how-it-works-mobile';
+import DeliveryGuideMobile from '../components/delivery-guide-mobile';
 import SiteFooter from '../components/site-footer'; // Adjusted path
 import SiteHeader from '../components/site-header'; // Adjusted path
 import ClientOnly from '../components/client-only'; // Adjusted path
 import LeftSideContent from './left-side-content-updated'; // Importing Left Side Content
 import RightSideContent from './right-side-content-updated'; // Importing Right Side Content
 import React from "react";
+import { useIsMobile } from '../hooks/use-mobile'; // Import useIsMobile hook
+
+function Buttons({ setHowItWorksOpen, setDeliveryGuideOpen }: { setHowItWorksOpen: React.Dispatch<React.SetStateAction<boolean>>, setDeliveryGuideOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+  return (
+    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto mb-8">
+      <button
+        onClick={() => setDeliveryGuideOpen(true)}
+        className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
+      >
+        <span className="font-bold">❯❯</span>
+        HOW WE DELIVER
+      </button>
+
+      <button
+        onClick={() => setHowItWorksOpen(true)}
+        className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
+      >
+        <span className="font-bold">❯❯</span>
+        HOW IT WORKS
+      </button>
+    </div>
+  );
+}
 
 function RightSideContentInline({ setHowItWorksOpen, setDeliveryGuideOpen }: { setHowItWorksOpen: React.Dispatch<React.SetStateAction<boolean>>, setDeliveryGuideOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   return (
     <div className="flex flex-col items-center  w-full max-w-md md:max-w-lg ml-10">
       {/* Buttons side by side on medium screens and up */}
-      <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto mb-8">
-        <button
-          onClick={() => setDeliveryGuideOpen(true)}
-          className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
-        >
-          <span className="font-bold">❯❯</span>
-          HOW WE DELIVER
-        </button>
-
-        <button
-          onClick={() => setHowItWorksOpen(true)}
-          className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
-        >
-          <span className="font-bold">❯❯</span>
-          HOW IT WORKS
-        </button>
-      </div>
+      <Buttons setHowItWorksOpen={setHowItWorksOpen} setDeliveryGuideOpen={setDeliveryGuideOpen} />
 
       {/* Heading on top */}
       <h1 className="text-white font-bold text-base md:text-lg mb-4">
@@ -51,6 +60,19 @@ export default function Home() {
 
   const isAnyOpen = howItWorksOpen || deliveryGuideOpen;
 
+  const isMobile = useIsMobile();
+
+  // Ensure only one modal open at a time
+  const openHowItWorks = () => {
+    setDeliveryGuideOpen(false);
+    setHowItWorksOpen(true);
+  };
+
+  const openDeliveryGuide = () => {
+    setHowItWorksOpen(false);
+    setDeliveryGuideOpen(true);
+  };
+
   return (
     <ClientOnly>
       <main className="relative w-full min-h-screen overflow-hidden">
@@ -60,24 +82,62 @@ export default function Home() {
           <SiteHeader />
 
           {/* Main Content Area - Adjusted for better spacing */}
-          <div className="flex-1 flex flex-row items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt-10">
+          <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt-10`}>
 
-            {/* Wrap LeftSideContent and conditional RightSideContentInline vertically */}
-            <div className="flex flex-col max-w-2xl">
-              <LeftSideContent /> {/* Left Side Content */}
-              {isAnyOpen && (
-                <RightSideContentInline
-                  setHowItWorksOpen={setHowItWorksOpen}
-                  setDeliveryGuideOpen={setDeliveryGuideOpen}
+            {/* Left Side Content */}
+            <div className="max-w-2xl w-full flex flex-col">
+              <LeftSideContent />
+              {/* On mobile, render buttons inside left side content */}
+              {isMobile && (
+                <Buttons setHowItWorksOpen={openHowItWorks} setDeliveryGuideOpen={openDeliveryGuide} />
+              )}
+              {/* On mobile, render mobile versions of content below left side content */}
+              {isMobile && howItWorksOpen && (
+                <HowItWorksMobile
+                  isOpen={howItWorksOpen}
+                  onClose={() => setHowItWorksOpen(false)}
                 />
               )}
-              {howItWorksOpen && (
+              {isMobile && deliveryGuideOpen && (
+                <DeliveryGuideMobile
+                  isOpen={deliveryGuideOpen}
+                  onClose={() => setDeliveryGuideOpen(false)}
+                />
+              )}
+
+              {/* On desktop, if any modal open, show buttons and heading below LeftSideContent */}
+              {!isMobile && isAnyOpen && (
+                <>
+                  <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto mb-4 mt-6">
+                    <button
+                      onClick={openDeliveryGuide}
+                      className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
+                    >
+                      <span className="font-bold">❯❯</span>
+                      HOW WE DELIVER
+                    </button>
+
+                    <button
+                      onClick={openHowItWorks}
+                      className="flex items-center justify-center gap-2 text-white text-sm p-3 hover:text-amber-200 transition duration-200 w-full md:w-auto"
+                    >
+                      <span className="font-bold">❯❯</span>
+                      HOW IT WORKS
+                    </button>
+                  </div>
+                  <h1 className="text-white font-bold text-base md:text-lg mb-4">
+                    YOUR FAVORITE AFRICAN MEALS—JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
+                  </h1>
+                </>
+              )}
+              {/* On desktop, render desktop versions of content below buttons */}
+              {!isMobile && howItWorksOpen && (
                 <HowItWorks
                   isOpen={howItWorksOpen}
                   onClose={() => setHowItWorksOpen(false)}
                 />
               )}
-              {deliveryGuideOpen && (
+              {!isMobile && deliveryGuideOpen && (
                 <DeliveryGuide
                   isOpen={deliveryGuideOpen}
                   onClose={() => setDeliveryGuideOpen(false)}
@@ -85,11 +145,12 @@ export default function Home() {
               )}
             </div>
 
-            {!isAnyOpen && (
+            {/* On desktop, if no modal open, show right side content */}
+            {!isMobile && !isAnyOpen && (
               <RightSideContent
-                setHowItWorksOpen={setHowItWorksOpen}
-                setDeliveryGuideOpen={setDeliveryGuideOpen}
-              /> /* Right Side Content */
+                setHowItWorksOpen={openHowItWorks}
+                setDeliveryGuideOpen={openDeliveryGuide}
+              />
             )}
           </div>
 

@@ -344,12 +344,36 @@ body {
   z-index: 50;
 }
 
-.clip-hexagon {
-  clip-path: polygon(
+.clip-hexagon { /*for desktop*/
+  clip-path: polygon( 
     10% 0%,   /* Top-left cut */
     100% 0%,  /* Top-right */
     100% 100%,/* Bottom-right */
     10% 100%, /* Bottom-left cut */
+    0% 85%,   /* Bottom diagonal */
+    0% 15%    /* Top diagonal */
+  );
+  position: relative; 
+}
+.clip-hexagon02 { /*for mobile [delivery guide]*/
+  clip-path: polygon(
+    20% 0%,   /* Top-left cut */
+    100% 0%,  /* Top-right */
+    100% 100%,/* Bottom-right */
+    20% 100%, /* Bottom-left cut */
+    0% 90%,   /* Bottom diagonal */
+    0% 10%    /* Top diagonal */
+  );
+  position: relative; 
+}
+
+
+.clip-hexagon03 { /*for mobile [How it works]*/
+  clip-path: polygon(
+    20% 0%,   /* Top-left cut */
+    100% 0%,  /* Top-right */
+    100% 100%,/* Bottom-right */
+    20% 100%, /* Bottom-left cut */
     0% 85%,   /* Bottom diagonal */
     0% 15%    /* Top diagonal */
   );
