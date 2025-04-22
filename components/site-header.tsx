@@ -20,7 +20,7 @@ export default function SiteHeader() {
             {/* Left Section with Logo and Language Selector */}
             <div className="flex items-center gap-4 md:gap-6">
                 {/* Logo */}
-                <div className="relative w-14 h-14 md:w-20 md:h-20">
+                {/* <div className="relative w-14 h-14 md:w-20 md:h-20">
                     <Image
                         src="/images/logo.png"
                         alt="Eat African Logo"
@@ -28,7 +28,44 @@ export default function SiteHeader() {
                         className="object-contain"
                         priority
                     />
+                </div> */}
+
+                <div className="relative w-14 h-14 md:w-20 md:h-20 mt-1">
+                    <div
+                        className="absolute inset-0 bg-[#8B0000] rounded-[10px] z-0"
+                        style={{ animation: 'heartbeat 1.5s ease-in-out infinite' }}
+                    />
+                    <Image
+                        src="/images/logo.png"
+                        alt="Eat African Logo"
+                        fill
+                        className="object-contain z-10"
+                        priority
+                    />
                 </div>
+
+                <style jsx>{`
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    14% {
+      transform: scale(1.15);
+    }
+    28% {
+      transform: scale(1);
+    }
+    42% {
+      transform: scale(1.15);
+    }
+    70% {
+      transform: scale(1);
+    }
+  }
+`}</style>
+
+
+
 
                 {/* Language Selector */}
                 <div className="relative">
