@@ -39,16 +39,18 @@ export default function LocationSelection() {
     return (
         <div className="bg-white/50 rounded-lg p-4 sm:p-5 w-full max-w-md sm:max-w-lg md:max-w-lg lg:max-w-xl mx-auto relative shadow-lg">
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                {/* Updated Country selection for responsiveness */}
-                <div className="p-2 w-full sm:w-auto">
-                    <div className="bg-[#fff2cc] text-center py-1 px-3 rounded-r-lg mb-3 inline-block mx-auto sm:mx-0">
+            {/* Scrollable Row on Small Screens */}
+            <div className="flex flex-row md:grid md:grid-cols-2 gap-4 mb-4 overflow-x-auto no-scrollbar">
+
+                {/* COUNTRY SPECIALTY SECTION */}
+                <div className="p-2 min-w-[230px]">
+                    <div className="bg-[#fff2cc] text-center py-1 px-3 rounded-r-xl mb-3 inline-block mx-auto sm:mx-0 ml-10 lg:ml-10">
                         <h3 className="font-semibold text-black text-[10px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                     </div>
 
-                    <div className="space-y-2 pl-2 sm:pl-4 mt-2 w-full max-w-sm sm:max-w-md md:max-w-md lg:max-w-lg">
+                    <div className="space-y-2 pl-2 sm:pl-4 mt-2 ml-4">
                         {countrySpecialties.map((country) => (
-                            <label key={country} className="custom-radio text-black flex items-center cursor-pointer gap-2 flex-wrap sm:flex-nowrap">
+                            <label key={country} className="custom-radio text-black flex items-center cursor-pointer gap-1 flex-wrap sm:flex-nowrap">
                                 <input
                                     type="radio"
                                     name="country"
@@ -79,16 +81,18 @@ export default function LocationSelection() {
                     </div>
                 </div>
 
-                {/* Info text */}
-                <div className="bg-[#fff2cc] text-start py-1 px-3 rounded-2xl mb-3 mx-auto sm:mx-0 mt-8 w-full max-w-sm sm:max-w-md md:max-w-md lg:max-w-lg">
-                    <h3 className="font-semibold text-black text-[10px] sm:text-xs uppercase p-2 leading-tight">
-                        CHOOSE AN AFRICAN SPECIALTY TO EXPLORE ITS DETAILS AND LOCATIONS WITH RESTAURANTS OFFERING IT
-                    </h3>
+                {/* INFO TEXT */}
+                <div className="p-0 flex items-center justify-center min-w-auto mt-12">
+                    <div className="bg-[#fff2cc] text-start py-1 px-1 rounded-2xl mr-10">
+                        <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase p-2 leading-tight">
+                            CHOOSE AN AFRICAN SPECIALTY TO EXPLORE ITS DETAILS AND LOCATIONS WITH RESTAURANTS OFFERING IT
+                        </h3>
+                    </div>
                 </div>
             </div>
 
-            {/* Chef Images */}
-            <div className="absolute left-0 bottom-0 w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36 z-10 -translate-x-1/3">
+            {/* CHEF IMAGES */}
+            <div className="absolute left-0 bottom-0 w-40 h-40 sm:w-28 sm:h-36 md:w-28 md:h-64 z-10 -translate-x-1/3">
                 <Image
                     src="/images/chef-male.png"
                     alt="Male Chef"
@@ -98,7 +102,7 @@ export default function LocationSelection() {
                 />
             </div>
 
-            <div className="absolute right-0 bottom-0 w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36 z-10 translate-x-1/3">
+            <div className="absolute right-0 bottom-0 w-40 h-40 sm:w-28 sm:h-36 md:w-28 md:h-64 z-10 translate-x-1/3">
                 <Image
                     src="/images/chef-female.png"
                     alt="Female Chef"
@@ -108,7 +112,7 @@ export default function LocationSelection() {
                 />
             </div>
 
-            {/* Buttons */}
+            {/* BUTTONS */}
             <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6 md:mt-8 relative z-20">
                 {selectedCountry && (
                     <button
