@@ -76,7 +76,7 @@ export default function HowItWorks({ isOpen, onClose }: HowItWorksProps) {
             <div className="modal-container02 relative max-w-xs bg-[#f0e6d9]/80 rounded-bl-3xl rounded-tl-3xl shadow-lg mt-4 mr-4 clip-hexagon overflow-hidden z-10">
 
                 {/* Image - BEHIND */}
-                <div className="absolute top-6 right-16 w-40 h-40 md:w-48 md:h-48 z-20">
+                <div className="absolute  right-72 w-40 h-40 md:w-48 md:h-48 z-20">
                     <Image
                         src="/images/chefs-group.png"
                         alt="Chefs group"
@@ -85,18 +85,17 @@ export default function HowItWorks({ isOpen, onClose }: HowItWorksProps) {
                     />
                 </div>
 
-
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute mt-16 left-32 text-white font-bold hover:text-amber-700 z-30"
+                    className="absolute mt-16 right-4 text-white font-bold hover:text-amber-700 z-30"
                     aria-label="Close"
                 >
                     <X size={30} />
                 </button>
 
                 {/* Header */}
-                <div className="flex justify-between items-start p-0 relative z-10">
+                <div className="flex justify-end items-end p-0 relative z-10 mr-12">
                     <div className="bg-amber-900 text-white mt-16 py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 ml-72">
                         <h2 className="text-sm font-bold uppercase">HOW IT WORKS</h2>
                     </div>

@@ -237,7 +237,7 @@ body {
 /* this is the HOW IT WORKS div */
 .modal-container02 { 
   /* background-color: var(--primary-orange); */
-  background-color: rgba(240, 230, 217, 0.505);
+  background-color: rgba(240, 230, 217, 0);
   /* border-top-left-radius: 10rem; */
   /* border-bottom-left-radius: 10rem; */
   /* padding: 1.5rem; */
@@ -251,7 +251,7 @@ body {
 /* this is the DELIVERY GUIDE div */
 .modal-container03 { 
   /* background-color: var(--primary-orange); */
-  background-color: rgba(240, 230, 217, 0.505);
+  background-color: rgba(240, 230, 217, 0);
   /* border-top-left-radius: 10rem; */
   /* border-bottom-left-radius: 10rem; */
   /* padding: 1.5rem; */
