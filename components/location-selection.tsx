@@ -78,7 +78,7 @@ export default function LocationSelection({ onViewMenu, isViewingMenu, selectedR
     };
 
     return (
-        <div className="bg-white/50 rounded-lg p-4 sm:p-5 w-full max-w-7xl mx-auto relative shadow-lg ml-6">
+        <div className="bg-white/50 rounded-lg p-4 sm:p-5 w-full max-w-7xl mx-auto relative shadow-lg ml-1">
 
             {/* Scrollable Row on Small Screens */}
             <div className="flex flex-row md:grid md:grid-cols-2 gap-4 mb-4 overflow-x-auto no-scrollbar ">
@@ -123,7 +123,7 @@ export default function LocationSelection({ onViewMenu, isViewingMenu, selectedR
                 <div className="p-2 min-w-[230px]">
 
                     {/* Chef male */}
-                    <div className="absolute left-0 -top-40 w-32 h-32 sm:w-24 sm:h-28 md:w-24 md:h-52 z-10 translate-x-1/4">
+                    <div className="absolute left-0 -top-40 w-32 h-32 sm:w-24 sm:h-28 md:w-24 md:h-52 z-10 translate-x-1/4 hidden sm:block">
                         <Image
                             src="/images/chef-male.png"
                             alt="Male Chef"
@@ -134,7 +134,7 @@ export default function LocationSelection({ onViewMenu, isViewingMenu, selectedR
                     </div>
 
                     {/* Chef female */}
-                    <div className="absolute right-6 -top-40 w-32 h-32 sm:w-24 sm:h-28 md:w-24 md:h-52 z-10 -translate-x-1/2">
+                    <div className="absolute right-6 -top-40 w-32 h-32 sm:w-24 sm:h-28 md:w-24 md:h-52 z-10 -translate-x-1/2 hidden sm:block">
                         <Image
                             src="/images/chef-female.png"
                             alt="Female Chef"
@@ -257,7 +257,7 @@ export default function LocationSelection({ onViewMenu, isViewingMenu, selectedR
 
                 {/* SEE RESTARUANT LIST */}
                 {selectedCountry && !selectedLocation && (
-                    <div className="p-0 flex items-center justify-center w-full" style={{ maxWidth: '200px', marginTop: '3.5rem' }}>
+                    <div className="p-0 flex items-center justify-center w-full ml-10" style={{ maxWidth: '200px', marginTop: '3.5rem' }}>
                         <div className="bg-[#fff2cc] text-start py-1 px-1 rounded-2xl">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase p-2 leading-tight">
                                 CHOOSE A LOCATION TO SEE RESTARUANT LIST AND VIEW THEIR MENU

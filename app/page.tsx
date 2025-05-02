@@ -38,17 +38,17 @@ function Buttons({ setHowItWorksOpen, setDeliveryGuideOpen }: { setHowItWorksOpe
 }
 
 function RightSideContentInline({ setHowItWorksOpen, setDeliveryGuideOpen }: { setHowItWorksOpen: React.Dispatch<React.SetStateAction<boolean>>, setDeliveryGuideOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
-return (
-  <div className="flex flex-col items-center  w-full max-w-md md:max-w-lg ml-10">
-    {/* Buttons side by side on medium screens and up */}
-    <Buttons setHowItWorksOpen={setHowItWorksOpen} setDeliveryGuideOpen={setDeliveryGuideOpen} />
+  return (
+    <div className="flex flex-col items-center  w-full max-w-md md:max-w-lg ml-10">
+      {/* Buttons side by side on medium screens and up */}
+      <Buttons setHowItWorksOpen={setHowItWorksOpen} setDeliveryGuideOpen={setDeliveryGuideOpen} />
 
-    {/* Heading on top */}
-    <h1 className="text-white font-bold text-base md:text-lg mb-4">
-      YOUR FAVORITE AFRICAN MEALS—JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
-    </h1>
-  </div>
-);
+      {/* Heading on top */}
+      <h1 className="text-white font-bold text-base md:text-lg mb-4">
+        YOUR FAVORITE AFRICAN MEALS—JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
+      </h1>
+    </div>
+  );
 }
 
 import { useState } from "react";
@@ -113,26 +113,29 @@ export default function Home() {
           {/* Main Content Area - Adjusted for better spacing */}
           <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt-10`}>
 
-            <div className="fixed left-0 top-1/2 transform -translate-y-1/2 flex flex-col items-start gap-4 ml-4 z-50">
-              <button
-                onClick={openDeliveryGuide}
-                className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
-                style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
-              >
-                <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
-              </button>
+            { !isMobile && (
+              <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-4 md:z-50">
+                <button
+                  onClick={openDeliveryGuide}
+                  className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+                  style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+                >
+                  <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
+                </button>
 
-              <button
-                onClick={openHowItWorks}
-                className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2  border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
-                style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
-              >
-                <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
-              </button> 
-            </div>
+                <button
+                  onClick={openHowItWorks}
+                  className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+                  style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+                >
+                  <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
+                </button>
+              </div>
+            )}
+
 
             {/* Left Side Content */}
-            <div className="max-w-2xl w-full flex flex-col">
+            <div className="max-w-2xl w-full flex flex-col ">
               <LeftSideContent
                 onViewMenu={handleViewMenu}
                 isViewingMenu={isViewingMenu}
@@ -148,6 +151,19 @@ export default function Home() {
               </div>
             )}
           </div>
+
+          {/* Render HowItWorks and DeliveryGuide modals conditionally */}
+          {isMobile ? (
+            <>
+              <HowItWorksMobile isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
+              <DeliveryGuideMobile isOpen={deliveryGuideOpen} onClose={() => setDeliveryGuideOpen(false)} />
+            </>
+          ) : (
+            <>
+              <HowItWorks isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
+              <DeliveryGuide isOpen={deliveryGuideOpen} onClose={() => setDeliveryGuideOpen(false)} />
+            </>
+          )}
 
           {/* Footer */}
           <SiteFooter />
