@@ -52,29 +52,28 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
     if (!isOpen) return null;
 
     return (
-        <div className="relative bg-[#f0e6d9]/60 rounded-lg shadow-lg p-4 mt-4 clip-hexagon02">
-            {/* Image - BEHIND */}
-            <div className="absolute top-4 right-4 w-40 h-40 z-10 opacity-100 pointer-events-none">
-                <Image
-                    src="/images/chefs-group.png"
-                    alt="Chefs group"
-                    fill
-                    className="object-cover rounded-md"
-                />
-            </div>
-
-            {/* Close Button */}
-            <button
+        <div className="relative rounded-lg shadow-lg p-4 -mt-80">
+             {/* Close Button */}
+             <button
                 onClick={onClose}
-                className="absolute top-8 left-20 text-gray-700 font-bold hover:text-amber-700 z-20"
+                className="rounded-full bg-[#f0e6d9] px-2 absolute top-10 right-10 text-gray-700 font-bold hover:text-amber-700 z-20"
                 aria-label="Close"
             >
                 ✕
             </button>
 
             {/* Header */}
-            <div className="mt-4 ml-28 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
+            <div className="mt-4 ml-40 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
                 <h2 className="text-sm font-bold uppercase">HOW WE DELIVER</h2>
+            </div>
+
+            <div className="absolute top-4 left-4 w-40 h-40 z-0 opacity-100 pointer-events-none">
+                <Image
+                    src="/images/chefs-group.png"
+                    alt="Chefs group"
+                    fill
+                    className="object-cover rounded-md"
+                />
             </div>
 
             {/* Delivery Zones Section */}

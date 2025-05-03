@@ -26,21 +26,27 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
   // State to track which component is visible: 'deliveryGuide', 'howItWorks', 'restaurantList', 'viewMenu', or null
   const [visibleComponent, setVisibleComponent] = useState<string | null>(null);
+  // State to track the active button: 'deliveryGuide', 'howItWorks', 'restaurantList', 'viewMenu', or null
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const openDeliveryGuide = () => {
     setVisibleComponent('deliveryGuide');
+    setActiveButton('deliveryGuide');
   };
 
   const openHowItWorks = () => {
     setVisibleComponent('howItWorks');
+    setActiveButton('howItWorks');
   };
 
   const openRestaurantList = () => {
     setVisibleComponent('restaurantList');
+    setActiveButton('restaurantList');
   };
 
   const openViewMenu = () => {
     setVisibleComponent('viewMenu');
+    setActiveButton('viewMenu');
     if (selectedRestaurant && !isViewingMenu) {
       onViewMenu(selectedRestaurant);
     }
@@ -48,12 +54,14 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
   const closeComponents = () => {
     setVisibleComponent(null);
+    setActiveButton(null);
   };
 
   // Handle VIEW MENU from LocationSelectionMobile
   const handleViewMenu = (restaurant: string) => {
-    // Do not set visibleComponent to 'viewMenu', just update parent state
-    onViewMenu(restaurant);
+    setVisibleComponent('viewMenu'); // Show ViewMenu immediately
+    setActiveButton('viewMenu'); // Set VIEW MENU as active
+    onViewMenu(restaurant); // Update parent state
   };
 
   return (
@@ -70,14 +78,14 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
         <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-4 md:z-50">
           <button
             onClick={openDeliveryGuide}
-            className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+            className={`bg-${activeButton === 'deliveryGuide' ? 'green-600' : 'amber-900'} text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180`}
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           >
             <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
           </button>
           <button
             onClick={openHowItWorks}
-            className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+            className={`bg-${activeButton === 'howItWorks' ? 'green-600' : 'amber-900'} text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180`}
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           >
             <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
@@ -97,22 +105,22 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
       {!isMobile && isViewingMenu && (
         <nav className="hidden sm:flex flex-col space-y-4 absolute right-0 top-1/3 transform -translate-y-1/2">
           <button
-            className="w-6 bg-amber-900 text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
             onClick={openViewMenu}
+            className={`w-6 bg-${activeButton === 'viewMenu' ? 'green-600' : 'amber-900'} text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180`}
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
           >
             <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
           </button>
           <button
-            className="w-6 bg-[#3A6B35] text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
             onClick={openRestaurantList}
+            className={`w-6 bg-${activeButton === 'restaurantList' ? 'green-600' : 'amber-900'} text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180`}
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
           >
             <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
           </button>
         </nav>
       )}
-      
+
       {/* Chef Images */}
       <div className="absolute max-w-2xl mt-36 mb-6 xs:mb-8 sm:mb-10 text-center">
         {/* Chef male - Desktop only */}
@@ -141,72 +149,80 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
       {/* Lower Section */}
       <div className="relative max-w-2xl mt-10 xs:mt-12 sm:mt-16 lg:mt-10 mb-6 xs:mb-8 sm:mb-10 text-center">
         {/* Chef male - Mobile only */}
-        <div className="block sm:hidden absolute -left-20 -top-16 w-24 xs:w-20 h-24 xs:h-20 z-10 translate-x-1/4">
-          <Image
-            src="/images/chef-male.png"
-            alt="Male Chef"
-            fill
-            className="object-contain object-bottom"
-            priority
-          />
-        </div>
-
-        {/* Chef female - Mobile only */}
-        <div className="block sm:hidden absolute -right-20 -top-16 w-24 xs:w-20 h-24 xs:h-20 z-10 -translate-x-1/4">
-          <Image
-            src="/images/chef-female.png"
-            alt="Female Chef"
-            fill
-            className="object-contain object-bottom"
-            priority
-          />
-        </div>
-        {/* Ending Text */}
-        <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
-          YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
-        </p>
-
-        {/* Side Buttons - Mobile View (Left Side, Floating Vertical Stack) */}
-        {isMobile && isViewingMenu && (
-          <nav className="block -ml-6 top-1/4 flex flex-col space-y-3 z-50 w-6">
-            <button
-              className="w-6 bg-amber-900 text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180"
-              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-              onClick={openViewMenu}
-            >
-              <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
-            </button>
-            <button
-              className="w-6 bg-[#3A6B35] text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
-              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-              onClick={openRestaurantList}
-            >
-              <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
-            </button>
-          </nav>
+        {(!isMobile || (visibleComponent !== 'viewMenu' && visibleComponent !== 'restaurantList')) && (
+          <div className="block sm:hidden absolute -left-20 -top-16 w-24 xs:w-20 h-24 xs:h-20 z-10 translate-x-1/4">
+            <Image
+              src="/images/chef-male.png"
+              alt="Male Chef"
+              fill
+              className="object-contain object-bottom"
+              priority
+            />
+          </div>
         )}
 
-        {/* Side Buttons 02 - Mobile View (Left Side, Floating Vertical Stack) */}
-        {isMobile && (
-          <div className="block -ml-6 top-1/3 flex flex-col space-y-3 z-50 w-6">
-            <button
-              onClick={openDeliveryGuide}
-              className="bg-amber-900 text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180"
-              style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
-            >
-              <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
-            </button>
-            <button
-              onClick={openHowItWorks}
-              className="bg-amber-900 text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180"
-              style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
-            >
-              <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
-            </button>
+        {/* Chef female - Mobile only */}
+        {(!isMobile || (visibleComponent !== 'viewMenu' && visibleComponent !== 'restaurantList')) && (
+          <div className="block sm:hidden absolute -right-20 -top-16 w-24 xs:w-20 h-24 xs:h-20 z-10 -translate-x-1/4">
+            <Image
+              src="/images/chef-female.png"
+              alt="Female Chef"
+              fill
+              className="object-contain object-bottom"
+              priority
+            />
           </div>
+        )}
+
+        {/* Ending Text */}
+        {(!isMobile || (visibleComponent !== 'viewMenu' && visibleComponent !== 'restaurantList')) && (
+          <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
+            YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
+          </p>
         )}
       </div>
 
+
+      {/* Side Buttons 02 - Mobile View (Centered or Left Side, Floating Vertical Stack) */}
+      {isMobile && (
+        <div className={`block top-1/3 flex flex-col space-y-3 z-50 w-6 ${visibleComponent ? '-ml-[450px]' : 'left-1/2 -translate-x-1/2'}`}>
+          <button
+            onClick={openDeliveryGuide}
+            className={`bg-${activeButton === 'deliveryGuide' ? 'green-600' : 'amber-900'} text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180`}
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
+          </button>
+          <button
+            onClick={openHowItWorks}
+            className={`bg-${activeButton === 'howItWorks' ? 'green-600' : 'amber-900'} text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180`}
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
+          </button>
+        </div>
+      )}
+
+      {/* Side Buttons - Mobile View (Left Side or Centered, Floating Vertical Stack) */}
+      {isMobile && isViewingMenu && (
+        <nav className={`block top-1/4 flex flex-col space-y-3 z-50 w-6 ${visibleComponent ? '-ml-[450px]' : 'left-1/2 -translate-x-1/2'}`}>
+          <button
+            onClick={openViewMenu}
+            className={`w-6 bg-${activeButton === 'viewMenu' ? 'green-600' : 'amber-900'} text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180`}
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+          >
+            <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
+          </button>
+          <button
+            onClick={openRestaurantList}
+            className={`w-6 bg-${activeButton === 'restaurantList' ? 'green-600' : 'amber-900'} text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180`}
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+          >
+            <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
+          </button>
+        </nav>
+      )}
+      
       {/* Render DeliveryGuide and HowItWorks components with controlled visibility */}
       {isMobile ? (
         <>

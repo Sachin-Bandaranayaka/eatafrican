@@ -60,7 +60,7 @@ export default function Home() {
           <SiteHeader />
 
           {/* Main Content Area */}
-          <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt`}>
+          <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt `}>
             {/* Left Side Content */}
             <div className="w-full md:w-1/2 max-w-2xl flex flex-col">
               <LeftSideContent

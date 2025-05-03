@@ -128,7 +128,11 @@ export default function ViewMenu() {
                   <Search size={16} className="text-gray-900 xs:size-20" />
                 </button>
                 <button className="bg-white p-1 shadow-md hover:shadow-lg transition">
-                  <Share size={16} className="text-gray-900 xs:size-20" />
+                  <img
+                    src="/images/shareButton.png" // your image path
+                    alt="Shopping Basket"
+                    style={{ width: 20, height: 20 }}
+                  />
                 </button>
               </div>
             </div>
@@ -205,7 +209,8 @@ export default function ViewMenu() {
             ))}
           </section>
         </main>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

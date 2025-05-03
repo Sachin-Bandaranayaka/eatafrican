@@ -11,8 +11,22 @@ export default function HowItWorksMobile({ isOpen, onClose }: HowItWorksProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="relative bg-[#f0e6d9]/60 rounded-lg shadow-lg p-4 mt-4 clip-hexagon03">
-            <div className="absolute top-4 right-4 w-40 h-40 z-0 opacity-100 pointer-events-none">
+        <div className="relative rounded-lg shadow-lg p-4 -mt-80">
+            {/* Close Button */}
+            <button
+                onClick={onClose}
+                className="rounded-full bg-[#f0e6d9] px-2 absolute top-10 right-10 text-gray-700 font-bold hover:text-amber-700 z-20"
+                aria-label="Close"
+            >
+                ✕
+            </button>
+
+            {/* Header */}
+            <div className="mt-4 ml-48 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
+                <h2 className="text-sm font-bold uppercase">HOW IT WORKS</h2>
+            </div>
+
+            <div className="absolute top-4 left-4 w-40 h-40 z-0 opacity-100 pointer-events-none">
                 <Image
                     src="/images/chefs-group.png"
                     alt="Chefs group"
@@ -21,19 +35,7 @@ export default function HowItWorksMobile({ isOpen, onClose }: HowItWorksProps) {
                 />
             </div>
             
-            {/* Close Button */}
-            <button
-                onClick={onClose}
-                className="absolute top-8 left-20 text-gray-700 font-bold hover:text-amber-700 z-20"
-                aria-label="Close"
-            >
-                ✕
-            </button>
-
-            {/* Header */}
-            <div className="mt-4 ml-28 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
-                <h2 className="text-sm font-bold uppercase">HOW IT WORKS</h2>
-            </div>
+            
 
             {/* Steps Section */}
             <div className="space-y-3 text-gray-900 text-[10px] text-center relative Z-10 mb-20 mt-6">

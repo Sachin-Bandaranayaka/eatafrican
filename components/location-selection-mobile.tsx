@@ -235,7 +235,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                     CHOOSE AN AFRICAN SPECIALTY TO EXPLORE ITS DETAILS AND LOCATIONS WITH RESTAURANTS OFFERING IT
                                 </h3>
                             </div>
-                        </div>
+                        </div>  
                     )}
 
                     <div className="mt-6 flex justify-end mr-14">

@@ -2,137 +2,148 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart, Star, Search, ChevronDown, Filter, SortAsc, Minus, Plus, Share } from "lucide-react";
+import {
+  Heart, Star, Search, ChevronDown, Filter, SortAsc, Minus, Plus, Share
+} from "lucide-react";
 import ViewMenu from "./view-menu";
 
 export default function RestaurantListing() {
-    const [showViewMenu, setShowViewMenu] = useState(false);
+  const [showViewMenu, setShowViewMenu] = useState(false);
 
-    const restaurants = [
-        {
-            id: 1,
-            name: "Restaurant 1 Name",
-            cuisine: "Ethiopian, Algerian",
-            distance: "9 km, 47 min from Olten",
-            minPrice: 24.00,
-            rating: 3.5,
-        },
-        {
-            id: 2,
-            name: "Restaurant 2 Name",
-            cuisine: "Nigerian",
-            distance: "6 km, 25 min from Olten",
-            minPrice: 24.00,
-            rating: 3,
-        },
-        {
-            id: 3,
-            name: "Restaurant 3 Name",
-            cuisine: "Kenyan",
-            distance: "3 km, 47 min from Olten",
-            minPrice: 24.00,
-            rating: 3,
-        },
-        {
-            id: 4,
-            name: "Restaurant 4 Name",
-            cuisine: "Kenyan",
-            distance: "9 km, 47 min from Olten",
-            minPrice: 24.00,
-            rating: 3.5,
-        },
-    ];
+  const restaurants = [
+    {
+      id: 1,
+      name: "Restaurant 1 Name",
+      cuisine: "Ethiopian, Algerian",
+      distance: "9 km, 47 min from Olten",
+      minPrice: 24.0,
+      rating: 3.5,
+    },
+    {
+      id: 2,
+      name: "Restaurant 2 Name",
+      cuisine: "Nigerian",
+      distance: "6 km, 25 min from Olten",
+      minPrice: 24.0,
+      rating: 3,
+    },
+    {
+      id: 3,
+      name: "Restaurant 3 Name",
+      cuisine: "Kenyan",
+      distance: "3 km, 47 min from Olten",
+      minPrice: 24.0,
+      rating: 3,
+    },
+    {
+      id: 4,
+      name: "Restaurant 4 Name",
+      cuisine: "Kenyan",
+      distance: "9 km, 47 min from Olten",
+      minPrice: 24.0,
+      rating: 3.5,
+    },
+  ];
 
-    const handleToggle = () => {
-        setShowViewMenu(!showViewMenu);
-    };
+  const handleToggle = () => {
+    setShowViewMenu(!showViewMenu);
+  };
 
-    if (showViewMenu) {
-        return <ViewMenu />;
-    }
+  if (showViewMenu) {
+    return <ViewMenu />;
+  }
 
-    return (
-        <div className="min-h-screen transperant p-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 md:mt-20 -mr-10">
-
-            <main className="relative space-y-6">
-                {/* Header */}
-                <div className="flex justify-end mb-4">
-                    <div className="bg-amber-800 text-white rounded-l-3xl border-2 border-amber-400 px-6 py-2 text-sm font-bold">
-                        AFRICAN RESTAURANTS IN ZURICH
-                    </div>
-                </div>
-
-                {/* Filter and Sort Buttons */}
-                <div className="flex justify-end space-x-4 mb-6">
-                    <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
-                        <span>FILTER BY</span>
-                        <ChevronDown size={14} className="ml-1" />
-                    </button>
-
-                    <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
-                        <span>SORT BY</span>
-                        <ChevronDown size={14} className="ml-1" />
-                    </button>
-
-                    <button className="bg-white p-1 rounded-full">
-                        <Share size={16} className="text-gray-900" />
-                    </button>
-                </div>
-
-                {/* Restaurant Listings */}
-                <div className="relative mx-auto justify-end max-w-5xl ml-20">
-                    {restaurants.map((restaurant) => (
-                        <div
-                            key={restaurant.id}
-                            className="bg-white rounded-lg mb-4 flex overflow-hidden border-2 border-amber-400"
-                        >
-                            {/* Restaurant Image */}
-                            <div className="w-32 h-auto  bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300">
-                                <span className="text-gray-400 text-xs text-center">No Image Available</span>
-                            </div>
-
-                            {/* Restaurant Info */}
-                            <div className="w-auto relative-1 p-2">
-                                <h3 className="font-bold text-sm">{restaurant.name}</h3>
-                                <div className="flex items-center text-xs mt-1">
-                                    <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
-                                    <span>{restaurant.cuisine}</span>
-                                </div>
-                                <div className="text-xs mt-1">
-                                    <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
-                                    <span>{restaurant.distance}</span>
-                                </div>
-                                <div className="text-xs mt-1">
-                                    <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
-                                    <span>Min Fr: {restaurant.minPrice.toFixed(2)}</span>
-                                </div>
-                                <div className="text-xs mt-1 flex items-center">
-                                    <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
-                                    <span>{restaurant.rating} hrs</span>
-                                </div>
-                            </div>
-
-                            {/* View Menu Button */}
-                            <div className="flex items-center pr-2 ml-20">
-                                <button className="bg-red-800 text-white text-xs font-bold rounded-lg px-3 py-1 whitespace-nowrap border border-amber-400">
-                                    VIEW MENU
-                                </button>
-                            </div>
-
-                            {/* Image Placeholder */}
-                            <div className="w-10 md:w-10 h-auto bg-gray-200 flex text-gray-500 text-sm font-semibold right">
-                                <Image
-                                    src="/images/menuIcon.png"
-                                    alt="Restaurant Logo"
-                                    width={80}
-                                    height={80}
-                                    className="object-cover"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </main>
+  return (
+    <div className=" min-h-screen flex flex-col md:flex-row bg-transperant text-gray-900 font-sans pl-12 w-auto -mt-[100vh] md:mt-20">
+      {/* Main Content Area */}
+      <div className="w-screen p-4 space-y-4 xs:space-y-6 md:space-y-8">
+        {/* Header */}
+        <div className="flex justify-end mb-4">
+          <div className="bg-amber-800 text-white rounded-l-3xl border-2 border-amber-400 px-6 py-2 text-sm font-bold">
+            AFRICAN RESTAURANTS IN ZURICH
+          </div>
         </div>
-    );
+
+        {/* Filter and Sort Buttons */}
+        <div className="flex justify-end space-x-4 mb-6">
+          <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+            <span>FILTER BY</span>
+            <ChevronDown size={14} className="ml-1" />
+          </button>
+
+          <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+            <span>SORT BY</span>
+            <ChevronDown size={14} className="ml-1" />
+          </button>
+
+          <button className="bg-white p-1">
+          <img
+                        src="/images/shareButton.png" // your image path
+                        alt="Shopping Basket"
+                        style={{ width: 20, height: 20 }}
+                    />
+          </button>
+        </div>
+
+        {/* Restaurant Listings */}
+        <div className="relative mx-auto max-w-5xl">
+          {restaurants.map((restaurant) => (
+            <div
+              key={restaurant.id}
+              className="bg-white rounded-lg mb-4 flex overflow-hidden border-2 border-amber-400"
+            >
+              {/* Restaurant Image */}
+              <div className="w-32 h-auto bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300">
+                <span className="text-gray-400 text-xs text-center">
+                  No Image Available
+                </span>
+              </div>
+
+              {/* Restaurant Info */}
+              <div className="w-auto p-2">
+                <h3 className="font-bold text-sm">{restaurant.name}</h3>
+                <div className="flex items-center text-xs mt-1">
+                  <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
+                  <span>{restaurant.cuisine}</span>
+                </div>
+                <div className="text-xs mt-1">
+                  <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
+                  <span>{restaurant.distance}</span>
+                </div>
+                <div className="text-xs mt-1">
+                  <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
+                  <span>Min Fr: {restaurant.minPrice.toFixed(2)}</span>
+                </div>
+                <div className="text-xs mt-1 flex items-center">
+                  <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
+                  <span>{restaurant.rating} hrs</span>
+                </div>
+              </div>
+
+              {/* View Menu Button */}
+              <div className="flex items-center pr-2 ml-20">
+                <button
+                  onClick={handleToggle}
+                  className="bg-red-800 text-white text-xs font-bold rounded-lg px-3 py-1 whitespace-nowrap border border-amber-400"
+                >
+                  VIEW MENU
+                </button>
+              </div>
+
+              {/* Image Placeholder */}
+              <div className="w-10 md:w-10 h-auto bg-gray-200 flex text-gray-500 text-sm font-semibold">
+                <Image
+                  src="/images/menuIcon.png"
+                  alt="Restaurant Logo"
+                  width={80}
+                  height={80}
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
