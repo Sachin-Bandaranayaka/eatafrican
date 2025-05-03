@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocationContext } from "../lib/location-context";
-import ViewMenu from "./view-menu";
 
 type CountrySpecialty = "ETHIOPIA, ERITREA" | "KENYA" | "NIGERIA, GHANA";
 type Location = "BERN" | "OLTEN" | "LUZERN" | "ZURICH";
@@ -57,6 +56,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
         if (!restaurantToView) {
             setShowError(true);
         } else {
+            // Update parent state to indicate VIEW MENU was clicked, but do not render ViewMenu
             onViewMenu(restaurantToView);
         }
     };
@@ -250,7 +250,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                         {isViewingMenu && (
                             <button
                                 onClick={handleHome}
-                                className="mt-1 bg-red-800 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                className="mt- bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                             >
                                 HOME
                             </button>

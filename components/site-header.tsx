@@ -19,17 +19,6 @@ export default function SiteHeader() {
         <header className="w-full z-30 pt-0 pb-12 md:pt-0 md:pb-16 px-3 md:px-4 flex justify-between items-center">
             {/* Left Section with Logo and Language Selector */}
             <div className="flex items-center gap-4 md:gap-6">
-                {/* Logo */}
-                {/* <div className="relative w-14 h-14 md:w-20 md:h-20">
-                    <Image
-                        src="/images/logo.png"
-                        alt="Eat African Logo"
-                        fill
-                        className="object-contain"
-                        priority
-                    />
-                </div> */}
-
                 <div className="relative w-14 h-14 md:w-20 md:h-20 mt-1">
                     <div
                         className="absolute inset-0 bg-[#8B0000] rounded-[10px] z-0"

@@ -1,8 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import { useLocationContext } from '../lib/location-context';
 import LocationSelection from '../components/location-selection';
 import LocationSelectionMobile from '../components/location-selection-mobile';
 import Image from "next/image";
 import { useIsMobile } from '../hooks/use-mobile';
+import DeliveryGuide from '../components/delivery-guide';
+import HowItWorks from '../components/how-it-works';
+import DeliveryGuideMobile from '../components/delivery-guide-mobile';
+import HowItWorksMobile from '../components/how-it-works-mobile';
+import RestaurantListing from '../components/restaurant-list';
+import ViewMenu from '../components/view-menu';
 
 interface LeftSideContentProps {
   onViewMenu: (restaurant: string) => void;
@@ -15,6 +24,38 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
   const { t } = useLocationContext();
   const isMobile = useIsMobile();
 
+  // State to track which component is visible: 'deliveryGuide', 'howItWorks', 'restaurantList', 'viewMenu', or null
+  const [visibleComponent, setVisibleComponent] = useState<string | null>(null);
+
+  const openDeliveryGuide = () => {
+    setVisibleComponent('deliveryGuide');
+  };
+
+  const openHowItWorks = () => {
+    setVisibleComponent('howItWorks');
+  };
+
+  const openRestaurantList = () => {
+    setVisibleComponent('restaurantList');
+  };
+
+  const openViewMenu = () => {
+    setVisibleComponent('viewMenu');
+    if (selectedRestaurant && !isViewingMenu) {
+      onViewMenu(selectedRestaurant);
+    }
+  };
+
+  const closeComponents = () => {
+    setVisibleComponent(null);
+  };
+
+  // Handle VIEW MENU from LocationSelectionMobile
+  const handleViewMenu = (restaurant: string) => {
+    // Do not set visibleComponent to 'viewMenu', just update parent state
+    onViewMenu(restaurant);
+  };
+
   return (
     <div className="relative flex flex-col items-center w-full px-4 sm:px-0 xs:px-0 lg:px-10 min-h-[calc(100vh-64px)]">
       {/* Heading Text */}
@@ -24,24 +65,56 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
         </p>
       </div>
 
-      {/* Location Selection Box */}
-      {isMobile ? (
-        <LocationSelectionMobile
-          onViewMenu={onViewMenu}
-          isViewingMenu={isViewingMenu}
-          selectedRestaurant={selectedRestaurant}
-          onChange={onChange}
-        />
-      ) : (
-        <LocationSelectionMobile
-          onViewMenu={onViewMenu}
-          isViewingMenu={isViewingMenu}
-          selectedRestaurant={selectedRestaurant}
-          onChange={onChange}
-        />
+      {/* Side Buttons 02 - Desktop View (Left Side, Between Heading and Ending Text) */}
+      {!isMobile && (
+        <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-4 md:z-50">
+          <button
+            onClick={openDeliveryGuide}
+            className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
+          </button>
+          <button
+            onClick={openHowItWorks}
+            className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-amber-600 hover:text-amber-200 transition duration-200 transform rotate-180"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
+          </button>
+        </div>
       )}
 
-      <div className="absolute max-w-2xl mt-36  mb-6 xs:mb-8 sm:mb-10 text-center">
+      {/* Location Selection Box */}
+      <LocationSelectionMobile
+        onViewMenu={handleViewMenu}
+        isViewingMenu={isViewingMenu}
+        selectedRestaurant={selectedRestaurant}
+        onChange={onChange}
+      />
+
+      {/* Side Buttons - Desktop View (Right Side, Between Heading and Ending Text) */}
+      {!isMobile && isViewingMenu && (
+        <nav className="hidden sm:flex flex-col space-y-4 absolute right-0 top-1/3 transform -translate-y-1/2">
+          <button
+            className="w-6 bg-amber-900 text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180"
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            onClick={openViewMenu}
+          >
+            <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
+          </button>
+          <button
+            className="w-6 bg-[#3A6B35] text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            onClick={openRestaurantList}
+          >
+            <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
+          </button>
+        </nav>
+      )}
+      
+      {/* Chef Images */}
+      <div className="absolute max-w-2xl mt-36 mb-6 xs:mb-8 sm:mb-10 text-center">
         {/* Chef male - Desktop only */}
         <div className="hidden sm:block absolute -ml-40 -top-56 w-32 h-32 lg:-left-40 lg:-top-28 lg:w-40 lg:h-40 z-10 translate-x-1/4">
           <Image
@@ -88,11 +161,75 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
             priority
           />
         </div>
-
+        {/* Ending Text */}
         <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
           YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
         </p>
+
+        {/* Side Buttons - Mobile View (Left Side, Floating Vertical Stack) */}
+        {isMobile && isViewingMenu && (
+          <nav className="block -ml-6 top-1/4 flex flex-col space-y-3 z-50 w-6">
+            <button
+              className="w-6 bg-amber-900 text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180"
+              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+              onClick={openViewMenu}
+            >
+              <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
+            </button>
+            <button
+              className="w-6 bg-[#3A6B35] text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
+              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+              onClick={openRestaurantList}
+            >
+              <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
+            </button>
+          </nav>
+        )}
+
+        {/* Side Buttons 02 - Mobile View (Left Side, Floating Vertical Stack) */}
+        {isMobile && (
+          <div className="block -ml-6 top-1/3 flex flex-col space-y-3 z-50 w-6">
+            <button
+              onClick={openDeliveryGuide}
+              className="bg-amber-900 text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180"
+              style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+            >
+              <span className="text-xs font-bold uppercase">HOW WE DELIVER</span>
+            </button>
+            <button
+              onClick={openHowItWorks}
+              className="bg-amber-900 text-white py-6 rounded-2xl border-2 border-amber-600 hover:text-amber-200 shadow-lg transition duration-200 transform rotate-180"
+              style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+            >
+              <span className="text-xs font-bold uppercase">HOW IT WORKS</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Render DeliveryGuide and HowItWorks components with controlled visibility */}
+      {isMobile ? (
+        <>
+          <DeliveryGuideMobile isOpen={visibleComponent === 'deliveryGuide'} onClose={closeComponents} />
+          <HowItWorksMobile isOpen={visibleComponent === 'howItWorks'} onClose={closeComponents} />
+          {/* Mobile view: Render ViewMenu and RestaurantListing below ending text */}
+          {visibleComponent === 'restaurantList' && <RestaurantListing />}
+          {visibleComponent === 'viewMenu' && <ViewMenu />}
+        </>
+      ) : (
+        <>
+          <DeliveryGuide isOpen={visibleComponent === 'deliveryGuide'} onClose={closeComponents} />
+          <HowItWorks isOpen={visibleComponent === 'howItWorks'} onClose={closeComponents} />
+        </>
+      )}
+
+      {/* Desktop view: Render ViewMenu and RestaurantListing on the right side */}
+      {!isMobile && (
+        <div className="fixed right-0 top-0 w-1/2 max-w-2xl h-full overflow-y-auto overflow-x-hidden z-40 bg-transparent p-4 box-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {visibleComponent === 'restaurantList' && <RestaurantListing />}
+          {visibleComponent === 'viewMenu' && <ViewMenu />}
+        </div>
+      )}
     </div>
   );
 }

@@ -52,24 +52,8 @@ export default function RestaurantListing() {
     }
 
     return (
-        <div className="min-h-screen transperant p-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-20 -mr-10">
+        <div className="min-h-screen transperant p-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 md:mt-20 -mr-10">
 
-            {/* Left Sidebar */}
-            <nav className="flex flex-col space-y-4 mt-48 ml-10">
-                <button
-                    className="bg-[#3A6B35] text-white py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
-                    style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-                >
-                    <span className="text-xs font-bold uppercase"> RESTAURANTS IN LUZERN</span>
-                </button>
-                <button
-                    className="bg-amber-900 text-white py-6 px-0 rounded-2xl border-2 border-white  hover:text-amber-200 transition duration-200 transform rotate-180"
-                    style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-                    onClick={handleToggle}
-                >
-                    <span className="text-xs font-bold uppercase">AFRICAN RESTAURANTS </span>
-                </button>
-            </nav>
             <main className="relative space-y-6">
                 {/* Header */}
                 <div className="flex justify-end mb-4">
@@ -103,12 +87,12 @@ export default function RestaurantListing() {
                             className="bg-white rounded-lg mb-4 flex overflow-hidden border-2 border-amber-400"
                         >
                             {/* Restaurant Image */}
-                            <div className="w-32 h-24 bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300">
+                            <div className="w-32 h-auto  bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300">
                                 <span className="text-gray-400 text-xs text-center">No Image Available</span>
                             </div>
 
                             {/* Restaurant Info */}
-                            <div className="relative-1 p-2">
+                            <div className="w-auto relative-1 p-2">
                                 <h3 className="font-bold text-sm">{restaurant.name}</h3>
                                 <div className="flex items-center text-xs mt-1">
                                     <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>

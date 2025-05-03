@@ -65,26 +65,7 @@ export default function ViewMenu() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent p-4 xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-28 -mr-10">
-      {/* Left Sidebar */}
-      {!showRestaurantList && (
-        <nav className="w-6 flex flex-col space-y-4 mt-32 xs:mt-40 sm:mt-56">
-          <button
-            className="w-6 bg-amber-900 text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:text-amber-200 transition duration-200 transform rotate-180"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-            onClick={handleToggle}
-          >
-            <span className="text-[10px] xs:text-xs font-bold uppercase">RESTAURANTS IN LUZERN</span>
-          </button>
-          <button
-            className="w-6 bg-[#3A6B35] text-white py-4 xs:py-6 px-0 rounded-2xl border-2 border-white hover:bg-[#2E552B] transition duration-200 transform rotate-180"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-          >
-            <span className="text-[10px] xs:text-xs font-bold uppercase">AFRICAN RESTAURANTS</span>
-          </button>
-        </nav>
-      )}
-
+    <div className="min-h-screen bg-transparent p-4 xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[100vh] md:mt-20 -mr-10 ">
       {/* Main Content */}
       {showRestaurantList ? (
         <RestaurantList />
@@ -163,7 +144,7 @@ export default function ViewMenu() {
                 {/* Left Image Placeholder and Meal Info on Same Level */}
                 <div className="flex flex-row xs:flex-row w-full">
                   {/* Left Image Placeholder */}
-                  <div className="w-1/4 h-auto bg-gray-200 flex items-start justify-start text-gray-500 text-[10px] xs:text-sm font-semibold rounded-xl border border-amber-400 xs:mr-4">
+                  <div className="mt-2 mb-2 w-1/4 h-auto bg-gray-200 flex items-start justify-start text-gray-500 text-[10px] xs:text-sm font-semibold rounded-xl border border-amber-400 xs:mr-4">
                     No Image Available
                   </div>
 
@@ -172,7 +153,7 @@ export default function ViewMenu() {
                     {/* Title and Vegan Button on Same Level */}
                     <div className="flex justify-between items-center mb-1">
                       <h3 className="text-[10px] xs:text-sm sm:text-lg font-bold">{meal.title}</h3>
-                      <span className="inline-block bg-green-800 text-white text-[8px] xs:text-xs px-2 xs:px-4 py-1 xs:py-2 rounded-lg">
+                      <span className="inline-block bg-green-800 text-white text-[8px] xs:text-xs py-2 px-4 xs:px-4 py-1 xs:py-2 rounded-md">
                         VEGAN
                       </span>
                     </div>
@@ -182,47 +163,43 @@ export default function ViewMenu() {
 
                     {/* Quantity, Increase Button, and Price */}
                     <div className="flex items-center justify-between mt-3 xs:mt-4">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-[8px] xs:text-xs sm:text-sm mr-2 xs:mr-4">Quantity</span>
-                        <QuantitySelector
-                          quantity={mealQuantities[meal.id]}
-                          setQuantity={(q) =>
-                            setMealQuantities((prev) => ({
-                              ...prev,
-                              [meal.id]: q,
-                            }))
-                          }
-                        />
+                      <div className="flex items-center space-x-10 ">
+                        <span className="text-[8px] xs:text-xs sm:text-sm mr-2 xs:mr-4 ml-8">Quantity</span>
+                        <button className="px-2 rounded-md border-2 border-amber-600 ">
+                          1+
+                        </button>
+                        <span className="text-[10px] xs:text-sm sm:text-lg font-bold">
+                          Fr. {meal.price.toFixed(2)}.-
+                        </span>
                       </div>
-                      <span className="text-[10px] xs:text-sm sm:text-lg font-bold">
-                        Fr. {meal.price.toFixed(2)}.-
-                      </span>
+
                     </div>
 
                     {/* Heart Icon and Add to Cart Button */}
-                    <div className="flex items-center justify-between mt-3 xs:mt-4">
+                    <div className="flex items-center justify-between mt-3 xs:mt-4 ml-10">
                       <button
                         className="bg-amber-900 p-1 text-green-600 hover:text-green-800 transition rounded-lg"
                         aria-label="Add to favorites"
                       >
                         <Heart size={20} className="bg-white xs:size-26" />
                       </button>
-                      <button className="bg-red-800 text-white py-1 xs:py-2 px-2 xs:px-3 border-4 border-amber-400 rounded-3xl text-[8px] xs:text-xs sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap">
+                      <button className="mr-40 bg-red-800 text-white py-2 xs:py-2 px-2 xs:px-3 border-4 border-amber-400 rounded-3xl text-[8px] xs:text-xs sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap">
                         ADD TO CART
                       </button>
                     </div>
                   </div>
-                </div>
 
-                {/* Right Image Placeholder */}
-                <div className="hidden xs:flex w-12 h-36 bg-gray-200 items-center justify-center">
-                  <Image
-                    src="./images/menuIcon.png"
-                    alt="Restaurant Logo"
-                    width={40}
-                    height={40}
-                    className="object-cover"
-                  />
+
+                  {/* Right Image Placeholder */}
+                  <div className="w-auto xs:flex w-12 h-auto bg-gray-200 items-center justify-center">
+                    <Image
+                      src="./images/menuIcon.png"
+                      alt="Restaurant Logo"
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
