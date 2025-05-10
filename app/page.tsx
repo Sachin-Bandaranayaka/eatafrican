@@ -55,7 +55,7 @@ export default function Home() {
     <ClientOnly>
       <main className="relative w-full h-screen overflow-hidden">
         {/* Content Overlay */}
-        <div className="relative z-20 flex flex-col h-screen">
+        <div className="relative z-10 flex flex-col h-screen">
           {/* Header with user icon and language selector */}
           <SiteHeader />
 
