@@ -65,7 +65,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full px-4 sm:px-0 xs:px-0 lg:px-10 min-h-[calc(100vh-64px)]">
+    <div className="relative flex flex-col items-center w-full px-4 sm:px-0 xs:px-0 lg:px-10 h-full">
       {/* Heading Text */}
       {/* <div className="max-w-3xl mb-10 sm:mb-8 lg:mb-28 text-center mt-12">
         <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
@@ -113,10 +113,8 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
         </nav>
       )}
 
-
-
       {/* Lower Section */}
-      <div className="relative max-w-2xl mt-4 xs:mt-12 sm:mt-16 lg:mt-4 mb-6 xs:mb-8 sm:mb-10 text-start hidden lg:block">
+      <div className="relative max-w-2xl mt-2 xs:mt-6 sm:mt-8 lg:mt-2 mb-4 xs:mb-4 sm:mb-5 text-start hidden lg:block">
         {/* Ending Text */}
         {(!isMobile || (visibleComponent !== 'viewMenu' && visibleComponent !== 'restaurantList')) && (
           <p className="text-white font-bold text-xs xs:text-sm sm:text-base md:-ml-4 lg:text-md uppercase leading-relaxed">

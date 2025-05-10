@@ -25,7 +25,7 @@ export default function SiteFooter() {
     return (
         <>
             {/* Desktop footer */}
-            <footer className="footer-container hidden md:block py-6 mt-auto">
+            <footer className="footer-container hidden md:block py-4 mt-auto">
                 <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center">
                     <div className="flex space-x-6 mb-2 md:mb-0">
                         <button
