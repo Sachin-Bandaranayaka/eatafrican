@@ -176,36 +176,151 @@ export const useLocation = (): UseLocationReturn => {
     const [isDetecting, setIsDetecting] = useState(false);
 
     useEffect(() => {
-        // Disable location tracking by not calling geolocation API
-        // Instead, set a fixed default location
-        const defaultLocation = {
-            country: 'SWITZERLAND' as keyof typeof LOCATIONS,
-            city: 'ZURICH',
-            language: DEFAULT_LANGUAGE.SWITZERLAND,
-            detectionMethod: 'manual' as LocationDetectionMethod
-        };
-        setLocationInfo(defaultLocation);
-        setShowPrompt(false);
-        setIsFirstVisit(false);
-        setIsDetecting(false);
+        // Check if user has already set a location preference
+        const savedLocation = localStorage.getItem('user-location');
+
+        if (savedLocation) {
+            try {
+                const parsed = JSON.parse(savedLocation);
+                setLocationInfo(parsed);
+                setIsFirstVisit(false);
+                // Keep showPrompt as false
+            } catch (error) {
+                console.error('Failed to parse saved location:', error);
+                detectLocation();
+            }
+        } else {
+            // First visit - detect location
+            detectLocation();
+        }
     }, []);
 
-    // Provide dummy functions for setLocation and setLanguage to keep interface consistent
-    const setLocation = (country: keyof typeof LOCATIONS, city: string) => {
+    // Function to detect user's location
+    const detectLocation = () => {
+        setIsDetecting(true);
+
+        // Try to get geolocation
+        if (typeof window !== 'undefined' && navigator.geolocation) {
+            try {
+                navigator.geolocation.getCurrentPosition(
+                    // Success callback
+                    (position) => {
+                        try {
+                            const { latitude, longitude } = position.coords;
+                            const { country, city } = findClosestLocation(latitude, longitude);
+
+                            // Set detected browser language
+                            const browserLang = detectBrowserLanguage();
+
+                            // Default to browser language, but if we found a country, use its default
+                            let detectedLanguage = browserLang;
+                            if (country && LANGUAGES[country].includes(browserLang)) {
+                                detectedLanguage = browserLang;
+                            } else if (country) {
+                                detectedLanguage = DEFAULT_LANGUAGE[country];
+                            }
+
+                            const newLocationInfo = {
+                                country,
+                                city,
+                                language: detectedLanguage,
+                                detectionMethod: 'geolocation' as LocationDetectionMethod
+                            };
+
+                            setLocationInfo(newLocationInfo);
+                            // Keep showPrompt as false
+                            setIsFirstVisit(true);
+                            setIsDetecting(false);
+                        } catch (err) {
+                            console.warn('Error processing geolocation data:', err);
+                            fallbackToLanguageDetection();
+                        }
+                    },
+                    // Error callback
+                    (error) => {
+                        // Handle specific geolocation errors
+                        let errorMessage;
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = 'User denied the request for geolocation';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = 'Location information is unavailable';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = 'The request to get user location timed out';
+                                break;
+                            default:
+                                errorMessage = 'An unknown error occurred';
+                        }
+                        console.warn(`Geolocation error: ${errorMessage}`);
+
+                        fallbackToLanguageDetection();
+                    },
+                    // Options with increased timeout and high accuracy
+                    {
+                        enableHighAccuracy: false, // High accuracy can cause more timeouts
+                        timeout: 8000,
+                        maximumAge: 60000 // Allow cached positions up to 1 minute
+                    }
+                );
+            } catch (e) {
+                console.warn('Failed to request geolocation:', e);
+                fallbackToLanguageDetection();
+            }
+        } else {
+            fallbackToLanguageDetection();
+        }
+    };
+
+    // Common fallback function for when geolocation fails
+    const fallbackToLanguageDetection = () => {
+        const { country, city, language } = getLocationFromBrowserLanguage();
+
         const newLocationInfo = {
             country,
             city,
-            language: DEFAULT_LANGUAGE[country],
-            detectionMethod: 'manual' as LocationDetectionMethod
+            language,
+            detectionMethod: 'browser' as LocationDetectionMethod
         };
+
         setLocationInfo(newLocationInfo);
+        // Keep showPrompt as false
+        setIsFirstVisit(true);
+        setIsDetecting(false);
+    };
+
+    // Function to update location
+    const setLocation = (country: keyof typeof LOCATIONS, city: string) => {
+        const newLocationInfo = {
+            ...locationInfo,
+            country,
+            city,
+            detectionMethod: 'manual' as LocationDetectionMethod,
+        };
+
+        // Update language if not already compatible with the new country
+        const availableLanguages = LANGUAGES[country];
+        if (!availableLanguages.includes(locationInfo.language)) {
+            newLocationInfo.language = DEFAULT_LANGUAGE[country];
+        }
+
+        setLocationInfo(newLocationInfo);
+
+        // Save to localStorage
         localStorage.setItem('user-location', JSON.stringify(newLocationInfo));
         setIsFirstVisit(false);
     };
 
+    // Function to update language
     const setLanguage = (language: string) => {
-        setLocationInfo(prev => ({ ...prev, language }));
-        localStorage.setItem('user-location', JSON.stringify({ ...locationInfo, language }));
+        const newLocationInfo = {
+            ...locationInfo,
+            language,
+        };
+
+        setLocationInfo(newLocationInfo);
+        localStorage.setItem('user-location', JSON.stringify(newLocationInfo));
     };
 
     return {
