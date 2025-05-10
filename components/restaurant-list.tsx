@@ -54,13 +54,15 @@ export default function RestaurantListing() {
   }
 
   return (
-    <div className=" min-h-screen flex flex-col md:flex-row bg-transperant text-gray-900 font-sans pl-12 w-auto -mt-[100vh] md:mt-20">
-      {/* Main Content Area */}
-      <div className="w-screen p-4 space-y-4 xs:space-y-6 md:space-y-8">
-        {/* Header */}
-        <div className="flex justify-end mb-4">
-          <div className="bg-amber-800 text-white rounded-l-3xl border-2 border-amber-400 px-6 py-2 text-sm font-bold">
-            AFRICAN RESTAURANTS IN ZURICH
+    <div className="min-h-screen flex flex-col md:flex-row bg-transparent text-gray-900 font-sans pl-1 w-auto -mt-[100vh] md:mt-20">
+      <div className="w-screen p-4 pl-10 space-y-4 xs:space-y-6 md:space-y-2">
+        <div className="flex justify-end items-end p-0 relative z-10">
+          <div className=" bg-[#FFF3C7] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 mb-4">
+            <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
+              <h2 className="block bg-[#2A5910] text-white text-sm font-bold uppercase rounded whitespace-nowrap">
+                AFRICAN RESTAURANTS IN ZURICH
+              </h2>
+            </div>
           </div>
         </div>
 
@@ -77,11 +79,11 @@ export default function RestaurantListing() {
           </button>
 
           <button className="bg-white p-1">
-          <img
-                        src="/images/shareButton.png" // your image path
-                        alt="Shopping Basket"
-                        style={{ width: 20, height: 20 }}
-                    />
+            <img
+              src="/images/shareButton.png" // your image path
+              alt="Shopping Basket"
+              style={{ width: 20, height: 20 }}
+            />
           </button>
         </div>
 

@@ -65,12 +65,12 @@ export default function ViewMenu() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent p-4 xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[100vh] md:mt-20 -mr-10 ">
+    <div className="min-h-screen bg-transparent  xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[100vh] md:mt-20 -mr-10 ">
       {/* Main Content */}
       {showRestaurantList ? (
         <RestaurantList />
       ) : (
-        <main className="flex-1 flex flex-col space-y-4 xs:space-y-6">
+        <main className="flex-1 p-2 md:p-10 flex flex-col space-y-4 xs:space-y-6">
           {/* Header Section */}
           <header className="flex flex-row justify-between items-start mr-2">
             {/* Left Side: Logo and Restaurant Details */}

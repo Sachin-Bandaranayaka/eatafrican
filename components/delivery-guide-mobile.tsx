@@ -53,18 +53,28 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
 
     return (
         <div className="relative rounded-lg shadow-lg p-4 -mt-80">
-             {/* Close Button */}
-             <button
+            {/* Close Button */}
+            <button
                 onClick={onClose}
-                className="rounded-full bg-[#f0e6d9] px-2 absolute top-10 right-10 text-gray-700 font-bold hover:text-amber-700 z-20"
-                aria-label="Close"
+                className="absolute top-10 right-0 bg-[#FFF3C7] rounded-full p-1 z-50"
+                type="button"
             >
-                ✕
+                <img
+                    src="/images/cancelBtn.png" // Replace with your image path
+                    alt="Close"
+                    className="w-4 h-4 object-contain"
+                />
             </button>
 
             {/* Header */}
-            <div className="mt-4 ml-40 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
-                <h2 className="text-sm font-bold uppercase">HOW WE DELIVER</h2>
+            <div className="mt-4 ml-48 bg-[#FFF3C7] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 mb-4 w-auto">
+                <div
+                    className="bg-[url('/images/title-background.png')] bg-contain bg-center px-6 py-1"
+                >
+                    <h2 className="inline-block bg-[#2A5910] text-white text-xs font-bold uppercase rounded">
+                        HOW WE DELIVER
+                    </h2>
+                </div>
             </div>
 
             <div className="absolute top-4 left-4 w-40 h-40 z-0 opacity-100 pointer-events-none">
@@ -80,29 +90,29 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
             <div className="mt-2">
                 {deliveryZones.map((zone) => (
                     <div key={zone.radius} className="bg-[#fff2d9]/90 p-3 mb-3 rounded-md relative z-10">
-                    <div className="flex justify-between items-start gap-4">
-                        {/* Main Content */}
-                        <div className="text-amber-950 text-[10px]">
-                            <h3 className="font-bold mb-1 ">{zone.radius} Radius</h3>
-                            <ul className="text-gray-900 list-disc list-inside space-y-1">
-                                <li>
-                                    <strong>Delivery Time:</strong> {zone.time}
-                                    {zone.note && (
-                                        <span className="block text-gray-700 ml-4">{zone.note}</span>
-                                    )}
-                                </li>
-                                <li><strong>Delivery Fee:</strong> {zone.fee}</li>
-                                <li><strong>Minimum Order:</strong> {zone.minOrder}</li>
-                            </ul>
-                        </div>
-                
-                        {/* Example box on the right */}
-                        <div className="max-w-[40%] bg-purple-300 text-gray-800 text-[9px] italic pl-2 rounded">
-                            <strong>Example:</strong> {zone.example}
+                        <div className="flex justify-between items-start gap-4">
+                            {/* Main Content */}
+                            <div className="text-amber-950 text-[10px]">
+                                <h3 className="font-bold mb-1 ">{zone.radius} Radius</h3>
+                                <ul className="text-gray-900 list-disc list-inside space-y-1">
+                                    <li>
+                                        <strong>Delivery Time:</strong> {zone.time}
+                                        {zone.note && (
+                                            <span className="block text-gray-700 ml-4">{zone.note}</span>
+                                        )}
+                                    </li>
+                                    <li><strong>Delivery Fee:</strong> {zone.fee}</li>
+                                    <li><strong>Minimum Order:</strong> {zone.minOrder}</li>
+                                </ul>
+                            </div>
+
+                            {/* Example box on the right */}
+                            <div className="max-w-[40%] bg-[#ebd1dc] text-gray-800 text-[9px] italic pl-2 rounded">
+                                <strong>Example:</strong> {zone.example}
+                            </div>
                         </div>
                     </div>
-                </div>
-                
+
                 ))}
             </div>
         </div>

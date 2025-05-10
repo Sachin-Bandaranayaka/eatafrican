@@ -1,0 +1,307 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+
+interface AboutSpecialtyProps {
+    cuisineType: string;
+    onClose: () => void;
+}
+
+export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyProps) {
+    const [showFullDescription, setShowFullDescription] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const paginationRef = useRef<HTMLDivElement>(null);
+    const initialMouseX = useRef<number | null>(null);
+    const initialThumbLeft = useRef<number>(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const specialtyContent = {
+        "ETHIOPIAN, ERITREAN": {
+            title: "ETHIOPIAN & ERITREAN CUISINE",
+            description: "Experience the ancient flavors of Ethiopia and Eritrea where every meal centers around injera—a tangy sourdough flatbread made from teff grain that serves as both plate and eating utensil. This distinctive cuisine features richly spiced wats (stews) including berbere-infused doro wat (chicken), tender tibs (sautéed meat), and flavorful vegetarian options like misir wat (lentils) and shiro (chickpea puree). With a 3,000-year culinary heritage blending aromatic spices and unique techniques, Ethiopian and Eritrean food offers a communal dining experience where the hands become instruments of enjoyment, delivering perfectly balanced bites of injera topped with savory, complex flavors.",
+            image: "/images/ethiopian-cuisine.jpg",
+            flags: ["/flags/ethiopia.png", "/flags/eritrea.png"],
+            meals: [
+                { name: "Doro Wat", description: "A spicy chicken stew made with berbere and spiced butter, often served with a boiled egg.", image: "/images/doro-wat.jpg" },
+                { name: "Tsebhi (Zigni)", description: "A slow-cooked beef or lamb stew in a smoky, tomato-based sauce", image: "/images/tsebhi-zigni.jpg" },
+                { name: "Kitfo", description: "Finely minced raw or lightly cooked beef, seasoned with spiced butter and chili.", image: "/images/tsebhi-zigni.jpg" },
+                { name: "Shiro", description: "A creamy chickpea or lentil stew flavored with garlic, onion, and berbere.", image: "/images/tsebhi-zigni.jpg" },
+                { name: "Atkilt Wat", description: "A sautéed mix of cabbage, carrots, and potatoes spiced with turmeric.", image: "/images/tsebhi-zigni.jpg" },
+                { name: "Chechebsa", description: "Shredded flatbread tossed with spiced butter and berbere - a quick, satisfying treat", image: "/images/tsebhi-zigni.jpg" },
+                { name: "Ambasha", description: "Lightly sweetened bread flavored with cardamom and coriander, often decorated with patterns.", image: "/images/tsebhi-zigni.jpg" },
+            ],
+        },
+        "KENYAN": {
+            title: "KENYAN CUISINE",
+            description: "Kenya’s food culture blends indigenous ingredients with influences from Arab, Indian, and European cuisines. From the hearty stews of the highlands to the spiced dishes of the Swahili coast, each bite offers a taste of the country's rich history and vibrant diversity.",
+            image: "/images/kenyan-cuisine.jpg",
+            flag: "/flags/kenya.png",
+            meals: [
+                { name: "Ugali", description: "Hearty cornmeal staple that pairs perfectly with stews and vegetables", image: "/images/nyama-choma.jpg" },
+                { name: "Pilau", description: "Spiced rice infused with cardamom, cloves, and cinnamon, often cooked with beef or chicken.", image: "/images/nyama-choma.jpg" },
+                { name: "Chapati", description: "Faky flatbread with Indian roots—ideal for wrapping, dipping, or pairing with stews.", image: "/images/ugali-sukuma.jpg" },
+                { name: "Kuku wa Kupaka", description: "Chicken simmered in  coconut sauce with ginger and tamarind.", image: "/images/ugali-sukuma.jpg" },
+                { name: "Viazi Karai", description: "Crispy turmeric-battered potatoes served with tangy tamarind sauce. A coastal street food favorite.", image: "/images/ugali-sukuma.jpg" },
+                { name: "Sambusa", description: "Deep-fried pastries filled with spiced meat or lentils. Crunchy, savory, and highly addictive.", image: "/images/ugali-sukuma.jpg" },
+            ],
+        },
+        "NIGERIAN, GHANA": {
+            title: "NIGERIAN & GHANAIAN CUISINE",
+            description: "Discover West Africa's vibrant flavors through Nigerian and Ghanaian cuisine, where bold spices and hearty ingredients combine in community-centered dishes. Both culinary traditions feature beloved jollof rice alongside regional specialties like Nigerian egusi soup with pounded yam and Ghanaian fufu with groundnut soup. Enjoy Ghana's waakye and spiced kelewele plantains or Nigeria's fiery pepper soup and suya skewers. These generations-old recipes offer a delicious gateway to West Africa's rich food heritage that satisfies both body and soul.",
+            image: "/images/nigerian-ghanaian-cuisine.jpg",
+            flags: ["/flags/nigeria.png", "/flags/ghana.png"],
+            meals: [
+                { name: "Jollof Rice", description: "A vibrant rice dish cooked in a tomato-pepper sauce, often served with meat or fried plantains.", image: "/images/jollof-rice.jpg" },
+                { name: "Egusi Soup", description: "A rich, nutty soup made from ground melon seeds, leafy greens, and assorted meats.", image: "/images/egusi-soup.jpg" },
+                { name: "Puff-Puff", description: "Sweet, fluffy deep-fried dough balls - Nigeria's beloved street snack.", image: "/images/egusi-soup.jpg" },
+                { name: "Chin Chin", description: "Crunchy, slightly sweet fried pastry bites perfect for on-the-go munching.", image: "/images/egusi-soup.jpg" },
+                { name: "Waakye", description: "A savory mix of rice and beans, cooked with millet leaves and served with varied sides.", image: "/images/egusi-soup.jpg" },
+                { name: "Fufu", description: "A smooth dough of ca ssava and plantain served with a mildly spicy tomato-based soup.", image: "/images/egusi-soup.jpg" },
+                { name: "Red-Red", description: "Black-eyed peas stewed with palm oil and served with fried plantains.", image: "/images/egusi-soup.jpg" },
+                { name: "Kelewele", description: "Spiced fried plantains seasoned with ginger, cayenne, and cloves.", image: "/images/egusi-soup.jpg" },
+            ],
+        },
+    };
+
+    const content = specialtyContent[cuisineType as keyof typeof specialtyContent] || {
+        title: "UNKNOWN CUISINE",
+        description: "No information available for this cuisine.",
+        image: "/images/placeholder.jpg",
+        flag: "/flags/placeholder.png",
+        meals: [],
+    };
+
+    const halfDescription = content.description.split(" ").slice(0, 20).join(" ") + "...";
+
+    // Carousel images
+    const carouselImages = [
+        { src: "/images/ethiopia-eritrea01.png", alt: content.title },
+        { src: "/images/ethiopia-eritrea02.png", alt: content.title },
+    ];
+
+    // Auto-rotate carousel
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + carouselImages.length) % carouselImages.length);
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
+    };
+
+    const updatePagination = () => {
+        if (scrollContainerRef.current && paginationRef.current) {
+            const scrollPos = scrollContainerRef.current.scrollLeft;
+            const visibleWidth = scrollContainerRef.current.clientWidth;
+            const totalWidth = scrollContainerRef.current.scrollWidth;
+            const scrollBarWidth = paginationRef.current.clientWidth;
+
+            if (totalWidth <= visibleWidth) {
+                const bar = paginationRef.current.querySelector(".pagination-bar");
+                if (bar) {
+                    bar.style.width = "100%";
+                    bar.style.left = "0";
+                }
+                return;
+            }
+
+            const thumbWidthRatio = visibleWidth / totalWidth;
+            const thumbWidth = Math.max(20, thumbWidthRatio * scrollBarWidth);
+            const maxScroll = totalWidth - visibleWidth;
+            const thumbMaxLeft = scrollBarWidth - thumbWidth;
+            const thumbLeft = maxScroll > 0 ? (scrollPos / maxScroll) * thumbMaxLeft : 0;
+
+            const bar = paginationRef.current.querySelector(".pagination-bar");
+            if (bar) {
+                bar.style.width = `${thumbWidth}px`;
+                bar.style.left = `${thumbLeft}px`;
+            }
+        }
+    };
+
+    useEffect(() => {
+        updatePagination();
+    }, [cuisineType]);
+
+    useEffect(() => {
+        if (isDragging) {
+            const handleMouseMove = (e: MouseEvent) => {
+                if (paginationRef.current && scrollContainerRef.current) {
+                    const scrollBarRect = paginationRef.current.getBoundingClientRect();
+                    const thumb = paginationRef.current.querySelector(".pagination-bar");
+                    if (thumb && initialMouseX.current !== null) {
+                        const thumbWidth = parseFloat(getComputedStyle(thumb).width);
+                        const maxThumbLeft = scrollBarRect.width - thumbWidth;
+                        const mouseDelta = e.clientX - initialMouseX.current;
+                        const newThumbLeft = Math.max(0, Math.min(initialThumbLeft.current + mouseDelta, maxThumbLeft));
+
+                        thumb.style.left = `${newThumbLeft}px`;
+
+                        const thumbRatio = maxThumbLeft > 0 ? newThumbLeft / maxThumbLeft : 0;
+                        const maxScroll = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth;
+                        scrollContainerRef.current.scrollLeft = thumbRatio * maxScroll;
+                    }
+                }
+            };
+
+            const handleMouseUp = () => {
+                setIsDragging(false);
+                initialMouseX.current = null;
+            };
+
+            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener("mouseup", handleMouseUp);
+
+            return () => {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+            };
+        }
+    }, [isDragging]);
+
+    return (
+        <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[100vw] md:ml-[38vw] md:w-[35vw] ">
+            <div className="relative ml-auto max-w-6xl w-full">
+                <div className="flex justify-end items-center p-0 z-10">
+                    <div className="bg-amber-900 border border-2 border-amber-600 inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
+                        <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
+                            <h2 className="block bg-[#2A5910] text-white text-sm font-bold uppercase rounded whitespace-nowrap">
+                                {content.title}
+                            </h2>
+                        </div>
+                    </div>
+                    {/* close button */}
+                    <button
+                        onClick={onClose}
+                        className="bg-[#FFF3C7] text-black rounded-full p-1 mr-2 z-50"
+                        type="button"
+                    >
+                        <img
+                            src="/images/cancelBtn.png"
+                            alt="Close"
+                            className="w-4 h-4 object-contain"
+                        />
+                    </button>
+                </div>
+
+                <div className="mx-auto mt-1 flex flex-row md:flex-row justify-end">
+                    <div className="bg-[#FFF3C7] bg-opacity-90 rounded-xl w-1/2 h-auto md:w-1/2 p-2 mr-56 z-50 mt-4 overflow-auto absolute">
+                        <div className="float-left mr-4">
+                            {(content.flags && content.flags.length > 1 ? content.flags : [content.flag]).map((flag, index) => (
+                                <Image
+                                    key={index}
+                                    src={flag || "/flags/placeholder.png"}
+                                    alt={`${content.title} flag ${index + 1}`}
+                                    width={60}
+                                    height={40}
+                                    className="mb-2"
+                                />
+                            ))}
+                        </div>
+                        <div className="">
+                            <p className="text-[13px] text-gray-700">
+                                {showFullDescription ? content.description : halfDescription}
+                            </p>
+                            {content.description.split(" ").length > 60 && (
+                                <span
+                                    onClick={() => setShowFullDescription(!showFullDescription)}
+                                    className="text-red-500 text-xs cursor-pointer underline"
+                                >
+                                    {showFullDescription ? "Read Less" : "Read More ->"}
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-[13px] bottom text-gray-700 mt-2">
+                            With just a few clicks, eatafrican.ch brings the authentic tastes of Ethiopia and Eritrea straight to your doorstep.
+                        </p>
+                    </div>
+
+                    <div className="w-1/2 md:w-1/2 h-[250px] bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300 relative z-20 h-full">
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={carouselImages[currentImageIndex].src}
+                                alt={carouselImages[currentImageIndex].alt}
+                                width={128}
+                                height={132}
+                                className="object-cover w-full h-full"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* meal card */}
+                {content.meals.length > 0 && (
+                    <div className="relative mx-1 mr-4 mt-4 ml-10">
+                        <div className="bg-transparent overflow-hidden">
+                            <div className="flex items-start">
+                                <div
+                                    ref={scrollContainerRef}
+                                    className="flex space-x-6 overflow-x-auto scroll-smooth pb-4"
+                                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    onScroll={updatePagination}
+                                >
+                                    {content.meals.map((meal, index) => (
+                                        <div
+                                            key={index}
+                                            className="min-w-[220px] bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 md:ml-10"
+                                        >
+                                            <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded-lg">
+                                                <Image
+                                                    src={meal.image || "/images/meal-placeholder.jpg"}
+                                                    alt={meal.name}
+                                                    width={128}
+                                                    height={128}
+                                                    className="object-cover w-full h-full rounded-lg"
+                                                />
+                                            </div>
+                                            <div className="p-2">
+                                                <p className="text-xs">
+                                                    <span className="font-semibold whitespace-nowrap">{meal.name}:</span>{" "}
+                                                    {meal.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* pagination button */}
+                            <div className="flex justify-center">
+                                <div
+                                    ref={paginationRef}
+                                    className="relative border-yellow-300 w-1/2 h-6 bg-white border-2 mt-2 rounded-full overflow-hidden"
+                                >
+                                    <button
+                                        type="button"
+                                        className="pagination-bar absolute h-6 w-10 bg-red-900 rounded-full cursor-pointer z-50 pointer-events-auto"
+                                        style={{ left: "0" }}
+                                        onClick={() => console.log("Button clicked via onClick!")}
+                                        onMouseDown={(e) => {
+                                            console.log("Button mousedown triggered!");
+                                            setIsDragging(true);
+                                            const thumb = e.currentTarget;
+                                            const thumbRect = thumb.getBoundingClientRect();
+                                            const scrollBarRect = paginationRef.current!.getBoundingClientRect();
+                                            initialMouseX.current = e.clientX;
+                                            initialThumbLeft.current = thumbRect.left - scrollBarRect.left;
+                                            e.preventDefault();
+                                        }}
+                                    ></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

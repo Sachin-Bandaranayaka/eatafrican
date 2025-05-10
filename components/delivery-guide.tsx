@@ -53,8 +53,8 @@ export default function DeliveryGuide({ isOpen, onClose }: DeliveryGuideProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay flex items-start justify-end fixed inset-0 z-0">
-            <div className="modal-container03 relative max-w-xs bg-[#f0e6d9]/80 rounded-bl-3xl rounded-tl-3xl shadow-lg mt-4 mr-4 clip-hexagon overflow-hidden z-10">
+        <div className="modal-overlay flex items-start justify-end inset-0 z-0 mb-4">
+            <div className="modal-container03 relative max-w-xs bg-[#f0e6d9]/80 rounded-bl-3xl rounded-tl-3xl shadow-lg mt-4 mr-4 z-10">
 
                 {/* Image - BEHIND */}
                 <div className="absolute  right-72 w-40 h-40 md:w-48 md:h-48 z-20">
@@ -66,26 +66,35 @@ export default function DeliveryGuide({ isOpen, onClose }: DeliveryGuideProps) {
                     />
                 </div>
 
-                {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute mt-16 right-4 text-white font-bold hover:text-amber-700 z-30"
-                    aria-label="Close"
+                    className="absolute top-20 right-2 bg-[#FFF3C7] rounded-full p-1 z-50"
+                    type="button"
                 >
-                    <X size={30} />
+                    <img
+                        src="/images/cancelBtn.png" // Replace with your image path
+                        alt="Close"
+                        className="w-4 h-4 object-contain"
+                    />
                 </button>
 
                 {/* Header */}
                 <div className="flex justify-end items-end p-0 relative z-10 mr-12">
-                    <div className="bg-amber-900 text-white mt-16 py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 ml-72">
-                        <h2 className="text-sm font-bold uppercase">DELIVERY GUIDE</h2>
+                    <div className="mt-16 ml-72 bg-[#FFF3C7] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 mb-4">
+                        <div className="bg-[url('/images/title-background03.png')]  bg-contain bg-start px-10 py-2">
+                            <h2 className="inline-block bg-[#2A5910] text-white text-sm font-bold uppercase rounded -ml-4">
+                                DELIVERY GUIDE
+                            </h2>
+                        </div>
                     </div>
                 </div>
+
+
 
                 {/* Transparent Steps Section */}
                 <div className="relative z-40 mt-10 ml-10 mb-24">
                     {deliveryZones.map((zone) => (
-                        <div key={zone.radius} className="bg-[#fff2d9]/80 p-1 mb-3 ml-3 mr-6 rounded-sm relative z-50">
+                        <div key={zone.radius} className="bg-[#fff2d9]/90 p-1 mb-3 ml-3 mr-6 rounded-sm relative z-50">
                             <h3 className="text-amber-950 text-sm font-bold mb-0.5">{zone.radius} Radius</h3>
                             <div className="flex justify-between items-start text-gray-900 text-xs">
                                 <ul className="space-y-1 list-disc list-inside pl-1 max-w-[60%]">
@@ -96,7 +105,7 @@ export default function DeliveryGuide({ isOpen, onClose }: DeliveryGuideProps) {
                                     <li><strong>Delivery Fee:</strong> {zone.fee}</li>
                                     <li><strong>Minimum Order:</strong> {zone.minOrder}</li>
                                 </ul>
-                                <div className="max-w-[50%] text-right bg-purple-300 text-gray-800 text-[10px] italic pl-2">
+                                <div className="max-w-[50%] text-right bg-[#ebd1dc] text-gray-800 text-[10px] italic pl-2">
                                     <strong>Example:</strong> {zone.example}
                                 </div>
                             </div>

@@ -15,16 +15,28 @@ export default function HowItWorksMobile({ isOpen, onClose }: HowItWorksProps) {
             {/* Close Button */}
             <button
                 onClick={onClose}
-                className="rounded-full bg-[#f0e6d9] px-2 absolute top-10 right-10 text-gray-700 font-bold hover:text-amber-700 z-20"
-                aria-label="Close"
+                className="absolute top-10 right-2 bg-[#FFF3C7] rounded-full p-1 z-50"
+                type="button"
             >
-                ✕
+                <img
+                    src="/images/cancelBtn.png" // Replace with your image path
+                    alt="Close"
+                    className="w-4 h-4 object-contain"
+                />
             </button>
 
             {/* Header */}
-            <div className="mt-4 ml-48 bg-amber-900 text-white py-1.5 px-4 rounded-l-2xl border-r-2 border-t-2 border-b-2 border-amber-600 mb-4 inline-block">
-                <h2 className="text-sm font-bold uppercase">HOW IT WORKS</h2>
+            <div className="mt-4 ml-48 bg-[#FFF3C7] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 mb-4 w-lg">
+                <div
+                    className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1"
+                >
+                    <h2 className="inline-block bg-[#2A5910] text-white text-xs font-bold uppercase rounded">
+                        ABOUT US
+                    </h2>
+                </div>
             </div>
+
+
 
             <div className="absolute top-4 left-4 w-40 h-40 z-0 opacity-100 pointer-events-none">
                 <Image
@@ -34,8 +46,8 @@ export default function HowItWorksMobile({ isOpen, onClose }: HowItWorksProps) {
                     className="object-cover rounded-md"
                 />
             </div>
-            
-            
+
+
 
             {/* Steps Section */}
             <div className="space-y-3 text-gray-900 text-[10px] text-center relative Z-10 mb-20 mt-6">
