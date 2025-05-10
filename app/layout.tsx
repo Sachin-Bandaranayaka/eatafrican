@@ -6,7 +6,7 @@ import BackgroundCollage from "@/app/components/background-collage"
 
 export const metadata: Metadata = {
   title: "African Restaurant",
-  description: "Order freshly prepared African food directly from African restaurants near you",
+  description: "Order freshly prepared African food directly from African restaurants and have it conveniently delivered to your home",
   generator: 'next.js'
 }
 

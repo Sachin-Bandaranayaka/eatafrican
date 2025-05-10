@@ -29,13 +29,13 @@ export default function SiteFooter() {
                 <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center">
                     <div className="flex space-x-6 mb-2 md:mb-0">
                         <button
-                            className="text-white hover:text-yellow-200 text-sm font-medium"
+                            className="text-white hover:text-yellow-200 text-sm font-bold"
                             onClick={() => openModal("about")}
                         >
                             ABOUT US
                         </button>
                         <button
-                            className="text-white hover:text-yellow-200 text-sm font-medium"
+                            className="text-white hover:text-yellow-200 text-sm font-bold"
                             onClick={() => openModal("contact")}
                         >
                             CONTACT US
@@ -48,13 +48,13 @@ export default function SiteFooter() {
 
                     <div className="flex space-x-6">
                         <button
-                            className="text-white hover:text-yellow-200 text-sm font-medium"
+                            className="text-white hover:text-yellow-200 text-sm font-bold"
                             onClick={() => openModal("privacy")}
                         >
                             PRIVACY POLICY
                         </button>
                         <button
-                            className="text-white hover:text-yellow-200 text-sm font-medium"
+                            className="text-white hover:text-yellow-200 text-sm font-bold"
                             onClick={() => openModal("legal")}
                         >
                             LEGAL NOTICE
@@ -88,25 +88,25 @@ export default function SiteFooter() {
                             {/* Links Column */}
                             <div className="p-5 flex flex-col space-y-3 text-gray-800 w-2/3">
                                 <button
-                                    className="text-left font-medium text-sm hover:text-amber-700"
+                                    className="text-left font-bold text-sm hover:text-amber-700"
                                     onClick={() => { openModal("about"); setMobileMenuOpen(false); }}
                                 >
                                     ABOUT US
                                 </button>
                                 <button
-                                    className="text-left font-medium text-sm hover:text-amber-700"
+                                    className="text-left font-bold text-sm hover:text-amber-700"
                                     onClick={() => { openModal("contact"); setMobileMenuOpen(false); }}
                                 >
                                     CONTACT US
                                 </button>
                                 <button
-                                    className="text-left font-medium text-sm hover:text-amber-700"
+                                    className="text-left font-bold text-sm hover:text-amber-700"
                                     onClick={() => { openModal("legal"); setMobileMenuOpen(false); }}
                                 >
                                     LEGAL NOTICE
                                 </button>
                                 <button
-                                    className="text-left font-medium text-sm hover:text-amber-700"
+                                    className="text-left font-bold text-sm hover:text-amber-700"
                                     onClick={() => { openModal("privacy"); setMobileMenuOpen(false); }}
                                 >
                                     PRIVACY POLICY
