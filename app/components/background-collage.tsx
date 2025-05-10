@@ -27,6 +27,9 @@ const BackgroundCollage = () => {
         document.body.style.backgroundPosition = 'center';
         document.body.style.backgroundRepeat = 'no-repeat';
         document.body.style.backgroundAttachment = 'fixed';
+        document.body.style.height = '100vh';
+        document.body.style.minHeight = '100vh';
+        document.body.style.overflow = 'hidden';
 
         // Add a semi-transparent overlay to the body using ::before
         const style = document.createElement('style');
@@ -54,6 +57,9 @@ const BackgroundCollage = () => {
             document.body.style.backgroundPosition = '';
             document.body.style.backgroundRepeat = '';
             document.body.style.backgroundAttachment = '';
+            document.body.style.height = '';
+            document.body.style.minHeight = '';
+            document.body.style.overflow = '';
         };
     }, []);
 
