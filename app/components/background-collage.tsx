@@ -31,26 +31,8 @@ const BackgroundCollage = () => {
         document.body.style.minHeight = '100vh';
         document.body.style.overflow = 'hidden';
 
-        // Add a semi-transparent overlay to the body using ::before
-        const style = document.createElement('style');
-        style.textContent = `
-            body::before {
-                content: '';
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: -1;
-                pointer-events: none;
-            }
-        `;
-        document.head.appendChild(style);
-
         return () => {
             mediaQuery.removeEventListener('change', handleMediaQueryChange);
-            document.head.removeChild(style);
             // Reset body styles when component unmounts
             document.body.style.backgroundImage = '';
             document.body.style.backgroundSize = '';
