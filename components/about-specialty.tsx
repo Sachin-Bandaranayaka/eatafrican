@@ -250,8 +250,8 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                         </p>
                     </div>
 
-                    <div className="w-1/2 md:w-1/2 h-[250px] bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300 relative z-10 h-full">
-                        <div className="relative w-full h-full">
+                    <div className="w-1/2 md:w-1/2 bg-gray-200 flex items-center justify-center m-2 rounded-lg relative z-10 h-full">
+                        <div className="relative w-auto h-[250px]">
                             <Image
                                 src={carouselImages[currentImageIndex].src}
                                 alt={carouselImages[currentImageIndex].alt}
@@ -281,7 +281,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                     {content.meals.map((meal, index) => (
                                         <div
                                             key={index}
-                                            className="meal-card flex-none w-[40vw] md:w-[45%] md:ml-10 bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 snap-start"
+                                            className="meal-card flex-none w-[40vw] md:w-[220px] md:ml-10 bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 snap-start"
                                         >
                                             <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded-lg">
                                                 <Image
