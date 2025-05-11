@@ -17,7 +17,7 @@ export default function TribalButton({ text, onClick, isActive = false }: Tribal
       <button
         className={`${
           isActive ? 'bg-green-600' : 'bg-amber-900'
-        } py-4 px-1 border-[3px] border-[#ffe59e] rounded-lg`}
+        } py-4 px-1 border-[3px] border-[#fff2ce] rounded-lg`}
         style={{
           writingMode: 'vertical-rl',
           textOrientation: 'mixed',
