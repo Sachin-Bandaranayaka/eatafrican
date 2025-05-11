@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { Flag, X } from "lucide-react";
 
 interface AboutSpecialtyProps {
     cuisineType: string;
@@ -34,6 +34,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 { name: "Chechebsa", description: "Shredded flatbread tossed with spiced butter and berbere - a quick, satisfying treat", image: "/images/tsebhi-zigni.jpg" },
                 { name: "Ambasha", description: "Lightly sweetened bread flavored with cardamom and coriander, often decorated with patterns.", image: "/images/tsebhi-zigni.jpg" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Ethiopia and Eritrea straight to your doorstep.",
         },
         "KENYAN": {
             title: "KENYAN CUISINE",
@@ -48,6 +49,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 { name: "Viazi Karai", description: "Crispy turmeric-battered potatoes served with tangy tamarind sauce. A coastal street food favorite.", image: "/images/ugali-sukuma.jpg" },
                 { name: "Sambusa", description: "Deep-fried pastries filled with spiced meat or lentils. Crunchy, savory, and highly addictive.", image: "/images/ugali-sukuma.jpg" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Kenya straight to your doorstep.",
         },
         "NIGERIAN, GHANA": {
             title: "NIGERIAN & GHANAIAN CUISINE",
@@ -55,15 +57,16 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
             image: "/images/nigerian-ghanaian-cuisine.jpg",
             flags: ["/flags/nigeria.png", "/flags/ghana.png"],
             meals: [
-                { name: "Jollof Rice", description: "A vibrant rice dish cooked in a tomato-pepper sauce, often served with meat or fried plantains.", image: "/images/jollof-rice.jpg" },
-                { name: "Egusi Soup", description: "A rich, nutty soup made from ground melon seeds, leafy greens, and assorted meats.", image: "/images/egusi-soup.jpg" },
-                { name: "Puff-Puff", description: "Sweet, fluffy deep-fried dough balls - Nigeria's beloved street snack.", image: "/images/egusi-soup.jpg" },
-                { name: "Chin Chin", description: "Crunchy, slightly sweet fried pastry bites perfect for on-the-go munching.", image: "/images/egusi-soup.jpg" },
-                { name: "Waakye", description: "A savory mix of rice and beans, cooked with millet leaves and served with varied sides.", image: "/images/egusi-soup.jpg" },
-                { name: "Fufu", description: "A smooth dough of cassava and plantain served with a mildly spicy tomato-based soup.", image: "/images/egusi-soup.jpg" },
-                { name: "Red-Red", description: "Black-eyed peas stewed with palm oil and served with fried plantains.", image: "/images/egusi-soup.jpg" },
-                { name: "Kelewele", description: "Spiced fried plantains seasoned with ginger, cayenne, and cloves.", image: "/images/egusi-soup.jpg" },
+                { name: "Jollof Rice", description: "A vibrant rice dish cooked in a tomato-pepper sauce, often served with meat or fried plantains.", image: "/images/jollof-rice.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Egusi Soup", description: "A rich, nutty soup made from ground melon seeds, leafy greens, and assorted meats.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Puff-Puff", description: "Sweet, fluffy deep-fried dough balls - Nigeria's beloved street snack.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Chin Chin", description: "Crunchy, slightly sweet fried pastry bites perfect for on-the-go munching.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Waakye", description: "A savory mix of rice and beans, cooked with millet leaves and served with varied sides.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Fufu", description: "A smooth dough of cassava and plantain served with a mildly spicy tomato-based soup.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Red-Red", description: "Black-eyed peas stewed with palm oil and served with fried plantains.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Kelewele", description: "Spiced fried plantains seasoned with ginger, cayenne, and cloves.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Nigeria and Ghana straight to your doorstep.",
         },
     };
 
@@ -185,6 +188,11 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         }
     }, [isDragging, totalPairs]);
 
+    // Correct country name typo for display
+    const getDisplayCountryName = (countryName: string) => {
+        return countryName === "GAHANA" ? "GHANA" : countryName;
+    };
+
     return (
         <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[100vw] md:ml-[38vw] md:w-[35vw]">
             <div className="relative ml-auto max-w-6xl w-full">
@@ -238,7 +246,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                             )}
                         </div>
                         <p className="text-[13px] bottom text-gray-700 mt-2">
-                            With just a few clicks, eatafrican.ch brings the authentic tastes of Ethiopia and Eritrea straight to your doorstep.
+                            {content.endDescription}
                         </p>
                     </div>
 
@@ -285,10 +293,28 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                                 />
                                             </div>
                                             <div className="p-2">
-                                                <p className="text-xs">
-                                                    <span className="font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
-                                                    {meal.description}
-                                                </p>
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-xs flex-1">
+                                                        <span className="font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
+                                                        {meal.description}
+                                                    </p>
+                                                    {meal.flag && (
+                                                        <div className="flex flex-col items-center">
+                                                            <Image
+                                                                src={meal.flag}
+                                                                alt={`${meal.name} flag`}
+                                                                width={60}
+                                                                height={40}
+                                                                className="ml-0 object-contain"
+                                                            />
+                                                            {meal.countryName && (
+                                                                <span className="pt-[3px] font-bold uppercase text-xs">
+                                                                    {getDisplayCountryName(meal.countryName)}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
