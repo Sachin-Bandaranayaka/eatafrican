@@ -99,7 +99,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Side Buttons - Desktop View (Right Side, Between Heading and Ending Text) */}
       {!isMobile && isViewingMenu && (
-        <nav className="hidden sm:flex flex-col space-y-4 absolute right-0 top-1/3 transform -translate-y-1/2">
+        <nav className="hidden sm:flex flex-col md:top-[60%] space-y-4 absolute right-0 top-1/3 transform -translate-y-1/2">
           <TribalButton
             text="RESTAURANTS IN LUZERN"
             onClick={openViewMenu}
