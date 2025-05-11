@@ -377,7 +377,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                     </button>
                                 </div>
                                 <div className="text-center mt-2 sm:mt-3 text-sm pb-6">
-                                    <span className="text-amber-900">New Here?</span>{" "}
+                                    <span className="text-black font-bold">New Here?</span>{" "}
                                     <button type="button" onClick={() => setView('register')} className="text-red-900 font-bold hover:underline">
                                         Create Account
                                     </button>

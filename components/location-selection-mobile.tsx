@@ -107,7 +107,6 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
             </div>
 
             <div className="bg-white/60 rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10">
-
                 {/* chef images */}
                 <div className="relative flex justify-between mb-4 mt-1">
                     {/* Chef male - Desktop only */}
@@ -163,23 +162,6 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                             className="appearance-none mr-2"
                                         />
                                         <span className="text-[8px] sm:text-xs font-medium">{country}</span>
-                                        <div className="flex items-center gap-1">
-                                            {country === "ETHIOPIA, ERITREA" && (
-                                                <>
-                                                    <Image src="/flags/ethiopia.png" alt="Ethiopia" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                                    <Image src="/flags/eritrea.png" alt="Eritrea" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                                </>
-                                            )}
-                                            {country === "KENYA" && (
-                                                <Image src="/flags/kenya.png" alt="Kenya" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                            )}
-                                            {country === "NIGERIA, GHANA" && (
-                                                <>
-                                                    <Image src="/flags/ghana.png" alt="Ghana" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                                    <Image src="/flags/nigeria.png" alt="Nigeria" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                                </>
-                                            )}
-                                        </div>
                                     </label>
                                 );
                             })
@@ -193,23 +175,6 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                     className="appearance-none mr-2"
                                 />
                                 <span className="text-[8px] sm:text-xs font-medium">{selectedCountry}</span>
-                                <div className="flex items-center gap-1">
-                                    {selectedCountry === "ETHIOPIA, ERITREA" && (
-                                        <>
-                                            <Image src="/flags/ethiopia.png" alt="Ethiopia" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                            <Image src="/flags/eritrea.png" alt="Eritrea" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                        </>
-                                    )}
-                                    {selectedCountry === "KENYA" && (
-                                        <Image src="/flags/kenya.png" alt="Kenya" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                    )}
-                                    {selectedCountry === "NIGERIA, GHANA" && (
-                                        <>
-                                            <Image src="/flags/ghana.png" alt="Ghana" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                            <Image src="/flags/nigeria.png" alt="Nigeria" width={12} height={8} className="sm:w-[16px] sm:h-[10px]" />
-                                        </>
-                                    )}
-                                </div>
                             </label>
                         )}
                         {isViewingMenu && selectedCountry && (

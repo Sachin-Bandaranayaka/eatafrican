@@ -6,7 +6,7 @@ interface PaymentErrorViewProps {
 
 export function PaymentErrorView({ onPlaceOrder }: PaymentErrorViewProps) {
   return (
-    <div className="bg-amber-50/80 rounded-3xl p-4 px-10 shadow">
+    <div className="bg-amber-50/80 rounded-3xl p-4 px-10 shadow md:mt-0 mt-10">
       <div className="text-red-600 font-bold md:text-start mt-6 mb-4 text-[20px]">
         We couldn&apos;t process your payment.
         <p className="font-normal text-black">Please try another card or payment method.</p>
