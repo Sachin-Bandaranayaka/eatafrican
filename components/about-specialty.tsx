@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { Flag, X } from "lucide-react";
 
 interface AboutSpecialtyProps {
     cuisineType: string;
@@ -17,6 +17,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
     const initialMouseX = useRef<number | null>(null);
     const initialThumbLeft = useRef<number>(0);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentPairIndex, setCurrentPairIndex] = useState(0);
 
     const specialtyContent = {
         "ETHIOPIAN, ERITREAN": {
@@ -33,6 +34,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 { name: "Chechebsa", description: "Shredded flatbread tossed with spiced butter and berbere - a quick, satisfying treat", image: "/images/tsebhi-zigni.jpg" },
                 { name: "Ambasha", description: "Lightly sweetened bread flavored with cardamom and coriander, often decorated with patterns.", image: "/images/tsebhi-zigni.jpg" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Ethiopia and Eritrea straight to your doorstep.",
         },
         "KENYAN": {
             title: "KENYAN CUISINE",
@@ -43,10 +45,11 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 { name: "Ugali", description: "Hearty cornmeal staple that pairs perfectly with stews and vegetables", image: "/images/nyama-choma.jpg" },
                 { name: "Pilau", description: "Spiced rice infused with cardamom, cloves, and cinnamon, often cooked with beef or chicken.", image: "/images/nyama-choma.jpg" },
                 { name: "Chapati", description: "Faky flatbread with Indian roots—ideal for wrapping, dipping, or pairing with stews.", image: "/images/ugali-sukuma.jpg" },
-                { name: "Kuku wa Kupaka", description: "Chicken simmered in  coconut sauce with ginger and tamarind.", image: "/images/ugali-sukuma.jpg" },
+                { name: "Kuku wa Kupaka", description: "Chicken simmered in coconut sauce with ginger and tamarind.", image: "/images/ugali-sukuma.jpg" },
                 { name: "Viazi Karai", description: "Crispy turmeric-battered potatoes served with tangy tamarind sauce. A coastal street food favorite.", image: "/images/ugali-sukuma.jpg" },
                 { name: "Sambusa", description: "Deep-fried pastries filled with spiced meat or lentils. Crunchy, savory, and highly addictive.", image: "/images/ugali-sukuma.jpg" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Kenya straight to your doorstep.",
         },
         "NIGERIAN, GHANA": {
             title: "NIGERIAN & GHANAIAN CUISINE",
@@ -54,15 +57,16 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
             image: "/images/nigerian-ghanaian-cuisine.jpg",
             flags: ["/flags/nigeria.png", "/flags/ghana.png"],
             meals: [
-                { name: "Jollof Rice", description: "A vibrant rice dish cooked in a tomato-pepper sauce, often served with meat or fried plantains.", image: "/images/jollof-rice.jpg" },
-                { name: "Egusi Soup", description: "A rich, nutty soup made from ground melon seeds, leafy greens, and assorted meats.", image: "/images/egusi-soup.jpg" },
-                { name: "Puff-Puff", description: "Sweet, fluffy deep-fried dough balls - Nigeria's beloved street snack.", image: "/images/egusi-soup.jpg" },
-                { name: "Chin Chin", description: "Crunchy, slightly sweet fried pastry bites perfect for on-the-go munching.", image: "/images/egusi-soup.jpg" },
-                { name: "Waakye", description: "A savory mix of rice and beans, cooked with millet leaves and served with varied sides.", image: "/images/egusi-soup.jpg" },
-                { name: "Fufu", description: "A smooth dough of ca ssava and plantain served with a mildly spicy tomato-based soup.", image: "/images/egusi-soup.jpg" },
-                { name: "Red-Red", description: "Black-eyed peas stewed with palm oil and served with fried plantains.", image: "/images/egusi-soup.jpg" },
-                { name: "Kelewele", description: "Spiced fried plantains seasoned with ginger, cayenne, and cloves.", image: "/images/egusi-soup.jpg" },
+                { name: "Jollof Rice", description: "A vibrant rice dish cooked in a tomato-pepper sauce, often served with meat or fried plantains.", image: "/images/jollof-rice.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Egusi Soup", description: "A rich, nutty soup made from ground melon seeds, leafy greens, and assorted meats.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Puff-Puff", description: "Sweet, fluffy deep-fried dough balls - Nigeria's beloved street snack.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Chin Chin", description: "Crunchy, slightly sweet fried pastry bites perfect for on-the-go munching.", image: "/images/egusi-soup.jpg", flag: "/flags/nigeria.png", countryName: "NIGERIA" },
+                { name: "Waakye", description: "A savory mix of rice and beans, cooked with millet leaves and served with varied sides.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Fufu", description: "A smooth dough of cassava and plantain served with a mildly spicy tomato-based soup.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Red-Red", description: "Black-eyed peas stewed with palm oil and served with fried plantains.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
+                { name: "Kelewele", description: "Spiced fried plantains seasoned with ginger, cayenne, and cloves.", image: "/images/egusi-soup.jpg", flag: "/flags/ghana.png", countryName: "GAHANA" },
             ],
+            endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Nigeria and Ghana straight to your doorstep.",
         },
     };
 
@@ -82,13 +86,17 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         { src: "/images/ethiopia-eritrea02.png", alt: content.title },
     ];
 
+    // Calculate the number of pairs (2 meals per pair)
+    const mealsPerPair = 2;
+    const totalPairs = Math.ceil(content.meals.length / mealsPerPair);
+
     // Auto-rotate carousel
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
         }, 3000);
         return () => clearInterval(interval);
-    }, []);
+    }, [carouselImages.length]);
 
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex - 1 + carouselImages.length) % carouselImages.length);
@@ -98,27 +106,35 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
     };
 
+    // Scroll to a specific pair
+    const scrollToPair = (pairIndex: number) => {
+        if (scrollContainerRef.current) {
+            const cardWidth = scrollContainerRef.current.querySelector(".meal-card")?.clientWidth || 0;
+            const gap = 8; // space-x-2 = 0.5rem = 8px
+            const pairWidth = (cardWidth * 2) + gap; // Width of two cards + gap
+            scrollContainerRef.current.scrollTo({
+                left: pairIndex * pairWidth,
+                behavior: "smooth",
+            });
+        }
+    };
+
     const updatePagination = () => {
         if (scrollContainerRef.current && paginationRef.current) {
             const scrollPos = scrollContainerRef.current.scrollLeft;
-            const visibleWidth = scrollContainerRef.current.clientWidth;
-            const totalWidth = scrollContainerRef.current.scrollWidth;
+            const cardWidth = scrollContainerRef.current.querySelector(".meal-card")?.clientWidth || 0;
+            const gap = 8; // space-x-2 = 0.5rem = 8px
+            const pairWidth = (cardWidth * 2) + gap; // Width of two cards + gap
+
+            // Update current pair index
+            const newPairIndex = Math.round(scrollPos / pairWidth);
+            setCurrentPairIndex(newPairIndex);
+
+            // Update pagination bar
             const scrollBarWidth = paginationRef.current.clientWidth;
-
-            if (totalWidth <= visibleWidth) {
-                const bar = paginationRef.current.querySelector(".pagination-bar");
-                if (bar) {
-                    bar.style.width = "100%";
-                    bar.style.left = "0";
-                }
-                return;
-            }
-
-            const thumbWidthRatio = visibleWidth / totalWidth;
-            const thumbWidth = Math.max(20, thumbWidthRatio * scrollBarWidth);
-            const maxScroll = totalWidth - visibleWidth;
-            const thumbMaxLeft = scrollBarWidth - thumbWidth;
-            const thumbLeft = maxScroll > 0 ? (scrollPos / maxScroll) * thumbMaxLeft : 0;
+            const thumbWidth = 40; // w-10 = 40px
+            const maxThumbLeft = scrollBarWidth - thumbWidth;
+            const thumbLeft = totalPairs > 1 ? (newPairIndex / (totalPairs - 1)) * maxThumbLeft : 0;
 
             const bar = paginationRef.current.querySelector(".pagination-bar");
             if (bar) {
@@ -130,25 +146,29 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
 
     useEffect(() => {
         updatePagination();
-    }, [cuisineType]);
+        // Reset to first pair when cuisine changes
+        setCurrentPairIndex(0);
+        scrollToPair(0);
+    }, [cuisineType, content.meals.length]);
 
     useEffect(() => {
         if (isDragging) {
             const handleMouseMove = (e: MouseEvent) => {
-                if (paginationRef.current && scrollContainerRef.current) {
+                if (paginationRef.current && scrollContainerRef.current && initialMouseX.current !== null) {
                     const scrollBarRect = paginationRef.current.getBoundingClientRect();
                     const thumb = paginationRef.current.querySelector(".pagination-bar");
-                    if (thumb && initialMouseX.current !== null) {
-                        const thumbWidth = parseFloat(getComputedStyle(thumb).width);
+                    if (thumb) {
+                        const thumbWidth = 40; // w-10 = 40px
                         const maxThumbLeft = scrollBarRect.width - thumbWidth;
                         const mouseDelta = e.clientX - initialMouseX.current;
                         const newThumbLeft = Math.max(0, Math.min(initialThumbLeft.current + mouseDelta, maxThumbLeft));
 
                         thumb.style.left = `${newThumbLeft}px`;
 
+                        // Calculate the corresponding pair index
                         const thumbRatio = maxThumbLeft > 0 ? newThumbLeft / maxThumbLeft : 0;
-                        const maxScroll = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth;
-                        scrollContainerRef.current.scrollLeft = thumbRatio * maxScroll;
+                        const newPairIndex = Math.round(thumbRatio * (totalPairs - 1));
+                        scrollToPair(newPairIndex);
                     }
                 }
             };
@@ -166,13 +186,18 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 document.removeEventListener("mouseup", handleMouseUp);
             };
         }
-    }, [isDragging]);
+    }, [isDragging, totalPairs]);
+
+    // Correct country name typo for display
+    const getDisplayCountryName = (countryName: string) => {
+        return countryName === "GAHANA" ? "GHANA" : countryName;
+    };
 
     return (
-        <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[100vw] md:ml-[38vw] md:w-[35vw] ">
+        <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[100vw] md:ml-[38vw] md:w-[35vw]">
             <div className="relative ml-auto max-w-6xl w-full">
                 <div className="flex justify-end items-center p-0 z-10">
-                    <div className="bg-amber-900 border border-2 border-amber-600 inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
+                    <div className="bg-[#85200cff] border border-[2px] border-[#fff2ccff] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
                         <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
                             <h2 className="block bg-[#2A5910] text-white text-sm font-bold uppercase rounded whitespace-nowrap">
                                 {content.title}
@@ -182,7 +207,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                     {/* close button */}
                     <button
                         onClick={onClose}
-                        className="bg-[#FFF3C7] text-black rounded-full p-1 mr-2 z-50"
+                        className="bg-[#FFF3C7] text-black rounded-full p-1 mr-2 z-30"
                         type="button"
                     >
                         <img
@@ -216,16 +241,16 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                     onClick={() => setShowFullDescription(!showFullDescription)}
                                     className="text-red-500 text-xs cursor-pointer underline"
                                 >
-                                    {showFullDescription ? "Read Less" : "Read More ->"}
+                                    {showFullDescription ? "<-Read Less" : "Read More ->"}
                                 </span>
                             )}
                         </div>
                         <p className="text-[13px] bottom text-gray-700 mt-2">
-                            With just a few clicks, eatafrican.ch brings the authentic tastes of Ethiopia and Eritrea straight to your doorstep.
+                            {content.endDescription}
                         </p>
                     </div>
 
-                    <div className="w-1/2 md:w-1/2 h-[250px] bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300 relative z-20 h-full">
+                    <div className="w-1/2 md:w-1/2 h-[250px] bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300 relative z-10 h-full">
                         <div className="relative w-full h-full">
                             <Image
                                 src={carouselImages[currentImageIndex].src}
@@ -245,14 +270,18 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                             <div className="flex items-start">
                                 <div
                                     ref={scrollContainerRef}
-                                    className="flex space-x-6 overflow-x-auto scroll-smooth pb-4"
-                                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    className="flex space-x-2 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory"
+                                    style={{
+                                        scrollbarWidth: "none",
+                                        msOverflowStyle: "none",
+                                        width: "calc(80vw + 0.5rem)", // 2 cards (40vw each) + space-x-2 (0.5rem)
+                                    }}
                                     onScroll={updatePagination}
                                 >
                                     {content.meals.map((meal, index) => (
                                         <div
                                             key={index}
-                                            className="min-w-[220px] bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 md:ml-10"
+                                            className="meal-card flex-none w-[40vw] md:w-[45%] md:ml-10 bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 snap-start"
                                         >
                                             <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded-lg">
                                                 <Image
@@ -264,10 +293,28 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                                 />
                                             </div>
                                             <div className="p-2">
-                                                <p className="text-xs">
-                                                    <span className="font-semibold whitespace-nowrap">{meal.name}:</span>{" "}
-                                                    {meal.description}
-                                                </p>
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-xs flex-1">
+                                                        <span className="font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
+                                                        {meal.description}
+                                                    </p>
+                                                    {meal.flag && (
+                                                        <div className="flex flex-col items-center">
+                                                            <Image
+                                                                src={meal.flag}
+                                                                alt={`${meal.name} flag`}
+                                                                width={60}
+                                                                height={40}
+                                                                className="ml-0 object-contain"
+                                                            />
+                                                            {meal.countryName && (
+                                                                <span className="pt-[3px] font-bold uppercase text-xs">
+                                                                    {getDisplayCountryName(meal.countryName)}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -283,7 +330,11 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                     <button
                                         type="button"
                                         className="pagination-bar absolute h-6 w-10 bg-red-900 rounded-full cursor-pointer z-50 pointer-events-auto"
-                                        style={{ left: "0" }}
+                                        style={{
+                                            left: totalPairs > 1
+                                                ? `${(currentPairIndex / (totalPairs - 1)) * (100 - (40 / (paginationRef.current?.clientWidth || 1)) * 100)}%`
+                                                : "0",
+                                        }}
                                         onClick={() => console.log("Button clicked via onClick!")}
                                         onMouseDown={(e) => {
                                             console.log("Button mousedown triggered!");

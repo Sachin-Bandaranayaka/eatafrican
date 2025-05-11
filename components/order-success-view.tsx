@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export function OrderSuccessView() {
   return (
-    <div className="text-center">
+    <div className="text-center md:mt-0 mt-10">
       <h2 className="font-bold mb-4 bg-[#4a8c3f] text-white py-2 rounded-md">ORDER SUCCESSFUL</h2>
 
       <div className="space-y-4">

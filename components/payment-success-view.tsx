@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export function PaymentSuccessView() {
   return (
-    <div className="bg-amber-50/80 rounded-lg p-4 shadow text-black">
+    <div className="bg-amber-50/60 rounded-lg p-4 shadow text-black md:mt-0 mt-10" >
       <div className="md:text-start space-y-3">
         <h3 className="font-bold text-lg text-black">Thank you for your order.</h3>
 
