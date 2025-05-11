@@ -66,12 +66,6 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
   return (
     <div className="relative flex flex-col items-center w-full px-4 sm:px-0 xs:px-0 lg:px-10 min-h-[calc(100vh-64px)]">
-      {/* Heading Text */}
-      {/* <div className="max-w-3xl mb-10 sm:mb-8 lg:mb-28 text-center mt-12">
-        <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
-          ORDER FRESHLY PREPARED AFRICAN FOOD DIRECTLY FROM AFRICAN RESTAURANTS AND HAVE IT CONVENIENTLY DELIVERED TO YOUR HOME
-        </p>
-      </div> */}
 
       {/* Side Buttons 02 - Desktop View (Left Side, Between Heading and Ending Text) */}
       {!isMobile && (

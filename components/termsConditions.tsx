@@ -75,7 +75,7 @@ export default function Terms({ isOpen, onClose }: TermsProps) {
         </div>
 
         {/* Scrollable Content with Hidden Scrollbar */}
-        <div className="relative z-30 p-1 md:p-1 m-4 md:m-4 md:mt-6 rounded-md max-h-[70vh] overflow-y-scroll scrollbar-hide">
+        <div className="relative z-30 p-1 md:p-1 m-4 md:m-4 md:mt-6 rounded-md max-h-[70vh] overflow-y-auto hide-scrollbar">
           <div className="divide-y divide-amber-800/20 w-full md:w-[500px]">
             <AccordionItem
               title="Introduction"

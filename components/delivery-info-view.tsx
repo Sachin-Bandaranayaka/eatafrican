@@ -6,7 +6,7 @@ interface DeliveryInfoViewProps {
 
 export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
   return (
-    <div className="bg-amber-50/80 rounded-3xl px-20 py-4 shadow">
+    <div className="bg-amber-50/60 rounded-3xl px-20 py-4 shadow md:mt-0 mt-10">
       <h2 className="font-bold mb-4 md:text-start text-amber-900">DELIVERY INFORMATION</h2>
 
       <div className="space-y-3 mb-4">

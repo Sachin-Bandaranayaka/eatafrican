@@ -53,16 +53,16 @@ export default function Home() {
 
   return (
     <ClientOnly>
-      <main className="relative w-full min-h-screen overflow-hidden">
+      <main className="w-full min-h-screen overflow-hidden">
         {/* Content Overlay */}
-        <div className="relative min-h-screen">
+        <div className="z-20 flex flex-col min-h-screen">
           {/* Header with user icon and language selector */}
           <SiteHeader />
 
           {/* Main Content Area */}
           <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-12 md:pb-16 mt `}>
             {/* Left Side Content */}
-            <div className="w-full md:w-1/2 max-w-2xl relative">
+            <div className="w-full md:w-1/2 max-w-2xl flex flex-col">
               <LeftSideContent
                 onViewMenu={handleViewMenu}
                 isViewingMenu={isViewingMenu}

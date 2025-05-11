@@ -44,7 +44,7 @@ export function CartView({ onCheckout }: CartViewProps) {
       {/* Delivery Address */}
       <div className="mt-6">
         <p className="text-xs mb-2">
-          Provide Address for us to calculate Delivery Fees and show available delivery times you can select
+          Provide Ad for us to calculate Delivery Fees and show available delivery times you can select
         </p>
         <div className="grid grid-cols-2 gap-2 mb-2">
           <Input placeholder="Postal Code" className="text-xs" />
