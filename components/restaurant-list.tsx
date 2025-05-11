@@ -68,12 +68,12 @@ export default function RestaurantListing() {
 
         {/* Filter and Sort Buttons */}
         <div className="flex justify-end space-x-4 mb-6">
-          <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+          <button className="bg-[#b65f14] text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
             <span>FILTER BY</span>
             <ChevronDown size={14} className="ml-1" />
           </button>
 
-          <button className="bg-amber-500 text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+          <button className="bg-[#b65f14] text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
             <span>SORT BY</span>
             <ChevronDown size={14} className="ml-1" />
           </button>
@@ -95,7 +95,7 @@ export default function RestaurantListing() {
               className="bg-white rounded-lg mb-4 flex overflow-hidden border-2 border-amber-400"
             >
               {/* Restaurant Image */}
-              <div className="w-32 h-auto bg-gray-200 flex items-center justify-center m-2 rounded-lg border border-gray-300">
+              <div className="w-32 h-auto bg-gray-200 flex items-center justify-center m-2 rounded-lg border-2 border-gray-300">
                 <span className="text-gray-400 text-xs text-center">
                   No Image Available
                 </span>
@@ -133,9 +133,9 @@ export default function RestaurantListing() {
               </div>
 
               {/* Image Placeholder */}
-              <div className="w-10 md:w-10 h-auto bg-gray-200 flex text-gray-500 text-sm font-semibold">
+              <div className="w-10 md:w-10 ml-20 h-auto bg-gray-200 flex text-gray-500 text-sm font-semibold">
                 <Image
-                  src="/images/menuIcon.png"
+                  src="/images/masks/mask02.png"
                   alt="Restaurant Logo"
                   width={80}
                   height={80}

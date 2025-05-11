@@ -106,7 +106,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                 </p>
             </div>
 
-            <div className="bg-white/60 rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10">
+            <div className="bg-white/60 border border-white rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10">
                 {/* chef images */}
                 <div className="relative flex justify-between mb-4 mt-1">
                     {/* Chef male - Desktop only */}
@@ -134,13 +134,13 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
 
                 {/* Headings: COUNTRY SPECIALTY, LOCATION, RESTAURANT on same level */}
                 <div className="flex justify-around mb-0 -mt-5">
-                    <div className="bg-[#ff9920] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
+                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
                         <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                     </div>
-                    <div className="bg-[#ff9920] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-14">
+                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-14">
                         <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
                     </div>
-                    <div className="bg-[#ff9920] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
+                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
                         <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
                     </div>
                 </div>
@@ -153,7 +153,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             countrySpecialties.map((country) => {
                                 const isVisible = !isViewingMenu || selectedCountry === country;
                                 return (
-                                    <label key={country} className="custom-radio text-black flex items-center cursor-pointer gap-1 flex-wrap">
+                                    <label key={country} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
                                         <input
                                             type="radio"
                                             name="country"
@@ -161,7 +161,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                             onChange={() => handleCountrySelect(country)}
                                             className="appearance-none mr-2"
                                         />
-                                        <span className="text-[8px] sm:text-xs font-medium">{country}</span>
+                                        <span className="text-[8px] font-bold sm:text-xs">{country}</span>
                                     </label>
                                 );
                             })
@@ -185,7 +185,8 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                 CHANGE
                             </button>
                         )}
-                    </div>
+
+                        </div>
 
                     {/* Location Selection */}
                     <div className="space-y-1 pl-1 w-28 mt-6 md:-ml-6">
@@ -193,7 +194,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             const isVisible = !isViewingMenu || selectedLocation === location;
                             if (!isVisible) return null;
                             return (
-                                <label key={location} className="custom-radio text-black flex items-center cursor-pointer gap-1 flex-wrap">
+                                <label key={location} className="custom-radio text-black flex items-center cursor-pointer  flex-wrap">
                                     <input
                                         type="radio"
                                         name="location"
@@ -201,7 +202,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                         onChange={() => handleLocationSelect(location as Location)}
                                         className="appearance-none mr-2"
                                     />
-                                    <span className="text-[8px] sm:text-xs font-medium">{location}</span>
+                                    <span className="text-[8px] sm:text-xs font-bold">{location} ({locations[location] || 0})</span>
                                 </label>
                             );
                         }) : (
@@ -213,7 +214,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                     <div className="space-y-1 pl-1 w-56 mt-6">
                         {/* See Restaurant List */}
                         {selectedCountry && !selectedLocation && (
-                            <div className="p-0 flex items-center justify-center w-full" style={{ maxWidth: '160px' }}>
+                            <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
                                 <div className="bg-[#ffe59e] text-start py-0.5 px-1 rounded-lg border">
                                     <h3 className="font-semibold text-black text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
                                         CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
@@ -226,14 +227,14 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
                             if (!isVisible) return null;
                             return (
-                                <label key={restaurantName} className="custom-radio text-black flex flex-col items-center cursor-pointer gap-1 flex-wrap">
+                                <label key={restaurantName} className="custom-radio text-black font-bold flex flex-col items-center cursor-pointer gap-1 flex-wrap">
                                     <div className="flex items-center">
                                         <input
                                             type="radio"
                                             name="restaurant"
                                             checked={selectedRestaurantInternal === restaurantName}
                                             onChange={() => handleRestaurantSelect(restaurantName)}
-                                            className="appearance-none mr-2"
+                                            className=" appearance-none mr-2 checked:item-[#ff9920]"
                                         />
                                         <span className="text-[10px] sm:text-sm">{restaurantName}</span>
                                     </div>
@@ -246,7 +247,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
                         )}
 
-                        {/* Explore Details */}
+                        {/* Explore Details TEXT*/}
                         {!selectedCountry && (
                             <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
                                 <div className="bg-[#ffe59e] border border-2 border-white text-start md:py-2 py-1 px-1 rounded-md p-4">
@@ -279,16 +280,15 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                 </div>
 
                 {/* Buttons */}
-                <div className="flex flex-col justify-start gap-2 mt-2 md:ml-0 md:-mb-4 ml-10 z-20">
+                <div className="relative justify-start gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
                     {!isViewingMenu && selectedCountry && (
                         <span
                             onClick={handleAboutSpecialtyClick}
-                            className="text-amber-500 underline cursor-pointer text-[8px] sm:text-xs font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
+                            className="text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
                         >
                             ABOUT {getCuisineType(selectedCountry)} SPECIALTY
                         </span>
                     )}
-                    {!selectedCountry || !selectedLocation ? <div className="h-[20px]"></div> : null}
                 </div>
             </div>
 

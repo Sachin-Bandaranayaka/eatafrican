@@ -116,11 +116,11 @@ export default function ViewMenu() {
 
               {/* Function Buttons (FILTER BY, SORT BY, Search, Share) */}
               <div className="flex flex-wrap justify-center md:justify-end gap-2 xs:gap-3 sm:gap-4">
-                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-yellow-400 text-black p-1 hover:bg-yellow-500 transition">
+                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-yellow-400 text-black font-bold p-1 hover:bg-yellow-500 transition">
                   <span>FILTER BY</span>
                   <ChevronDown className="text-white" size={12} />
                 </button>
-                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-yellow-400 text-black p-1 hover:bg-yellow-500 transition">
+                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-yellow-400 text-black font-bold p-1 hover:bg-yellow-500 transition">
                   <span>SORT BY</span>
                   <ChevronDown size={12} />
                 </button>
@@ -197,7 +197,7 @@ export default function ViewMenu() {
                   {/* Right Image Placeholder */}
                   <div className="w-auto xs:flex w-12 h-auto bg-gray-200 items-center justify-center">
                     <Image
-                      src="./images/menuIcon.png"
+                      src="./images/masks/mask02.png"
                       alt="Restaurant Logo"
                       width={40}
                       height={40}
