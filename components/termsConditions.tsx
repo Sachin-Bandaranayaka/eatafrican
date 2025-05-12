@@ -42,7 +42,7 @@ export default function Terms({ isOpen, onClose }: TermsProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-start justify-end">
       <div className="relative max-w-full md:max-w-2xl rounded-bl-3xl rounded-tl-3xl shadow-lg mt-12 mr-4 overflow-hidden">
    
         {/* Image - BEHIND */}
