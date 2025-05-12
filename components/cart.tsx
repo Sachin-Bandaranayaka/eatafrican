@@ -230,7 +230,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           <div className="md:hidden mb-4 z-20 relative">
             <button
               onClick={handleCheckoutClick}
-              className="flex items-center bg-[#4a8c3f] text-white p-2 px-4 font-bold rounded-r-2xl border-l-4 border-[#e68a3e] min-w-40 w-auto"
+              className="flex items-center bg-[#6b2c0c] text-white p-2 px-4 font-bold rounded-r-2xl border-l-4 border-[#e68a3e] min-w-40 w-auto"
             >
               <span>{currentView === "payment-success" ? "ORDER SUCCESSFUL" : "CHECKOUT"}</span>
               <ChevronRight size={16} className="ml-1" />
@@ -336,7 +336,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           {/* Desktop Layout - Hidden on mobile */}
           <div className="hidden md:block md:w-[25%] p-10 flex flex-col">
             {/* Checkout Div - Changes to ORDER SUMMARY when in payment-success state */}
-            <div className="bg-[#6b2c0c] w-[40%] text-white p-2 rounded-r-full px-6 font-bold mb-10 uppercase text-center">
+            <div className="bg-[#6b2c0c] w-full text-white p-2 rounded-r-full px-6 font-bold mb-10 uppercase text-center">
               {currentView === "payment-success" ? "ORDER SUMMARY" : "CHECKOUT"}
             </div>
 
