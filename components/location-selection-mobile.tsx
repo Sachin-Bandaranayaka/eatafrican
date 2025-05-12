@@ -133,7 +133,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                 </div>
 
                 {/* Headings: COUNTRY SPECIALTY, LOCATION, RESTAURANT on same level */}
-                <div className="flex justify-around mb-0 -mt-5">
+                <div className="flex justify-around mb-0 -mt-4">
                     <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
                         <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                     </div>
@@ -186,7 +186,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             </button>
                         )}
 
-                        </div>
+                    </div>
 
                     {/* Location Selection */}
                     <div className="space-y-1 pl-1 w-28 mt-6 md:-ml-6">
