@@ -1,51 +1,60 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const BackgroundCollage = () => {
-    const [isMobile, setIsMobile] = useState(false);
-
     useEffect(() => {
-        // Handle mobile detection
-        const mediaQuery = window.matchMedia('(max-width: 768px)');
-        setIsMobile(mediaQuery.matches);
-
-        const handleMediaQueryChange = (e) => {
-            setIsMobile(e.matches);
+        // Simple direct approach - apply background directly to body with fixed settings
+        const applyBackground = () => {
+            try {
+                const isMobile = window.innerWidth <= 768;
+                const backgroundImage = isMobile 
+                    ? '/images/background-collage-mobile.png'
+                    : '/images/background-collage-desktop.png';
+                
+                // Apply styles to body
+                document.body.style.backgroundImage = `url(${backgroundImage})`;
+                document.body.style.backgroundSize = "cover";
+                document.body.style.backgroundPosition = "center";
+                document.body.style.backgroundRepeat = "no-repeat";
+                document.body.style.backgroundAttachment = "fixed";
+                document.body.style.backgroundColor = "#331a00"; // Brown backup color
+                document.body.style.margin = "0";
+                document.body.style.padding = "0";
+                document.body.style.minHeight = "100vh";
+            } catch (err) {
+                console.error('Error applying background:', err);
+            }
         };
-
-        mediaQuery.addEventListener('change', handleMediaQueryChange);
-
-        // Apply background directly to the body
-        const imagePath = mediaQuery.matches
-            ? '/images/background-collage-mobile.png'
-            : '/images/background-collage-desktop.png';
-
-        // Apply styles directly to the document body
-        document.body.style.backgroundImage = `url(${imagePath})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        document.body.style.backgroundRepeat = 'no-repeat';
-        document.body.style.backgroundAttachment = 'fixed';
-        document.body.style.height = '100vh';
-        document.body.style.minHeight = '100vh';
-        document.body.style.overflow = 'hidden';
-
+        
+        // Apply initially
+        applyBackground();
+        
+        // Handle window resize
+        const handleResize = () => {
+            applyBackground();
+        };
+        
+        // Add resize listener
+        window.addEventListener('resize', handleResize);
+        
+        // Cleanup
         return () => {
-            mediaQuery.removeEventListener('change', handleMediaQueryChange);
-            // Reset body styles when component unmounts
-            document.body.style.backgroundImage = '';
-            document.body.style.backgroundSize = '';
-            document.body.style.backgroundPosition = '';
-            document.body.style.backgroundRepeat = '';
-            document.body.style.backgroundAttachment = '';
-            document.body.style.height = '';
-            document.body.style.minHeight = '';
-            document.body.style.overflow = '';
+            window.removeEventListener('resize', handleResize);
+            // Only clean up what we set
+            try {
+                document.body.style.backgroundImage = "";
+                document.body.style.backgroundSize = "";
+                document.body.style.backgroundPosition = "";
+                document.body.style.backgroundRepeat = "";
+                document.body.style.backgroundAttachment = "";
+            } catch (err) {
+                console.error('Error cleaning up background:', err);
+            }
         };
     }, []);
 
-    // This component doesn't render anything visible, it just modifies the body
+    // Component doesn't render anything visible
     return null;
 };
 
