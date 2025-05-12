@@ -14,8 +14,8 @@ const DESKTOP_IMAGES = [
 
 const MOBILE_IMAGES = [
   '/images/background-collage-mobile.png',
-  '/images/ethiopia-eritrea01.png',
-  '/images/ethiopia-eritrea02.png',
+  '/images/background-collage-mobile01.png',
+  '/images/background-collage-mobile02.png',
 ];
 
 const BackgroundCollage = () => {
