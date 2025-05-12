@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import AboutUs from "../components/aboutUs";
 import LegalNotice from "../components/legalNotice";
 import Terms from "../components/termsConditions";
+import ContactUs from "../components/contactUs";
+import PrivacyPolicy from "../components/privacyPolicy";
 
 type ModalContent = "about" | "contact" | "legal" | "privacy" | "termsConditions" | null;
 
@@ -189,81 +191,15 @@ export default function SiteFooter() {
         <>
           {modalOpen === "about" ? (
             <AboutUs isOpen={true} onClose={closeModal} />
+          ) : modalOpen === "contact" ? (
+            <ContactUs isOpen={true} onClose={closeModal} />
           ) : modalOpen === "legal" ? (
             <LegalNotice isOpen={true} onClose={closeModal} />
           ) : modalOpen === "termsConditions" ? (
             <Terms isOpen={true} onClose={closeModal} />
-          ) : (
-            <div className="modal-overlay">
-              <div className="modal-container relative max-w-2xl">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-2 right-2 text-white hover:text-gray-200"
-                  aria-label="Close"
-                >
-                  <X size={24} />
-                </button>
-
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-white text-xl font-bold">
-                    {modalOpen === "contact" && "CONTACT US"}
-                    {modalOpen === "privacy" && "PRIVACY POLICY"}
-                  </h2>
-                  <div className="relative w-32 h-32">
-                    <Image
-                      src="/images/chefs-cooking.jpg"
-                      alt="Chefs"
-                      fill
-                      className="object-cover rounded-md"
-                    />
-                  </div>
-                </div>
-
-                <div className="text-white">
-                  {modalOpen === "contact" && (
-                    <div>
-                      <p className="mb-4">Get in touch with our team:</p>
-                      <ul className="space-y-2">
-                        <li>
-                          <strong>Email:</strong> info@eatafrican.com
-                        </li>
-                        <li>
-                          <strong>Phone:</strong> +41 123 456 789
-                        </li>
-                        <li>
-                          <strong>Address:</strong> Bahnhofstrasse 123, 8001
-                          Zürich, Switzerland
-                        </li>
-                      </ul>
-                      <p className="mt-4">
-                        Our customer service is available Monday to Friday, 9:00 -
-                        17:00.
-                      </p>
-                    </div>
-                  )}
-
-                  {modalOpen === "privacy" && (
-                    <div>
-                      <p className="mb-4">
-                        Eat African respects your privacy and is committed to
-                        protecting your personal data.
-                      </p>
-                      <p className="mb-4">
-                        We collect your personal information to process your
-                        orders, provide customer support, and improve our
-                        services. We do not sell your data to third parties.
-                      </p>
-                      <p>
-                        By using our service, you consent to our privacy policy.
-                        For more information on how we process your data, please
-                        contact us.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+          ) : modalOpen === "privacy" ? (
+            <PrivacyPolicy isOpen={true} onClose={closeModal} />
+          ) : null}
         </>
       )}
     </>
