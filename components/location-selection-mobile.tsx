@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import AboutSpecialty from "./about-specialty";
@@ -14,7 +13,12 @@ interface LocationSelectionProps {
     onChange: () => void;
 }
 
-export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, selectedRestaurant, onChange }: LocationSelectionProps) {
+export default function LocationSelectionMobile({
+    onViewMenu,
+    isViewingMenu,
+    selectedRestaurant,
+    onChange,
+}: LocationSelectionProps) {
     const [selectedCountry, setSelectedCountry] = useState<CountrySpecialty | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [showError, setShowError] = useState(false);
@@ -30,13 +34,12 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
         "ZURICH": 3
     };
 
-    // Custom hook to detect mobile screen size
+    // Detect mobile screen size
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 640); // Tailwind's 'sm' breakpoint
         };
-
-        handleResize(); // Initial check
+        handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
@@ -75,7 +78,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
 
     const handleChange = () => {
         setShowError(false);
-        onChange();
+        onChange(); // Triggers parent to update isViewingMenu
     };
 
     const handleHome = () => {
@@ -93,7 +96,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
     const getCuisineType = (country: CountrySpecialty | null): string => {
         if (country === "ETHIOPIA, ERITREA") return "ETHIOPIAN, ERITREAN";
         if (country === "KENYA") return "KENYAN";
-        if (country === "NIGERIA, GHANA") return "NIGERIAN, GHANA";
+        if (country === "NIGERIA, GHANA") return "NIGERIAN, GHANAIAN";
         return "";
     };
 
@@ -107,10 +110,9 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
             </div>
 
             <div className="bg-white/60 border border-white rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10">
-                {/* chef images */}
+                {/* Chef Images */}
                 <div className="relative flex justify-between mb-4 mt-1">
-                    {/* Chef male - Desktop only */}
-                    <div className="hidden sm:block absolute w-28 h-28  -left-2 -mt-[90px]">
+                    <div className="hidden sm:block absolute w-28 h-28 -left-2 -mt-[90px]">
                         <Image
                             src="/images/chef-male.png"
                             alt="Male Chef"
@@ -119,9 +121,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             priority
                         />
                     </div>
-
-                    {/* Chef female - Desktop only */}
-                    <div className="hidden sm:block absolute w-28 h-28  right-10 -mt-[90px]">
+                    <div className="hidden sm:block absolute w-28 h-28 right-10 -mt-[90px]">
                         <Image
                             src="/images/chef-female.png"
                             alt="Female Chef"
@@ -132,7 +132,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                     </div>
                 </div>
 
-                {/* Headings: COUNTRY SPECIALTY, LOCATION, RESTAURANT on same level */}
+                {/* Headings */}
                 <div className="flex justify-around mb-0 -mt-5">
                     <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
                         <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
@@ -145,26 +145,23 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                     </div>
                 </div>
 
-                {/* Sections: Country, Location, Restaurant on same horizontal level always */}
+                {/* Sections */}
                 <div className="flex justify-around">
                     {/* Country Selection */}
                     <div className="space-y-1 pl-0 mt-6 w-1/2 md:w-50">
                         {!isViewingMenu ? (
-                            countrySpecialties.map((country) => {
-                                const isVisible = !isViewingMenu || selectedCountry === country;
-                                return (
-                                    <label key={country} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
-                                        <input
-                                            type="radio"
-                                            name="country"
-                                            checked={selectedCountry === country}
-                                            onChange={() => handleCountrySelect(country)}
-                                            className="appearance-none mr-2"
-                                        />
-                                        <span className="text-[8px] font-bold sm:text-xs">{country}</span>
-                                    </label>
-                                );
-                            })
+                            countrySpecialties.map((country) => (
+                                <label key={country} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
+                                    <input
+                                        type="radio"
+                                        name="country"
+                                        checked={selectedCountry === country}
+                                        onChange={() => handleCountrySelect(country)}
+                                        className="appearance-none mr-2"
+                                    />
+                                    <span className="text-[8px] font-bold sm:text-xs">{country}</span>
+                                </label>
+                            ))
                         ) : (
                             <label className="custom-radio text-black flex items-center cursor-pointer gap-1 flex-wrap">
                                 <input
@@ -177,6 +174,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                 <span className="text-[8px] sm:text-xs font-medium">{selectedCountry}</span>
                             </label>
                         )}
+
                         {isViewingMenu && selectedCountry && (
                             <button
                                 onClick={handleChange}
@@ -185,8 +183,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                 CHANGE
                             </button>
                         )}
-
-                        </div>
+                    </div>
 
                     {/* Location Selection */}
                     <div className="space-y-1 pl-1 w-28 mt-6 md:-ml-6">
@@ -194,7 +191,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             const isVisible = !isViewingMenu || selectedLocation === location;
                             if (!isVisible) return null;
                             return (
-                                <label key={location} className="custom-radio text-black flex items-center cursor-pointer  flex-wrap">
+                                <label key={location} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
                                     <input
                                         type="radio"
                                         name="location"
@@ -212,7 +209,6 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
 
                     {/* Restaurant Selection */}
                     <div className="space-y-1 pl-1 w-56 mt-6">
-                        {/* See Restaurant List */}
                         {selectedCountry && !selectedLocation && (
                             <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
                                 <div className="bg-[#ffe59e] text-start py-0.5 px-1 rounded-lg border">
@@ -222,6 +218,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                 </div>
                             </div>
                         )}
+
                         {selectedLocation ? [...Array(locations[selectedLocation] || 1)].map((_, index) => {
                             const restaurantName = `African Restaurant ${index + 1}`;
                             const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
@@ -234,7 +231,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                             name="restaurant"
                                             checked={selectedRestaurantInternal === restaurantName}
                                             onChange={() => handleRestaurantSelect(restaurantName)}
-                                            className=" appearance-none mr-2 checked:item-[#ff9920]"
+                                            className="appearance-none mr-2"
                                         />
                                         <span className="text-[10px] sm:text-sm">{restaurantName}</span>
                                     </div>
@@ -243,11 +240,11 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                         }) : (
                             <div className="h-0"></div>
                         )}
+
                         {showError && (
                             <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
                         )}
 
-                        {/* Explore Details TEXT*/}
                         {!selectedCountry && (
                             <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
                                 <div className="bg-[#ffe59e] border border-2 border-white text-start md:py-2 py-1 px-1 rounded-md p-4">
@@ -258,7 +255,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                             </div>
                         )}
 
-                        <div className="mt-6 flex justify-end mr-14 ">
+                        <div className="mt-6 flex justify-end mr-14">
                             {selectedLocation && !isViewingMenu && (
                                 <button
                                     onClick={handleViewMenuClick}
@@ -279,7 +276,7 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                     </div>
                 </div>
 
-                {/* Buttons */}
+                {/* Buttons Section */}
                 <div className="relative justify-start gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
                     {!isViewingMenu && selectedCountry && (
                         <span
@@ -296,7 +293,6 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
             <div className="max-w-2xl mt-2 xs:mt-12 w-[95vw] ml-0 sm:mt-16 lg:mt-10 mb-6 xs:mb-8 sm:mb-10 text-center">
                 {isMobile && (
                     <div className="flex justify-between items-center w-full">
-                        {/* Chef male - Mobile only */}
                         <div className="w-16 xs:w-20 h-16 -mt-20 xs:h-20 z-10">
                             <Image
                                 src="/images/chef-male.png"
@@ -307,15 +303,11 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                                 priority
                             />
                         </div>
-
-                        {/* Ending Text */}
                         <div className="flex-1 mx-2">
                             <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
                                 YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
                             </p>
                         </div>
-
-                        {/* Chef female - Mobile only */}
                         <div className="w-16 xs:w-20 h-16 -mt-20 -mr-2 xs:h-20 z-10">
                             <Image
                                 src="/images/chef-female.png"
@@ -330,14 +322,14 @@ export default function LocationSelectionMobile({ onViewMenu, isViewingMenu, sel
                 )}
             </div>
 
-            {/* AboutSpecialty for Mobile (below location section) */}
+            {/* AboutSpecialty for Mobile */}
             {showAboutSpecialty && selectedCountry && (
                 <div className="md:hidden mt-2 mx-auto w-full max-w-full flex justify-center">
                     <AboutSpecialty cuisineType={getCuisineType(selectedCountry)} onClose={handleCloseAboutSpecialty} />
                 </div>
             )}
 
-            {/* AboutSpecialty for Large Devices (right side) */}
+            {/* AboutSpecialty for Large Devices */}
             {showAboutSpecialty && selectedCountry && (
                 <div className="hidden md:block absolute top-0 right-0 w-1/2 p-0 -mr-4">
                     <AboutSpecialty cuisineType={getCuisineType(selectedCountry)} onClose={handleCloseAboutSpecialty} />
