@@ -109,183 +109,215 @@ export default function LocationSelectionMobile({
                 </p>
             </div>
 
-            <div className="bg-white/60 border border-white rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10">
-                {/* Chef Images */}
-                <div className="relative flex justify-between mb-4 mt-1">
-                    <div className="hidden sm:block absolute w-28 h-28 -left-2 -mt-[90px]">
-                        <Image
-                            src="/images/chef-male.png"
-                            alt="Male Chef"
-                            fill
-                            className="object-contain object-bottom"
-                            priority
-                        />
+            <div
+                className="border rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10"
+                style={{
+                    backgroundImage: `url('/images/Box_Restaurant_BckgImg01.png')`,
+                    // backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    borderColor: '#f1c232',
+                    borderRadius: '10px'
+                }}
+            >
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        // backgroundColor: 'rgba(127, 96, 0, 0.75)',
+                        borderRadius: '10px',
+                        opacity: '75%',
+                        background: '#7f6000c4'
+                    }}
+                ></div>
+                <div className="relative z-10">
+                    {/* Chef Images */}
+                    <div className="relative flex justify-between mb-4 mt-1">
+                        <div className="hidden sm:block absolute w-28 h-28 -left-0 -mt-[95px]">
+                            <Image
+                                src="/images/chef-male.png"
+                                alt="Male Chef"
+                                fill
+                                className="object-contain object-bottom"
+                                priority
+                            />
+                        </div>
+                        <div className="hidden sm:block absolute w-28 h-28 right-0 -mt-[95px]">
+                            <Image
+                                src="/images/chef-female.png"
+                                alt="Female Chef"
+                                fill
+                                className="object-contain object-bottom"
+                                priority
+                            />
+                        </div>
                     </div>
-                    <div className="hidden sm:block absolute w-28 h-28 right-10 -mt-[90px]">
-                        <Image
-                            src="/images/chef-female.png"
-                            alt="Female Chef"
-                            fill
-                            className="object-contain object-bottom"
-                            priority
-                        />
-                    </div>
-                </div>
 
-                {/* Headings */}
-                <div className="flex justify-around mb-0 -mt-5">
-                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
-                        <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
+                    {/* Headings */}
+                    <div className="flex justify-around mb-0 -mt-5">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20 -mr-6">
+                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
+                        </div>
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-24 -mr-20">
+                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
+                        </div>
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-14 mr-2">
+                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
+                        </div>
                     </div>
-                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-14">
-                        <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
-                    </div>
-                    <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20">
-                        <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
-                    </div>
-                </div>
 
-                {/* Sections */}
-                <div className="flex justify-around">
-                    {/* Country Selection */}
-                    <div className="space-y-1 pl-0 mt-6 w-1/2 md:w-50">
-                        {!isViewingMenu ? (
-                            countrySpecialties.map((country) => (
-                                <label key={country} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
+                    {/* Sections */}
+                    <div className="flex justify-around">
+                        {/* Country Selection */}
+                        <div className="space-y-1 pl-0 mt-6 w-1/2 md:w-50">
+                            {!isViewingMenu ? (
+                                countrySpecialties.map((country) => (
+                                    <label key={country} className="custom-radio text-white flex items-center cursor-pointer flex-wrap">
+                                        <input
+                                            type="radio"
+                                            name="country"
+                                            checked={selectedCountry === country}
+                                            onChange={() => handleCountrySelect(country)}
+                                            className="appearance-none mr-2"
+                                        />
+                                        <span className="text-[8px] font-bold sm:text-xs">{country}</span>
+                                    </label>
+                                ))
+                            ) : (
+                                <label className="custom-radio text-white flex items-center cursor-pointer gap-1 flex-wrap">
                                     <input
                                         type="radio"
                                         name="country"
-                                        checked={selectedCountry === country}
-                                        onChange={() => handleCountrySelect(country)}
+                                        checked
+                                        readOnly
                                         className="appearance-none mr-2"
                                     />
-                                    <span className="text-[8px] font-bold sm:text-xs">{country}</span>
+                                    <span className="text-[8px] sm:text-xs font-medium">{selectedCountry}</span>
                                 </label>
-                            ))
-                        ) : (
-                            <label className="custom-radio text-black flex items-center cursor-pointer gap-1 flex-wrap">
-                                <input
-                                    type="radio"
-                                    name="country"
-                                    checked
-                                    readOnly
-                                    className="appearance-none mr-2"
-                                />
-                                <span className="text-[8px] sm:text-xs font-medium">{selectedCountry}</span>
-                            </label>
-                        )}
-
-                        {isViewingMenu && selectedCountry && (
-                            <button
-                                onClick={handleChange}
-                                className="mt-4 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                            >
-                                CHANGE
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Location Selection */}
-                    <div className="space-y-1 pl-1 w-28 mt-6 md:-ml-6">
-                        {selectedCountry ? Object.keys(locations).map((location) => {
-                            const isVisible = !isViewingMenu || selectedLocation === location;
-                            if (!isVisible) return null;
-                            return (
-                                <label key={location} className="custom-radio text-black flex items-center cursor-pointer flex-wrap">
-                                    <input
-                                        type="radio"
-                                        name="location"
-                                        checked={selectedLocation === location}
-                                        onChange={() => handleLocationSelect(location as Location)}
-                                        className="appearance-none mr-2"
-                                    />
-                                    <span className="text-[8px] sm:text-xs font-bold">{location} ({locations[location] || 0})</span>
-                                </label>
-                            );
-                        }) : (
-                            <div className="h-20"></div>
-                        )}
-                    </div>
-
-                    {/* Restaurant Selection */}
-                    <div className="space-y-1 pl-1 w-56 mt-6">
-                        {selectedCountry && !selectedLocation && (
-                            <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
-                                <div className="bg-[#ffe59e] text-start py-0.5 px-1 rounded-lg border">
-                                    <h3 className="font-semibold text-black text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
-                                        CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
-                                    </h3>
-                                </div>
-                            </div>
-                        )}
-
-                        {selectedLocation ? [...Array(locations[selectedLocation] || 1)].map((_, index) => {
-                            const restaurantName = `African Restaurant ${index + 1}`;
-                            const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
-                            if (!isVisible) return null;
-                            return (
-                                <label key={restaurantName} className="custom-radio text-black font-bold flex flex-col items-center cursor-pointer gap-1 flex-wrap">
-                                    <div className="flex items-center">
-                                        <input
-                                            type="radio"
-                                            name="restaurant"
-                                            checked={selectedRestaurantInternal === restaurantName}
-                                            onChange={() => handleRestaurantSelect(restaurantName)}
-                                            className="appearance-none mr-2"
-                                        />
-                                        <span className="text-[10px] sm:text-sm">{restaurantName}</span>
-                                    </div>
-                                </label>
-                            );
-                        }) : (
-                            <div className="h-0"></div>
-                        )}
-
-                        {showError && (
-                            <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
-                        )}
-
-                        {!selectedCountry && (
-                            <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
-                                <div className="bg-[#ffe59e] border border-2 border-white text-start md:py-2 py-1 px-1 rounded-md p-4">
-                                    <h3 className="font-semibold text-black text-[8px] md:text-[9px] uppercase p-1 leading-tight">
-                                        CHOOSE AN AFRICAN SPECIALTY TO EXPLORE ITS DETAILS AND LOCATIONS WITH RESTAURANTS OFFERING IT
-                                    </h3>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="mt-6 flex justify-end mr-14">
-                            {selectedLocation && !isViewingMenu && (
-                                <button
-                                    onClick={handleViewMenuClick}
-                                    className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                                >
-                                    VIEW MENU
-                                </button>
                             )}
-                            {isViewingMenu && (
+
+                            {isViewingMenu && selectedCountry && (
                                 <button
-                                    onClick={handleHome}
-                                    className="mt- bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                    onClick={handleChange}
+                                    className="mt-4 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                                 >
-                                    HOME
+                                    CHANGE
                                 </button>
                             )}
                         </div>
-                    </div>
-                </div>
 
-                {/* Buttons Section */}
-                <div className="relative justify-start gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
-                    {!isViewingMenu && selectedCountry && (
-                        <span
-                            onClick={handleAboutSpecialtyClick}
-                            className="text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
-                        >
-                            ABOUT {getCuisineType(selectedCountry)} SPECIALTY
-                        </span>
-                    )}
+                        {/* Location Selection */}
+                        <div className="space-y-1 pl-1 w-28 mt-6 md:-ml-10">
+                            {selectedCountry ? Object.keys(locations).map((location) => {
+                                const isVisible = !isViewingMenu || selectedLocation === location;
+                                if (!isVisible) return null;
+                                return (
+                                    <label key={location} className="custom-radio text-white flex items-center cursor-pointer flex-wrap">
+                                        <input
+                                            type="radio"
+                                            name="location"
+                                            checked={selectedLocation === location}
+                                            onChange={() => handleLocationSelect(location as Location)}
+                                            className="appearance-none mr-2"
+                                        />
+                                        <span className="text-[8px] sm:text-xs font-bold">{location} ({locations[location] || 0})</span>
+                                    </label>
+                                );
+                            }) : (
+                                <div className="h-20"></div>
+                            )}
+                        </div>
+
+                        {/* Restaurant Selection */}
+                        <div className="space-y-1 pl-1 w-56 mt-6">
+                            {selectedCountry && !selectedLocation && (
+                                <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
+                                    {/* <div className="bg-[#ffe59e] text-start py-0.5 px-1 rounded-lg border"> */}
+                                    <div className="text-start py-0.5 px-1 rounded-lg">
+                                        <h3 className="font-semibold text-white text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
+                                            CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
+                                        </h3>
+                                    </div>
+                                </div>
+                            )}
+
+                            {selectedLocation ? [...Array(locations[selectedLocation] || 1)].map((_, index) => {
+                                const restaurantName = `African Restaurant ${index + 1}`;
+                                const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
+                                if (!isVisible) return null;
+                                return (
+                                    <label key={restaurantName} className="custom-radio text-white font-bold flex flex-col items-center cursor-pointer gap-1 flex-wrap">
+                                        <div className="flex items-center">
+                                            <input
+                                                type="radio"
+                                                name="restaurant"
+                                                checked={selectedRestaurantInternal === restaurantName}
+                                                onChange={() => handleRestaurantSelect(restaurantName)}
+                                                className="appearance-none mr-2"
+                                            />
+                                            <span className="text-[10px] sm:text-sm">{restaurantName}</span>
+                                        </div>
+                                    </label>
+                                );
+                            }) : (
+                                <div className="h-0"></div>
+                            )}
+
+                            {showError && (
+                                <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
+                            )}
+
+                            {!selectedCountry && (
+                                <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
+                                    {/* <div className="bg-[#ffe59e] border border-2 border-white text-start md:py-2 py-1 px-1 rounded-md p-4"> */}
+                                    <div className="text-start md:py-2 py-1 px-1 rounded-md p-4">
+                                        <h3 className="font-semibold text-white text-[8px] md:text-[9px] uppercase p-1 leading-tight">
+                                            CHOOSE A COUNTRY SPECIALTY TO EXPLORE ITS DETAILS AND SEE LOCATIONS WITH RESTAURANTS OFFERING IT
+                                        </h3>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="mt-6 flex justify-end mr-14">
+                                {/* Back BUtton */}
+                                <button
+                                    className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                >
+                                    BACK
+                                </button>
+                                 {/* view menu btn */}
+                                {selectedLocation && !isViewingMenu && (
+                                    
+                                    <button
+                                        onClick={handleViewMenuClick}
+                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                    >
+                                        VIEW MENU
+                                    </button>
+                                )}
+                                {/* Home Button */}
+                                {isViewingMenu && (
+                                    <button
+                                        onClick={handleHome}
+                                        className="mt- bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                    >
+                                        HOME
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Buttons Section */}
+                    <div className="relative justify-start gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
+                        {!isViewingMenu && selectedCountry && (
+                            <span
+                                onClick={handleAboutSpecialtyClick}
+                                className="text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
+                            >
+                                ABOUT {getCuisineType(selectedCountry)} SPECIALTY
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
