@@ -25,6 +25,7 @@ export default function LocationSelectionMobile({
     const [selectedRestaurantInternal, setSelectedRestaurantInternal] = useState<string | null>(null);
     const [showAboutSpecialty, setShowAboutSpecialty] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [showBackButton, setShowBackButton] = useState(false);
 
     const countrySpecialties: CountrySpecialty[] = ["ETHIOPIA, ERITREA", "KENYA", "NIGERIA, GHANA"];
     const locations: { [key: string]: number } = {
@@ -50,6 +51,7 @@ export default function LocationSelectionMobile({
         setSelectedRestaurantInternal(null);
         setShowError(false);
         setShowAboutSpecialty(false);
+        setShowBackButton(true);
         onChange();
     };
 
@@ -72,13 +74,14 @@ export default function LocationSelectionMobile({
         if (!restaurantToView) {
             setShowError(true);
         } else {
+            setShowBackButton(false);
             onViewMenu(restaurantToView);
         }
     };
 
     const handleChange = () => {
         setShowError(false);
-        onChange(); // Triggers parent to update isViewingMenu
+        onChange();
     };
 
     const handleHome = () => {
@@ -91,6 +94,20 @@ export default function LocationSelectionMobile({
 
     const handleCloseAboutSpecialty = () => {
         setShowAboutSpecialty(false);
+    };
+
+    const handleBack = () => {
+        if (selectedRestaurantInternal) {
+            setSelectedRestaurantInternal(null);
+        } else if (selectedLocation) {
+            setSelectedLocation(null);
+        } else if (selectedCountry) {
+            setSelectedCountry(null);
+            setShowBackButton(false);
+        }
+        setShowError(false);
+        setShowAboutSpecialty(false);
+        onChange();
     };
 
     const getCuisineType = (country: CountrySpecialty | null): string => {
@@ -113,7 +130,6 @@ export default function LocationSelectionMobile({
                 className="border rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10"
                 style={{
                     backgroundImage: `url('/images/Box_Restaurant_BckgImg01.png')`,
-                    // backgroundRepeat: 'no-repeat',
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     borderColor: '#f1c232',
@@ -123,7 +139,6 @@ export default function LocationSelectionMobile({
                 <div
                     className="absolute inset-0"
                     style={{
-                        // backgroundColor: 'rgba(127, 96, 0, 0.75)',
                         borderRadius: '10px',
                         opacity: '75%',
                         background: '#7f6000c4'
@@ -231,7 +246,6 @@ export default function LocationSelectionMobile({
                         <div className="space-y-1 pl-1 w-56 mt-6">
                             {selectedCountry && !selectedLocation && (
                                 <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
-                                    {/* <div className="bg-[#ffe59e] text-start py-0.5 px-1 rounded-lg border"> */}
                                     <div className="text-start py-0.5 px-1 rounded-lg">
                                         <h3 className="font-semibold text-white text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
                                             CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
@@ -268,7 +282,6 @@ export default function LocationSelectionMobile({
 
                             {!selectedCountry && (
                                 <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
-                                    {/* <div className="bg-[#ffe59e] border border-2 border-white text-start md:py-2 py-1 px-1 rounded-md p-4"> */}
                                     <div className="text-start md:py-2 py-1 px-1 rounded-md p-4">
                                         <h3 className="font-semibold text-white text-[8px] md:text-[9px] uppercase p-1 leading-tight">
                                             CHOOSE A COUNTRY SPECIALTY TO EXPLORE ITS DETAILS AND SEE LOCATIONS WITH RESTAURANTS OFFERING IT
@@ -277,16 +290,9 @@ export default function LocationSelectionMobile({
                                 </div>
                             )}
 
-                            <div className="mt-6 flex justify-end mr-14">
-                                {/* Back BUtton */}
-                                <button
-                                    className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                                >
-                                    BACK
-                                </button>
-                                 {/* view menu btn */}
+                            <div className="mt-6 flex justify-end mr-14 gap-2">
+                                {/* View Menu Button */}
                                 {selectedLocation && !isViewingMenu && (
-                                    
                                     <button
                                         onClick={handleViewMenuClick}
                                         className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
@@ -298,7 +304,7 @@ export default function LocationSelectionMobile({
                                 {isViewingMenu && (
                                     <button
                                         onClick={handleHome}
-                                        className="mt- bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                                     >
                                         HOME
                                     </button>
@@ -308,7 +314,7 @@ export default function LocationSelectionMobile({
                     </div>
 
                     {/* Buttons Section */}
-                    <div className="relative justify-start gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
+                    <div className="flex justify-between gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
                         {!isViewingMenu && selectedCountry && (
                             <span
                                 onClick={handleAboutSpecialtyClick}
@@ -316,6 +322,16 @@ export default function LocationSelectionMobile({
                             >
                                 ABOUT {getCuisineType(selectedCountry)} SPECIALTY
                             </span>
+                        )}
+
+                        {/* Back Button */}
+                        {showBackButton && !isViewingMenu && (
+                            <button
+                                onClick={handleBack}
+                                className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                            >
+                                BACK
+                            </button>
                         )}
                     </div>
                 </div>
