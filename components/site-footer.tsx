@@ -78,7 +78,7 @@ export default function SiteFooter() {
       <div className="md:hidden fixed bottom-6 right-6 z-50">
         <button
           onClick={toggleMobileMenu}
-          className="bg-red-600 rounded-full w-12 h-12 flex items-center justify-center text-white shadow-lg"
+          className="bg-tranperant rounded-full w-12 h-12 flex items-center justify-center text-white shadow-lg"
           aria-label="Open menu"
         >
           {mobileMenuOpen ? (

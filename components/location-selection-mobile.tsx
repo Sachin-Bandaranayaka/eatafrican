@@ -127,15 +127,15 @@ export default function LocationSelectionMobile({
             </div>
 
             <div
-                className="border rounded-lg p-2 xs:w-auto md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10"
+                className="border rounded-lg p-2 xs:w-auto w-[90%] md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-10"
                 style={{
                     backgroundImage: `url('/images/Box_Restaurant_BckgImg01.png')`,
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     borderColor: '#f1c232',
-                    borderRadius: '10px'
-                }}
-            >
+                    borderRadius: '10px'}}
+                >
+            
                 <div
                     className="absolute inset-0"
                     style={{
@@ -169,13 +169,13 @@ export default function LocationSelectionMobile({
 
                     {/* Headings */}
                     <div className="flex justify-around mb-0 -mt-5">
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-20 -mr-6">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-20 md:-mr-6 lg:-ml-20 lg:-mr-6 xl:-ml-20 xl:-mr-6 2xl:-ml-20 2xl:-mr-6">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-24 -mr-20">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-4 md:-ml-24 md:-mr-20 lg:-ml-24 lg:-mr-20 xl:-ml-24 xl:-mr-20 2xl:-ml-24 2xl:-mr-20">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-14 mr-2">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-14 md:mr-2 lg:-ml-14 lg:mr-2 xl:-ml-14 xl:mr-2 2xl:-ml-14 2xl:mr-2">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
                         </div>
                     </div>
@@ -226,7 +226,7 @@ export default function LocationSelectionMobile({
                                 const isVisible = !isViewingMenu || selectedLocation === location;
                                 if (!isVisible) return null;
                                 return (
-                                    <label key={location} className="custom-radio text-white flex items-center cursor-pointer flex-wrap">
+                                    <label key={location} className="custom-radio text-white flex items-center overflow-hidden cursor-pointer flex-wrap">
                                         <input
                                             type="radio"
                                             name="location"
@@ -283,7 +283,7 @@ export default function LocationSelectionMobile({
                             {!selectedCountry && (
                                 <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
                                     <div className="text-start md:py-2 py-1 px-1 rounded-md p-4">
-                                        <h3 className="font-semibold text-white text-[8px] md:text-[9px] uppercase p-1 leading-tight">
+                                        <h3 className="font-semibold text-white text-[6px] md:text-[9px] text-[6px] uppercase p-4 md:p-1 leading-tight">
                                             CHOOSE A COUNTRY SPECIALTY TO EXPLORE ITS DETAILS AND SEE LOCATIONS WITH RESTAURANTS OFFERING IT
                                         </h3>
                                     </div>
@@ -328,7 +328,7 @@ export default function LocationSelectionMobile({
                         {showBackButton && !isViewingMenu && (
                             <button
                                 onClick={handleBack}
-                                className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                className="mb-10 md:mb-0 lg:mb-0 xl:mb-0 2xl:mb-0 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                             >
                                 BACK
                             </button>
@@ -340,7 +340,7 @@ export default function LocationSelectionMobile({
             {/* Lower Section */}
             <div className="max-w-2xl mt-2 xs:mt-12 w-[95vw] ml-0 sm:mt-16 lg:mt-10 mb-6 xs:mb-8 sm:mb-10 text-center">
                 {isMobile && (
-                    <div className="flex justify-between items-center w-full">
+                    <div className="flex justify-between items-center w-full mt-4">
                         <div className="w-16 xs:w-20 h-16 -mt-20 xs:h-20 z-10">
                             <Image
                                 src="/images/chef-male.png"
@@ -352,7 +352,7 @@ export default function LocationSelectionMobile({
                             />
                         </div>
                         <div className="flex-1 mx-2">
-                            <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
+                            <p className="text-white font-bold text-xs uppercase leading-relaxed">
                                 YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
                             </p>
                         </div>
