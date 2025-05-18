@@ -27,7 +27,7 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
 }) => (
   <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4 z-50">
     {/* Outer container for positioning chef */}
-    <div className="relative max-w-4xl w-[90%] md:w-[35%] h-full md:-mr-[950px] mt-10 md:mt-40">
+    <div className="relative max-w-4xl w-[90%] md:w-[35%] h-full -right-4 md:-mr-[950px] mt-10 md:mt-40">
       {/* Main Modal Box - Lighter background with scrolling */}
       <div className="relative bg-amber-600 rounded-2xl w-full max-h-[90vh] overflow-y-auto hide-scrollbar shadow-xl">
         {/* Top-right chef group image - moved behind everything */}
@@ -45,21 +45,21 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
         {/* Close Button - Positioned relative to the amber box */}
         <button
           onClick={onClose}
-          className="bg-amber-600 text-black rounded-full p-1 w-6 h-6 ml-auto ml-[92%] md:ml-[95%] md:mt-10 relative z-50"
+          className="bg-amber-600 text-black rounded-full p-1 w-6 h-6 ml-auto ml-[90%] md:ml-[95%] md:mt-10 relative z-50"
           type="button"
         >
           <img src="/images/cancelBtn.png" alt="Close" className="w-6 h-6 object-contain" />
         </button>
 
         {/* Title Section - Consistent across all views */}
-        <div className="relative w-[250px] pt-4 sm:pt-6 pl-0 z-10 -mt-10">
+        <div className="relative w-[250px] pt-4 sm:pt-6 pl-0 z-10 md:-mt-10">
           <h2 className="md:text-[16px] sm:text-xl font-bold text-white bg-amber-900 py-1.5 sm:py-2 px-2 sm:px-2 sm:pr-6 rounded-r-full rounded-l-none shadow-md uppercase inline-block">
             {title}
           </h2>
         </div>
 
         {/* Inner Content Area - Adjusted padding */}
-        <div className="flex flex-col md:flex-row pt-4 sm:pt-5 p-4 sm:p-6 md:p-8 relative z-10">{children}</div>
+        <div className="flex flex-row pt-4 sm:pt-5 p-4 sm:p-6 md:p-8 relative z-10">{children}</div>
 
         {/* Chef image - Positioned bottom-left relative to outer container */}
         <div className="absolute bottom-0 -left-6 w-40 h-72 sm:left-0 sm:w-48 sm:h-96 lg:w-52 lg:h-80 pointer-events-none z-20">
