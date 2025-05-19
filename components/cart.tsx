@@ -15,7 +15,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
   const handleLogin = () => {
     setCurrentView("delivery")
-    setShowCheckout(false) // Hide checkout view on mobile when proceeding to delivery
+    setShowCheckout(false)
   }
 
   const handlePlaceOrder = () => {
@@ -39,9 +39,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
     <>
       <style jsx>{`
         .cart-container {
-          position: static; /* Override fixed positioning to integrate with page flow */
-          overflow-y: auto; /* Allow scrolling if content overflows */
-          max-height: 85%; /* Limit height to avoid taking up too much space */
+          overflow-y: auto; /* Enable vertical scrolling */
           -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
           scrollbar-width: none; /* Hide scrollbar for Firefox */
         }
@@ -49,9 +47,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
         }
       `}</style>
-      <div className="cart-container bg-[#e68a3e] w-full max-w-[100%] mx-auto rounded-2xl relative md:mt-20 md:mb-4 mt-4">
-
-
+      <div className="cart-container bg-[#e68a3e] h-[90%] md:h-[85%] w-full max-w-[100%] mx-auto rounded-2xl relative z-50 md:mt-24 md:mb-4 mb-10 mt-20">
         {/* Desktop Header - Hidden on mobile */}
         <div className="hidden mt-10 md:block bg-[#6b2c0c] rounded-r-full text-white p-2 px-4 font-bold w-32">
           YOUR CART
@@ -75,10 +71,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
               className="bg-none text-black rounded-full p-1 w-6 h-6"
               type="button"
             >
-              <img
-                src="/images/cancelBtn.png"
-                alt="Close"
-              />
+              <img src="/images/cancelBtn.png" alt="Close" />
             </button>
           </div>
         </div>
@@ -97,7 +90,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
         {/* Main Content - Three columns on desktop, stacked on mobile */}
         <div className="flex flex-col md:flex-row relative">
           {/* First Component - Cart Items - 40% width on desktop, full width on mobile */}
-          {/* Mobile: Positioned between YOUR CART and CHECKOUT buttons */}
           {showCartItems && (
             <div className="w-full md:w-[40%] p-4 md:p-10" style={{ marginTop: "-10px" }}>
               <div className="bg-amber-50/80 rounded-3xl p-4 shadow">
@@ -142,8 +134,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                     {currentView !== "payment-error" && currentView !== "payment-success" ? (
                       <div>
                         <p className="text-xs mb-2 text-black">
-                          Provide Address for us to calculate Delivery Fees and show available delivery times you can
-                          select
+                          Provide Address for us to calculate Delivery Fees and show available delivery times you can select
                         </p>
                         <div className="grid grid-cols-2 gap-2 mb-2">
                           <input
@@ -239,7 +230,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
           {/* Mobile Checkout View - Only visible on mobile when checkout is clicked and we're in login state */}
           {showCheckout && currentView === "login" && (
-            <div className="md:hidden" >
+            <div className="md:hidden">
               {/* Login and Just Browsing sections side by side */}
               <div className="w-full flex flex-wrap">
                 {/* Login Section - 50% width on mobile */}
@@ -250,25 +241,25 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                     <div className="space-y-3 mb-4">
                       <input
                         placeholder="E-mail"
-                        className="w-full p-2 rounded border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="w-full p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                       />
                       <input
                         type="password"
                         placeholder="Password"
-                        className="w-full p-2 rounded border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="w-full p-1 -mb-4 md:mb-0 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                       />
                     </div>
 
                     <div className="text-center mb-4">
-                      <a href="#" className="text-xs text-red-900 hover:underline font-semibold">
+                      <a href="#" className="text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-red-900 hover:underline font-semibold">
                         Forgot Password?
                       </a>
                     </div>
 
-                    <div className="flex justify-center mb-3">
+                    <div className="flex justify-center md:gap-3 gap-1 md:pt-1 pt-0">
                       <button
                         onClick={handleLogin}
-                        className="relative bg-red-900 text-white rounded-full py-2 px-6 text-sm font-bold hover:bg-red-800 shadow-md"
+                        className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
                       >
                         <span className="relative z-10">LOGIN</span>
                         <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
@@ -281,15 +272,11 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                             borderRightWidth: "4px",
                           }}
                         ></span>
-                        <span
-                          // className="absolute inset-0 rounded-full outline outline-2 outline-yellow-800"
-                          style={{ outlineOffset: "1px" }}
-                        ></span>
                       </button>
                     </div>
 
-                    <div className="text-center text-sm mb-4">
-                      <span className="text-amber-900">New Here? </span>
+                    <div className="text-center text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:mt-2 mt-1 md:pb-6 pb-1">
+                      <span className="text-black font-bold">New Here? </span>
                       <a href="#" className="text-red-900 font-bold hover:underline">
                         Create Account
                       </a>
@@ -299,16 +286,15 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
                 {/* Just Browsing Section - 50% width on mobile */}
                 <div className="w-1/2 p-4">
-                  <div className="bg-[#fce5bb]/60 rounded-lg p-4 shadow hover:shadow-md transition-shadow">
-                    <h3 className="font-bold text-sm text-amber-900">Just browsing?</h3>
-                    <p className="text-sm text-black leading-relaxed">
-                      Order your favorite meals without logging in or creating an account. Delicious food is just a few
-                      clicks away, no registration required.
+                  <div className="bg-[#fce5bb]/60 rounded-lg p-2 md:p-4 shadow hover:shadow-md transition-shadow">
+                    <h3 className="font-bold text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-amber-900">Just browsing?</h3>
+                    <p className="text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-black leading-relaxed">
+                      Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
                     </p>
                     <div className="pt-2 flex justify-center">
                       <button
                         onClick={handleLogin}
-                        className="relative bg-[#6b2c0c] text-white rounded-full py-2 px-4 text-xs font-bold hover:bg-red-800 shadow-md"
+                        className="relative bg-[#6b2c0c] text-white rounded-full py-1.5 px-6 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
                       >
                         <span className="relative z-10">CONTINUE AS GUEST</span>
                         <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
@@ -321,10 +307,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                             borderRightWidth: "4px",
                           }}
                         ></span>
-                        <span
-                          // className="absolute inset-0 rounded-full outline outline-2 outline-amber-800"
-                          style={{ outlineOffset: "1px" }}
-                        ></span>
                       </button>
                     </div>
                   </div>
@@ -335,12 +317,10 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
           {/* Desktop Layout - Hidden on mobile */}
           <div className="hidden md:block md:w-[25%] p-10 flex flex-col">
-            {/* Checkout Div - Changes to ORDER SUMMARY when in payment-success state */}
             <div className="bg-[#6b2c0c] w-full text-white p-2 rounded-r-full px-6 font-bold mb-10 uppercase text-center">
               {currentView === "payment-success" ? "ORDER SUMMARY" : "CHECKOUT"}
             </div>
 
-            {/* Login Form */}
             {currentView === "login" && (
               <div className="bg-amber-50/60 rounded-2xl p-4 relative shadow">
                 <div className="mb-4 text-center font-bold text-amber-900">LOGIN</div>
@@ -379,7 +359,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                         borderRightWidth: "4px",
                       }}
                     ></span>
-                    <span className="absolute inset-0 rounded-full" style={{ outlineOffset: "1px" }}></span>
                   </button>
                 </div>
 
@@ -399,7 +378,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
               <button onClick={onClose} className="absolute right-14 rounded-full p-1 z-10" type="button">
                 <img src="/images/cancelBtnWhite.png" alt="Close" className="w-4 h-4 object-contain" />
               </button>
-              {/* Relative wrapper for positioning */}
               <div className="relative">
                 <div className="z-20">
                   <Image
@@ -415,8 +393,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                   <div className="absolute bottom-10 -left-4 p-4 bg-amber-50/60 w-[60%] rounded-2xl z-50">
                     <h3 className="font-bold text-sm text-amber-900">Just browsing?</h3>
                     <p className="text-sm text-black leading-relaxed">
-                      Order your favorite meals without logging in or creating an account. Delicious food is just a few
-                      clicks away, no registration required.
+                      Order your favorite meals without logging in or creating an account. Delicious food is just a few clicks away, no registration required.
                     </p>
                     <div className="pt-2 flex justify-center">
                       <button
@@ -434,7 +411,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                             borderRightWidth: "4px",
                           }}
                         ></span>
-                        <span className="absolute inset-0 rounded-full" style={{ outlineOffset: "1px" }}></span>
                       </button>
                     </div>
                   </div>
@@ -443,7 +419,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Overlapping Components - These will overlap the image section - Desktop only */}
+          {/* Overlapping Components - Desktop only */}
           {currentView !== "login" && (
             <div className="hidden md:block w-full md:w-[40%] p-4 absolute top-20 left-[40%] md:left-[42%] z-10">
               {currentView === "delivery" && <DeliveryInfoView onPlaceOrder={handlePlaceOrder} />}
@@ -452,7 +428,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
             </div>
           )}
 
-          {/* Mobile Next Components - These will be full width on mobile */}
+          {/* Mobile Next Components - Full width on mobile */}
           {currentView !== "login" && !showCartItems && (
             <div className="md:hidden w-full p-4" style={{ marginTop: "-64px" }}>
               {currentView === "delivery" && <DeliveryInfoView onPlaceOrder={handlePlaceOrder} />}

@@ -63,11 +63,11 @@ export default function RestaurantListing() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-transparent text-gray-900 font-sans pl-1 w-auto -mt-[100vh] md:mt-20">
+    <div className="min-h-screen flex md:flex-row bg-transparent text-gray-900 font-sans pl-1 w-auto -mt-[80vh] md:mt-20">
       <div className="w-screen p-4 pl-10 space-y-4 xs:space-y-6 md:space-y-2">
         <div className="flex items-center justify-end p-0 relative z-10">
           <div className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover bg-center inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2">
-            <h2 className="block text-balck text-sm font-bold uppercase rounded whitespace-nowrap">
+            <h2 className="block text-balck text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold uppercase rounded whitespace-nowrap">
               AFRICAN RESTAURANTS IN ZURICH
             </h2>
           </div>
@@ -87,12 +87,12 @@ export default function RestaurantListing() {
 
         {/* Filter and Sort Buttons */}
         <div className="flex justify-end space-x-4 mb-6">
-          <button className="bg-[#434343ff] text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+          <button className="bg-[#434343ff] text-white rounded-lg px-4 py-1 text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-bold flex items-center">
             <span>FILTER BY</span>
             <ChevronDown size={14} className="ml-1" />
           </button>
 
-          <button className="bg-[#434343ff] text-white rounded-lg px-4 py-1 text-xs font-bold flex items-center">
+          <button className="bg-[#434343ff] text-white rounded-lg px-4 py-1 text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-bold flex items-center">
             <span>SORT BY</span>
             <ChevronDown size={14} className="ml-1" />
           </button>
@@ -143,25 +143,25 @@ export default function RestaurantListing() {
                 {/* Restaurant Info */}
                 <div className="w-[60%] p-2">
                   <h3 className="font-bold text-sm text-[#ebeb48]">{restaurant.name}</h3>
-                  <div className="flex items-center text-xs mt-1">
+                  <div className="flex items-center text-[8px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs mt-1">
                     <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
                     <span className=" text-white">{restaurant.cuisine}</span>
                   </div>
-                  <div className="text-xs mt-1">
+                  <div className="text-[8px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs mt-1">
                     <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
                     <span className=" text-white">{restaurant.distance}</span>
                   </div>
-                  <div className="text-xs mt-1">
+                  <div className="text-[8px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs mt-1">
                     <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
                     <span className=" text-white">Min Fr: {restaurant.minPrice.toFixed(2)}</span>
                   </div>
-                  <div className="text-xs mt-1 flex items-center">
+                  <div className="text-[8px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs mt-1 flex items-center">
                     <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mr-1"></span>
                     <span className=" text-white">{restaurant.rating} hrs</span>
                   </div>
                   <button
                     onClick={handleToggle}
-                    className="bg-red-800 text-white text-[10px] rounded-full px-3 py-1 whitespace-nowrap border-4 border-amber-400"
+                    className="bg-red-800 text-white text-[8px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] rounded-full px-3 py-1 whitespace-nowrap border-4 border-amber-400"
                   >
                     VIEW RESTAURANT
                   </button>
@@ -169,7 +169,7 @@ export default function RestaurantListing() {
 
                 {/* View Menu Button */}
                 <div className="flex items-center pr-2 ml-4 w-[90%]">
-                  <p className="text-white text-xs">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.m nonumy eirmod tempor invidunt ut labore et dolore. nonumy eirmod tempor invidunt ut labore et dolore.nonumy eirmod tempor invidunt ut labore et dolore.</p>
+                  <p className="text-white text-[8px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.m nonumy eirmod tempor invidunt ut labore et dolore. nonumy eirmod tempor invidunt ut labore et dolore.nonumy eirmod tempor invidunt ut labore et dolore.</p>
                 </div>
 
                 {/* Mask Image Placeholder */}

@@ -4,10 +4,12 @@ import { useState } from "react"
 import Image from "next/image"
 import { User, ChevronDown } from "lucide-react"
 import LoginModal from "./login-modal"
-import { CartComponent } from "./cart" // Updated import
+import LoginModalTest from "./login-modal-test"
+import { CartComponent } from "./cart"
 
 export default function SiteHeader() {
   const [loginModalOpen, setLoginModalOpen] = useState(false)
+  const [loginModalTestOpen, setLoginModalTestOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
   const [currentLanguage, setCurrentLanguage] = useState("ENGLISH")
   const [cartOpen, setCartOpen] = useState(false)
@@ -84,6 +86,18 @@ export default function SiteHeader() {
 
       {/* Right Section with User Icon and Shopping Cart */}
       <div className="flex items-center gap-4 md:gap-6">
+        {/* login test */}
+        <button
+          onClick={() => {
+            console.log("Test button clicked, opening test modal")
+            setLoginModalTestOpen(true)
+          }}
+          className={iconButtonStyle}
+          aria-label="test"
+        >
+          <User size={10} />
+        </button>
+        
         {/* User Icon */}
         <button
           onClick={() => {
@@ -111,11 +125,14 @@ export default function SiteHeader() {
 
       {/* Login Modal */}
       <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      
+      {/* Login Modal Test */}
+      <LoginModalTest isOpen={loginModalTestOpen} onClose={() => setLoginModalTestOpen(false)} />
 
       {/* Cart Component */}
       {cartOpen && (
         <div className="fixed inset-0 z-50">
-          <CartComponent onClose={() => setCartOpen(false)} /> {/* Updated to CartComponent */}
+          <CartComponent onClose={() => setCartOpen(false)} />
         </div>
       )}
     </header>

@@ -46,10 +46,10 @@ export default function ContactUs({ isOpen, onClose, embedInModal = false }: Con
       {/* Content */}
       <div className="relative z-20 p-4 md:p-8 bg-[#fff2d9]/90 m-4 md:m-8 rounded-3xl">
         <div className="space-y-4 my-6">
-          <p className="text-black space-y-2 text-sm md:text-base">
+          <p className="text-black space-y-2 text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Get in touch with our team:
           </p>
-          <ul className="space-y-2 text-black">
+          <ul className="space-y-2 text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">
             <li>
               <strong>Email:</strong> info@eatafrican.com
             </li>
@@ -60,7 +60,7 @@ export default function ContactUs({ isOpen, onClose, embedInModal = false }: Con
               <strong>Address:</strong> Bahnhofstrasse 123, 8001 Zürich, Switzerland
             </li>
           </ul>
-          <p className="text-black space-y-2 text-sm md:text-base">
+          <p className="text-black space-y-2 text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Our customer service is available Monday to Friday, 9:00 - 17:00.
           </p>
         </div>
@@ -73,15 +73,7 @@ export default function ContactUs({ isOpen, onClose, embedInModal = false }: Con
   }
 
   return (
-    <div className="modal-overlay flex items-start justify-end fixed inset-0 z-0">
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-2 bg-transparent rounded-full p-1 z-50"
-        type="button"
-      >
-        <X className="w-5 h-5 text-white" />
-      </button>
+    <div className="flex items-start justify-end inset-0 z-0">
       {content}
     </div>
   );

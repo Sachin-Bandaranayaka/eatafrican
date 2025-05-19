@@ -65,25 +65,35 @@ export default function ViewMenu() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent  xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[100vh] md:mt-20 -mr-10 ">
+    <div className="min-h-screen w-[100%] bg-transparent xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[80vh] md:mt-20 -mr-10 ">
       {/* Main Content */}
       {showRestaurantList ? (
         <RestaurantList />
       ) : (
-        <main className="flex-1 p-2 md:p-10 flex flex-col space-y-4 xs:space-y-6">
+        <main className="flex p-2 md:p-10 flex flex-col space-y-4 xs:space-y-6">
           {/* Header Section */}
           <header className="flex flex-row justify-between items-start mr-2">
             {/* Left Side: Logo and Restaurant Details */}
-            <div className="flex items-start">
+            <div className="flex items-start ">
               <div className="bg-transparent flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/menuIcon.png"
                   alt="Restaurant Logo"
-                  width={150}
-                  height={150}
+                  width={130}
+                  height={130}
                   className="object-cover xs:w-[80px] xs:h-[80px]"
                 />
               </div>
+
+              {/* <div className="bg-transparent flex items-center justify-center overflow-hidden relative w-[80px] h-[80px] xs:w-[80px] xs:h-[80px] sm:w-[100px] sm:h-[100px] md:w-[150px] md:h-[100px] lg:w-[150px] lg:h-[150px]">
+                <Image
+                  src="/images/menuIcon.png"
+                  alt="Restaurant Logo"
+                  layout="fill"
+                  className="object-cover"
+                />
+              </div> */}
+
               <div
                 className="pl-2 text-white flex flex-col space-y-0 relative rounded-r-xl w-full"
                 style={{
@@ -126,24 +136,24 @@ export default function ViewMenu() {
             <div className="flex flex-col items-center md:items-end space-y-3">
               {/* Category Buttons (MAIN DISHES, SNACKS, DRINKS) */}
               <div className="flex flex-wrap justify-center md:justify-end gap-2 xs:gap-3 sm:gap-4">
-                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 xs:px-3 text-[8px] xs:text-xs sm:text-xs font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
+                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
                   MAIN DISHES
                 </button>
-                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 xs:px-3 text-[8px] xs:text-xs sm:text-xs font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
+                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
                   SNACKS
                 </button>
-                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 xs:px-3 text-[8px] xs:text-xs sm:text-xs font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
+                <button className="bg-[#670402] text-white border-2 border-white rounded-full py-1 px-2 text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-semibold hover:bg-[#670402] transition duration-200 whitespace-nowrap">
                   DRINKS
                 </button>
               </div>
 
               {/* Function Buttons (FILTER BY, SORT BY, Search, Share) */}
               <div className="flex flex-wrap justify-center md:justify-end gap-2 xs:gap-3 sm:gap-4">
-                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-[#434343ff] text-black font-bold p-1 transition">
+                <button className="text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-[#434343ff] text-black font-bold p-1 transition">
                   <span>FILTER BY</span>
                   <ChevronDown className="text-white" size={12} />
                 </button>
-                <button className="text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-[#434343ff] text-black font-bold p-1 transition">
+                <button className="text-[5px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] xs:text-xs sm:text-xs flex items-center border-2 rounded-lg space-x-1 bg-[#434343ff] text-black font-bold p-1 transition">
                   <span>SORT BY</span>
                   <ChevronDown size={12} />
                 </button>
@@ -166,7 +176,7 @@ export default function ViewMenu() {
             {meals.map((meal) => (
               <div
                 key={meal.id}
-                className="flex flex-col xs:flex-row rounded-lg shadow-md overflow-hidden border-2 border-[#f1c232] relative"
+                className="flex flex-col rounded-lg shadow-md overflow-hidden border-2 border-[#f1c232] relative"
                 style={{
                   backgroundImage: 'url("/images/Box_Restaurant_BckgImg01.png")',
                   backgroundSize: 'cover',
@@ -188,18 +198,18 @@ export default function ViewMenu() {
                 {/* Content with higher z-index */}
                 <div className="relative z-10 w-full">
                   {/* Left Image Placeholder and Meal Info on Same Level */}
-                  <div className="flex flex-row xs:flex-row w-full">
+                  <div className="flex flex-row w-full">
                     {/* Left Image Placeholder */}
                     <div className="m-2 mb-2 w-1/4 h-auto bg-gray-200 flex items-start justify-start text-gray-500 text-[10px] xs:text-sm font-semibold rounded-xl border border-amber-400 xs:mr-4">
                       No Image Available
                     </div>
 
                     {/* Meal Info */}
-                    <div className="flex-1 p-3 xs:p-4 flex flex-col justify-end">
+                    <div className="p-3 xs:p-4 flex flex-col justify-end">
                       {/* Title and Vegan Button on Same Level */}
                       <div className="flex justify-between items-center mb-1">
-                        <h3 className="text-[10px] xs:text-sm sm:text-lg font-bold text-[#ebeb48]">{meal.title}</h3>
-                        <span className="inline-block bg-[#367627] border border-[#f1c232] text-white text-[10px] xs:text-xs py-1 px-4 xs:px-4 xs:py-2 rounded-full">
+                        <h3 className="text-[10px] font-bold text-[#ebeb48]">{meal.title}</h3>
+                        <span className="inline-block bg-[#367627] border border-[#f1c232] text-white text-[10px]  py-1 px-4 xs:px-4 xs:py-2 rounded-full">
                           VEGAN
                         </span>
                       </div>
@@ -228,7 +238,7 @@ export default function ViewMenu() {
                           >
                             <Heart size={30} className="bg-white xs:size-26 p-1" />
                           </button>
-                          
+
                         </div>
                       </div>
                     </div>
