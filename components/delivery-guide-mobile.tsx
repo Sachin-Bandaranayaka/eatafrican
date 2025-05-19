@@ -52,7 +52,7 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
     if (!isOpen) return null;
 
     return (
-        <div className="relative rounded-lg pl-6 -mt-72 z-50">
+        <div className="absolute rounded-lg mt-96 pl-6 z-50">
 
             {/* Fixed Chefs Image */}
             <div className="absolute top-4 left-[10%] w-40 h-40 z-10 opacity-100 pointer-events-none">

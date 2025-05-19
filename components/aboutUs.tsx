@@ -14,10 +14,10 @@ export default function AboutUs({ isOpen, onClose, embedInModal = false }: About
 
   // Content to be rendered (shared in both modes)
   const content = (
-    <div className="w-[100%] md:w-[45%] mt-[70vh] md:mt-0 lg:mt-0 xl:mt-0 2xl:mt-0 relative rounded-[5px] overflow-hidden z-10">
+    <div className="w-[100%] md:w-[45%] md:mt-0 lg:mt-0 xl:mt-0 2xl:mt-0 relative rounded-[5px] overflow-hidden z-10">
 
         {/* Image - BEHIND */}
-        <div className="absolute right-24 md:right-96 w-40 h-40 md:w-48 md:h-48 z-20">
+        <div className="absolute right-48 md:right-96 w-40 h-40 md:w-48 md:h-48 z-20">
           <Image
             src="/images/chefs-group.png"
             alt="Chefs group"
@@ -76,7 +76,7 @@ export default function AboutUs({ isOpen, onClose, embedInModal = false }: About
 
   // Otherwise, render the full modal structure
   return (
-    <div className=" flex items-start justify-end inset-0 z-0">
+    <div className="md:fixed lg:fixed xl:fixed 2xl:fixed -mt-72 md:mt-[20vh] lg:[20vh] xl:[20vh] 2xl:[20vh] flex items-start justify-end inset-0 z-50">
       {content}
     </div>
   );
