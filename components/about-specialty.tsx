@@ -38,7 +38,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         },
         "KENYAN": {
             title: "KENYAN CUISINE",
-            description: "Kenya’s food culture blends indigenous ingredients with influences from Arab, Indian, and European cuisines. From the hearty stews of the highlands to the spiced dishes of the Swahili coast, each bite offers a taste of the country's rich history and vibrant diversity.",
+            description: "Kenya's food culture blends indigenous ingredients with influences from Arab, Indian, and European cuisines. From the hearty stews of the highlands to the spiced dishes of the Swahili coast, each bite offers a taste of the country's rich history and vibrant diversity.",
             image: "/images/kenyan-cuisine.jpg",
             flag: "/flags/kenya.png",
             meals: [
@@ -199,7 +199,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 <div className="flex justify-end items-center p-0 z-10">
                     <div className="bg-[#85200cff] border border-[2px] border-[#fff2ccff] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
                         <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
-                            <h2 className="block bg-[#2A5910] text-white text-[14px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold uppercase rounded whitespace-nowrap">
+                            <h2 className="block bg-[#2A5910] text-white text-[11px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold uppercase rounded whitespace-nowrap">
                                 {content.title}
                             </h2>
                         </div>
@@ -233,19 +233,19 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                             ))}
                         </div>
                         <div className="">
-                            <p className="text-[10px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px] text-gray-700">
+                            <p className="text-[7px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] text-gray-700">
                                 {showFullDescription ? content.description : halfDescription}
                             </p>
                             {content.description.split(" ").length > 60 && (
                                 <span
                                     onClick={() => setShowFullDescription(!showFullDescription)}
-                                    className="text-red-500 text-[6px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs cursor-pointer underline"
+                                    className="text-red-500 text-[3px] md:text-[7px] lg:text-[7px] xl:text-[7px] 2xl:text-[7px] cursor-pointer underline"
                                 >
                                     {showFullDescription ? "<-Read Less" : "Read More ->"}
                                 </span>
                             )}
                         </div>
-                        <p className="text-[10px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px] bottom text-gray-700 mt-2">
+                        <p className="text-[7px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] bottom text-gray-700 mt-2">
                             {content.endDescription}
                         </p>
                     </div>
@@ -294,7 +294,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                             </div>
                                             <div className="p-2">
                                                 <div className="flex items-center justify-between">
-                                                    <p className="text-xs flex-1">
+                                                    <p className="text-[7px] flex-1">
                                                         <span className="font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
                                                         {meal.description}
                                                     </p>
@@ -308,7 +308,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                                                                 className="ml-0 object-contain"
                                                             />
                                                             {meal.countryName && (
-                                                                <span className="pt-[3px] font-bold uppercase text-xs">
+                                                                <span className="pt-[3px] font-bold uppercase text-[7px]">
                                                                     {getDisplayCountryName(meal.countryName)}
                                                                 </span>
                                                             )}

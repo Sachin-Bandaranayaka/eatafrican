@@ -319,9 +319,9 @@ body {
 .custom-radio input[type="radio"]:checked::after {
   content: "";
   position: absolute;
-  width: 0.75rem;
+  width: 0.6rem;
   height: 0.75rem;
-  background-color: white;
+  background-color: orange;
   border-radius: 50%;
   top: 50%;
   left: 50%;

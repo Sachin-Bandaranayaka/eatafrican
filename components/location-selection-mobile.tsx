@@ -176,13 +176,13 @@ export default function LocationSelectionMobile({
                     {/* Headings */}
                     <div className="flex justify-around mb-0 -mt-5">
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-20 md:-mr-6 lg:-ml-20 lg:-mr-6 xl:-ml-20 xl:-mr-6 2xl:-ml-20 2xl:-mr-6">
-                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
+                            <h3 className="font-semibold text-black text-[5px] sm:text-[9px] uppercase">COUNTRY SPECIALTY</h3>
                         </div>
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-4 md:-ml-24 md:-mr-20 lg:-ml-24 lg:-mr-20 xl:-ml-24 xl:-mr-20 2xl:-ml-24 2xl:-mr-20">
-                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
+                            <h3 className="font-semibold text-black text-[5px] sm:text-[9px] uppercase">LOCATION</h3>
                         </div>
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-14 md:mr-2 lg:-ml-14 lg:mr-2 xl:-ml-14 xl:mr-2 2xl:-ml-14 2xl:-mr-2">
-                            <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
+                            <h3 className="font-semibold text-black text-[5px] sm:text-[9px] uppercase">RESTAURANT</h3>
                         </div>
                     </div>
 
@@ -200,7 +200,7 @@ export default function LocationSelectionMobile({
                                             onChange={() => handleCountrySelect(country)}
                                             className="appearance-none mr-2"
                                         />
-                                        <span className="text-[8px] font-bold sm:text-xs">{country}</span>
+                                        <span className="text-[5px] font-bold sm:text-[9px]">{country}</span>
                                     </label>
                                 ))
                             ) : (
@@ -212,14 +212,14 @@ export default function LocationSelectionMobile({
                                         readOnly
                                         className="appearance-none mr-2"
                                     />
-                                    <span className="text-[8px] sm:text-xs font-medium">{selectedCountry}</span>
+                                    <span className="text-[5px] sm:text-[9px] font-medium">{selectedCountry}</span>
                                 </label>
                             )}
 
                             {isViewingMenu && selectedCountry && (
                                 <button
                                     onClick={handleChange}
-                                    className="mt-4 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                    className="mt-4 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[7px] sm:text-[9px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                                 >
                                     CHANGE
                                 </button>
@@ -240,7 +240,7 @@ export default function LocationSelectionMobile({
                                             onChange={() => handleLocationSelect(location as Location)}
                                             className="appearance-none mr-2"
                                         />
-                                        <span className="text-[8px] sm:text-xs font-bold">{location} ({locations[location] || 0})</span>
+                                        <span className="text-[5px] sm:text-[9px] font-bold">{location} ({locations[location] || 0})</span>
                                     </label>
                                 );
                             }) : (
@@ -253,7 +253,7 @@ export default function LocationSelectionMobile({
                             {selectedCountry && !selectedLocation && (
                                 <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
                                     <div className="text-start py-0.5 px-1 rounded-lg">
-                                        <h3 className="font-semibold text-white text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
+                                        <h3 className="font-semibold text-white text-[3px] sm:text-[5px] uppercase p-1 leading-tight">
                                             CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
                                         </h3>
                                     </div>
@@ -274,7 +274,7 @@ export default function LocationSelectionMobile({
                                                 onChange={() => handleRestaurantSelect(restaurantName)}
                                                 className="appearance-none mr-2"
                                             />
-                                            <span className="text-[10px] sm:text-sm">{restaurantName}</span>
+                                            <span className="text-[7px] sm:text-[9px]">{restaurantName}</span>
                                         </div>
                                     </label>
                                 );
@@ -283,13 +283,13 @@ export default function LocationSelectionMobile({
                             )}
 
                             {showError && (
-                                <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
+                                <p className="text-red-600 text-[7px] sm:text-[9px] font-bold mt-1">Choose a restaurant to view menu</p>
                             )}
 
                             {!selectedCountry && (
                                 <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
                                     <div className="text-start md:py-2 py-1 px-1 rounded-md p-4">
-                                        <h3 className="font-semibold text-white text-[6px] md:text-[9px] text-[6px] uppercase p-4 md:p-1 leading-tight">
+                                        <h3 className="font-semibold text-white text-[3px] md:text-[6px] text-[3px] uppercase p-4 md:p-1 leading-tight">
                                             CHOOSE A COUNTRY SPECIALTY TO EXPLORE ITS DETAILS AND SEE LOCATIONS WITH RESTAURANTS OFFERING IT
                                         </h3>
                                     </div>
@@ -301,7 +301,7 @@ export default function LocationSelectionMobile({
                                 {selectedLocation && !isViewingMenu && (
                                     <button
                                         onClick={handleViewMenuClick}
-                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[7px] sm:text-[9px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                                     >
                                         VIEW MENU
                                     </button>
@@ -310,7 +310,7 @@ export default function LocationSelectionMobile({
                                 {isViewingMenu && (
                                     <button
                                         onClick={handleHome}
-                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 w-[80px] sm:w-[100px] text-[7px] sm:text-[9px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                                     >
                                         HOME
                                     </button>
@@ -324,7 +324,7 @@ export default function LocationSelectionMobile({
                         {!isViewingMenu && selectedCountry && (
                             <span
                                 onClick={handleAboutSpecialtyClick}
-                                className="text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
+                                className="text-[#ebeb48] underline cursor-pointer text-[5px] sm:text-[9px] font-semibold hover:text-amber-700 transition duration-200 whitespace-nowrap"
                             >
                                 ABOUT {getCuisineType(selectedCountry)} SPECIALTY
                             </span>
@@ -334,7 +334,7 @@ export default function LocationSelectionMobile({
                         {showBackButton && !isViewingMenu && (
                             <button
                                 onClick={handleBack}
-                                className="mb-10 md:mb-0 lg:mb-0 xl:mb-0 2xl:mb-0 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                                className="mb-10 md:mb-0 lg:mb-0 xl:mb-0 2xl:mb-0 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[7px] sm:text-[9px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
                             >
                                 BACK
                             </button>

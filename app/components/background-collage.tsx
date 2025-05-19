@@ -66,7 +66,7 @@ const BackgroundCollage = () => {
           background-position: center;
           background-repeat: no-repeat;
           opacity: 0;
-          transition: opacity 2s ease-in-out;
+          transition: opacity 3s cubic-bezier(0.33, 1, 0.68, 1);
           z-index: 0;
         }
         
@@ -78,6 +78,11 @@ const BackgroundCollage = () => {
         .bg-slide.ken-burns {
           animation: kenBurns 20s ease-in-out forwards;
           transform-origin: center center;
+        }
+        
+        .bg-slide.next-up {
+          z-index: 1;
+          opacity: 0;
         }
         
         .bg-slider-overlay {
@@ -171,9 +176,14 @@ const BackgroundCollage = () => {
 
       // Set next image index with looping
       const nextIndex = (currentImageIndex + 1) % images.length;
-      setCurrentImageIndex(nextIndex);
 
-      // Apply transition on next frame
+      // Prepare the next slide before making it active
+      const nextSlide = document.getElementById(`bg-slide-${nextIndex}`);
+      if (nextSlide) {
+        nextSlide.classList.add('next-up');
+      }
+
+      // Apply transitions with slight delay for smoother sequence
       setTimeout(() => {
         // Remove active and ken-burns class from old slide
         if (oldSlide) {
@@ -181,19 +191,22 @@ const BackgroundCollage = () => {
         }
 
         // Add active and ken-burns to new slide
-        const newSlide = document.getElementById(`bg-slide-${nextIndex}`);
-        if (newSlide) {
-          newSlide.classList.add('active', 'ken-burns');
+        if (nextSlide) {
+          nextSlide.classList.add('active', 'ken-burns');
+          nextSlide.classList.remove('next-up');
         }
-      }, 50);
+
+        // Update state after transition starts
+        setCurrentImageIndex(nextIndex);
+      }, 100);
     };
 
     // Setup the slider
     createSliderStyles();
     createSliderElements();
 
-    // Start the rotation timer
-    const rotationTimer = setInterval(rotateBackground, 10000); // Change image every 10 seconds
+    // Start the rotation timer with slightly longer duration
+    const rotationTimer = setInterval(rotateBackground, 12000); // Change image every 12 seconds
 
     // Handle window resize
     const handleResize = () => {
