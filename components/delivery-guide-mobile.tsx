@@ -52,10 +52,10 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
     if (!isOpen) return null;
 
     return (
-        <div className="relative rounded-lg p-4 -mt-80 z-50">
-            
+        <div className="relative rounded-lg pl-6 -mt-72 z-50">
+
             {/* Fixed Chefs Image */}
-            <div className="absolute top-4 left-4 w-40 h-40 z-10 opacity-100 pointer-events-none">
+            <div className="absolute top-4 left-[10%] w-40 h-40 z-10 opacity-100 pointer-events-none">
                 <Image
                     src="/images/chefs-group.png"
                     alt="Chefs group"
@@ -65,7 +65,7 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
             </div>
 
             {/* Close Button */}
-            <button
+            {/* <button
                 onClick={onClose}
                 className="absolute top-11 right-0 bg-[#ff9920] border border-white rounded-full p-1 z-50"
                 type="button"
@@ -76,19 +76,34 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
                     alt="Close"
                     className="w-4 h-4 object-contain"
                 />
-            </button>
+            </button> */}
 
             {/* Header */}
-            <div className="mt-4 ml-48 inline-block rounded-l-full pl-6 pr-2 py-2 mb-4 w-auto">
-                <div
-                    className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover  rounded-l-full bg-center px-6 py-1 border border-[#ffe599]"
-                >
-                    <h2 className="inline-block text-black text-xs font-bold uppercase rounded">
-                        HOW WE DELIVER
-                    </h2>
+            <div className="flex flex-row">
+                <div className="mt-4 ml-40 left-10 rounded-l-full pl-6 pr-2 py-2 mb-4 w-[100%]">
+                    <div
+                        className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover  rounded-l-full bg-center px-6 py-1 border border-[#ffe599]"
+                    >
+                        <h2 className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold uppercase rounded">
+                            HOW WE DELIVER
+                        </h2>
+                    </div>
                 </div>
-            </div>
 
+ </div>
+                <button
+                    onClick={onClose}
+                    className="absolute top-11 right-0 bg-[#ff9920] border border-white rounded-full p-1 z-50"
+                    type="button"
+                    aria-label="Close"
+                >
+                    <img
+                        src="/images/cancelBtnBlack.png"
+                        alt="Close"
+                        className="w-4 h-4 object-contain"
+                    />
+                </button>
+           
             {/* Delivery Zones Section */}
             <div className="relative z-10 mt-2">
                 {deliveryZones.map((zone) => (

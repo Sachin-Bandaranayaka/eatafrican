@@ -199,7 +199,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                 <div className="flex justify-end items-center p-0 z-10">
                     <div className="bg-[#85200cff] border border-[2px] border-[#fff2ccff] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
                         <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
-                            <h2 className="block bg-[#2A5910] text-white text-sm font-bold uppercase rounded whitespace-nowrap">
+                            <h2 className="block bg-[#2A5910] text-white text-[14px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold uppercase rounded whitespace-nowrap">
                                 {content.title}
                             </h2>
                         </div>
@@ -218,8 +218,8 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                     </button>
                 </div>
 
-                <div className="mx-auto mt-1 flex flex-row md:flex-row justify-end">
-                    <div className="bg-[#FFF3C7] bg-opacity-90 rounded-xl w-1/2 h-auto md:w-1/2 p-2 mr-56 z-50 mt-4 overflow-auto absolute">
+                <div className="mx-auto mt-1 flex flex-row justify-between">
+                    <div className="bg-[#FFF3C7] bg-opacity-90 rounded-xl w-1/2 h-auto p-2 -mr-56 z-50 mt-4 overflow-auto ">
                         <div className="float-left mr-4">
                             {(content.flags && content.flags.length > 1 ? content.flags : [content.flag]).map((flag, index) => (
                                 <Image
@@ -233,19 +233,19 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                             ))}
                         </div>
                         <div className="">
-                            <p className="text-[13px] text-gray-700">
+                            <p className="text-[10px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px] text-gray-700">
                                 {showFullDescription ? content.description : halfDescription}
                             </p>
                             {content.description.split(" ").length > 60 && (
                                 <span
                                     onClick={() => setShowFullDescription(!showFullDescription)}
-                                    className="text-red-500 text-xs cursor-pointer underline"
+                                    className="text-red-500 text-[6px] md:text-xs lg:text-xs xl:text-xs 2xl:text-xs cursor-pointer underline"
                                 >
                                     {showFullDescription ? "<-Read Less" : "Read More ->"}
                                 </span>
                             )}
                         </div>
-                        <p className="text-[13px] bottom text-gray-700 mt-2">
+                        <p className="text-[10px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px] bottom text-gray-700 mt-2">
                             {content.endDescription}
                         </p>
                     </div>

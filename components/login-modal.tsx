@@ -45,14 +45,14 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
         {/* Close Button - Positioned relative to the amber box */}
         <button
           onClick={onClose}
-          className="bg-amber-600 text-black rounded-full p-1 w-6 h-6 ml-auto ml-[90%] md:ml-[95%] md:mt-10 relative z-50"
+          className="bg-amber-600 text-black rounded-full p-1 w-6 h-6 ml-[90%] mt-4 md:ml-[95%] md:mt-10 relative z-50"
           type="button"
         >
           <img src="/images/cancelBtn.png" alt="Close" className="w-6 h-6 object-contain" />
         </button>
 
         {/* Title Section - Consistent across all views */}
-        <div className="relative w-[250px] pt-4 sm:pt-6 pl-0 z-10 md:-mt-10">
+        <div className="relative w-[250px] pt-4 sm:pt-6 pl-0 z-10 -mt-10">
           <h2 className="md:text-[16px] sm:text-xl font-bold text-white bg-amber-900 py-1.5 sm:py-2 px-2 sm:px-2 sm:pr-6 rounded-r-full rounded-l-none shadow-md uppercase inline-block">
             {title}
           </h2>

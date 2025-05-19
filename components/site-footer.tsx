@@ -30,7 +30,7 @@ export default function SiteFooter() {
   return (
     <>
       {/* Desktop footer */}
-      <footer className="footer-container hidden md:block py-6 mt-auto z-50">
+      <footer className="footer-container hidden md:block py-6 mt-auto z-10">
         <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center">
           <div className="flex space-x-6 mb-2 md:mb-0">
             <button
@@ -75,7 +75,7 @@ export default function SiteFooter() {
       </footer>
 
       {/* Mobile Footer Button (Hamburger) */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50">
+      <div className="md:hidden fixed bottom-6 right-6 z-10">
         <button
           onClick={toggleMobileMenu}
           className="bg-tranperant rounded-full w-12 h-12 flex items-center justify-center text-white shadow-lg"
@@ -182,7 +182,7 @@ export default function SiteFooter() {
       )}
 
       {/* Mobile footer copyright - Visible at the bottom */}
-      <div className="fixed bottom-0 left-0 w-full text-gray-200 text-center p-1 text-xs md:hidden z-40">
+      <div className="bottom-0 fixed left-0 w-full text-gray-200 text-center p-1 text-xs md:hidden z-10">
         © EAT AFRICAN 2025
       </div>
 

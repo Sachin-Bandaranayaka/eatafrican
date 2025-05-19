@@ -28,7 +28,7 @@ export default function LegalNotice({ isOpen, onClose, embedInModal = false }: L
       {/* Header */}
       <div className="flex justify-end md:mr-6 mt-12 top-10 md:top-10 z-20 flex items-center space-x-2">
         <div className="bg-amber-900 text-white px-4 py-2 rounded-l-full border border-amber-600 flex items-center">
-          <span className="text-sm md:text-base font-bold uppercase">LEGAL NOTICE</span>
+          <span className="text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base font-bold uppercase">LEGAL NOTICE</span>
         </div>
         {/* close button */}
         <button
@@ -45,18 +45,18 @@ export default function LegalNotice({ isOpen, onClose, embedInModal = false }: L
       </div>
 
       {/* Content */}
-      <div className="relative z-20 p-4 md:p-8 bg-[#fff2d9]/90 m-4 md:m-8 rounded-3xl">
+      <div className="relative z-20 p-2 md:p-8 bg-[#fff2d9]/90 m-4 md:m-8 rounded-3xl">
         <div className="space-y-4 my-6">
-          <p className="text-black text-sm md:text-base">
+          <p className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             The Website http://eatafrican.ch is operated by:
           </p>
-          <p className="text-black text-sm md:text-base">
+          <p className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Eat African Aloice Ouko Piller
           </p>
-          <p className="text-black text-sm md:text-base">
+          <p className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Email: info@eatafrican.ch
           </p>
-          <p className="text-black text-sm md:text-base">
+          <p className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Company Nr: CH-241.1.024.430-9
           </p>
         </div>
@@ -71,15 +71,8 @@ export default function LegalNotice({ isOpen, onClose, embedInModal = false }: L
 
   // Otherwise, render the full modal structure
   return (
-    <div className="modal-overlay flex items-start justify-end fixed inset-0 z-50">
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-2 bg-transparent rounded-full p-1 z-50"
-        type="button"
-      >
-        <X className="w-5 h-5 text-white" />
-      </button>
+    <div className="flex items-start justify-end inset-0 z-50">
+     
       {content}
     </div>
   );

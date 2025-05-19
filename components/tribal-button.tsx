@@ -24,7 +24,7 @@ export default function TribalButton({ text, onClick, isActive = false }: Tribal
           transform: 'rotate(180deg)',
         }}
       >
-        <h2 className="text-white text-xs font-bold tracking-wider text-center">
+        <h2 className="text-white text-[10px] md:text-md lg:text-md xl:text-md 2xl:text-md font-bold tracking-wider text-center">
           {text}
         </h2>
       </button>

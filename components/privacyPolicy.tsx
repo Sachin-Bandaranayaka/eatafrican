@@ -27,7 +27,7 @@ export default function PrivacyPolicy({ isOpen, onClose, embedInModal = false }:
       {/* Header */}
       <div className="flex justify-end md:mr-6 mt-12 top-10 md:top-10 z-20 flex items-center space-x-2">
         <div className="bg-amber-900 text-white px-4 py-2 rounded-l-full border border-amber-600 flex items-center">
-          <span className="text-sm md:text-base font-bold uppercase">PRIVACY POLICY</span>
+          <span className="text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base font-bold uppercase">PRIVACY POLICY</span>
         </div>
         {/* close button */}
         <button
@@ -46,13 +46,13 @@ export default function PrivacyPolicy({ isOpen, onClose, embedInModal = false }:
       {/* Content */}
       <div className="relative z-20 p-4 md:p-8 bg-[#fff2d9]/90 m-4 md:m-8 rounded-3xl">
         <div className="space-y-4 my-6">
-          <p className="text-black space-y-2 text-sm md:text-base">
+          <p className="text-black space-y-2 text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             Eat African respects your privacy and is committed to protecting your personal data.
           </p>
-          <p className="text-black space-y-2 text-sm md:text-base">
+          <p className="text-black space-y-2 text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             We collect your personal information to process your orders, provide customer support, and improve our services. We do not sell your data to third parties.
           </p>
-          <p className="text-black space-y-2 text-sm md:text-base">
+          <p className="text-black space-y-2 text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm md:text-base">
             By using our service, you consent to our privacy policy. For more information on how we process your data, please contact us.
           </p>
         </div>
@@ -65,15 +65,8 @@ export default function PrivacyPolicy({ isOpen, onClose, embedInModal = false }:
   }
 
   return (
-    <div className="modal-overlay flex items-start justify-end fixed inset-0 z-0">
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-2 bg-transparent rounded-full p-1 z-50"
-        type="button"
-      >
-        <X className="w-5 h-5 text-white" />
-      </button>
+    <div className=" flex items-start justify-end inset-0 z-0">
+      
       {content}
     </div>
   );

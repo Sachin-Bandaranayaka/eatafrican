@@ -65,7 +65,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full px-4 sm:px-0 xs:px-0 lg:px-10 h-full">
+    <div className="relative flex flex-col items-center w-full px-0 md:px-4 sm:px-0 xs:px-0 lg:px-10 h-full">
       {/* Side Buttons 02 - Desktop View (Left Side, Between Heading and Ending Text) */}
       {!isMobile && (
         <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-1 md:z-20">
@@ -118,7 +118,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Side Buttons 02 - Mobile View (Centered or Left Side, Floating Vertical Stack) */}
       {isMobile && (
-        <div className={`block top-1/3 flex flex-col space-y-3 z-20 w-6 ${visibleComponent ? '-ml-[450px]' : 'left-1/2 -translate-x-1/2'}`}>
+        <div className={`block top-1/3 flex flex-col space-y-3 z-20 w-6 ${visibleComponent ? 'mr-[100%]' : 'left-1/2 -translate-x-1/2'}`}>
           <TribalButton
             text="HOW WE DELIVER"
             onClick={openDeliveryGuide}

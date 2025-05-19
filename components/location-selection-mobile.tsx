@@ -11,6 +11,8 @@ interface LocationSelectionProps {
     isViewingMenu: boolean;
     selectedRestaurant: string | null;
     onChange: () => void;
+    onAboutSpecialtyOpen: () => void;
+    onAboutSpecialtyClose: () => void;
 }
 
 export default function LocationSelectionMobile({
@@ -18,6 +20,8 @@ export default function LocationSelectionMobile({
     isViewingMenu,
     selectedRestaurant,
     onChange,
+    onAboutSpecialtyOpen,
+    onAboutSpecialtyClose,
 }: LocationSelectionProps) {
     const [selectedCountry, setSelectedCountry] = useState<CountrySpecialty | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -90,10 +94,12 @@ export default function LocationSelectionMobile({
 
     const handleAboutSpecialtyClick = () => {
         setShowAboutSpecialty(true);
+        onAboutSpecialtyOpen();
     };
 
     const handleCloseAboutSpecialty = () => {
         setShowAboutSpecialty(false);
+        onAboutSpecialtyClose();
     };
 
     const handleBack = () => {
@@ -133,9 +139,9 @@ export default function LocationSelectionMobile({
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     borderColor: '#f1c232',
-                    borderRadius: '10px'}}
-                >
-            
+                    borderRadius: '10px'
+                }}
+            >
                 <div
                     className="absolute inset-0"
                     style={{
@@ -175,7 +181,7 @@ export default function LocationSelectionMobile({
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-1 rounded-r-xl z-20 -ml-4 md:-ml-24 md:-mr-20 lg:-ml-24 lg:-mr-20 xl:-ml-24 xl:-mr-20 2xl:-ml-24 2xl:-mr-20">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">LOCATION</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-14 md:mr-2 lg:-ml-14 lg:mr-2 xl:-ml-14 xl:mr-2 2xl:-ml-14 2xl:mr-2">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-14 md:mr-2 lg:-ml-14 lg:mr-2 xl:-ml-14 xl:mr-2 2xl:-ml-14 2xl:-mr-2">
                             <h3 className="font-semibold text-black text-[8px] sm:text-xs uppercase">RESTAURANT</h3>
                         </div>
                     </div>
