@@ -134,7 +134,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Side Buttons - Mobile View (Left Side or Centered, Floating Vertical Stack) */}
       {isMobile && isViewingMenu && (
-        <nav className={`block top-1/4 flex flex-col space-y-3 z-50 w-6 ${visibleComponent ? '-ml-[450px]' : 'left-1/2 -translate-x-1/2'}`}>
+        <nav className={`block top-1/4 pt-4 flex flex-col space-y-3 z-50 w-6 ${visibleComponent ? 'mr-[100%]' : 'left-1/2 -translate-x-1/2'}`}>
           <TribalButton
             text="RESTAURANTS IN LUZERN"
             onClick={openViewMenu}
@@ -173,4 +173,4 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
       )}
     </div>
   );
-}
+} 

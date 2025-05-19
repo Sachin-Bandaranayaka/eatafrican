@@ -42,11 +42,11 @@ export default function Terms({ isOpen, onClose }: TermsProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="inset-0 z-50 flex items-start justify-end">
+    <div className="md:fixed lg:fixed xl:fixed 2xl:fixed -mt-[80%] md:mt-[20vh] lg:[20vh] xl:[20vh] 2xl:[20vh] inset-0 z-50 flex items-start justify-end">
       <div className="relative w-full md:max-w-2xl rounded-bl-3xl rounded-tl-3xl shadow-lg mt-12 mr-4 overflow-hidden">
    
         {/* Image - BEHIND */}
-        <div className="absolute left-10 md:left-20 w-40 h-40 md:w-48 md:h-48 z-10">
+        <div className="absolute right-40 md:left-20 w-40 h-40 md:w-48 md:h-48 z-10">
           <Image
             src="/images/chefs-group.png"
             alt="Chefs group"
@@ -76,7 +76,7 @@ export default function Terms({ isOpen, onClose }: TermsProps) {
 
         {/* Scrollable Content with Hidden Scrollbar */}
         <div className="relative z-30 p-1 md:p-1 m-4 md:m-4 md:mt-6 rounded-md max-h-[70vh] overflow-y-auto hide-scrollbar">
-          <div className="divide-y divide-amber-800/20 w-[100%] md:w-[500px] text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">
+          <div className="divide-y divide-amber-800/20 w-[100%] md:w-[100%] text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">
             <AccordionItem
               title="Introduction"
               isOpen={openSection === "introduction"}

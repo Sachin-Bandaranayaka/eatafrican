@@ -16,7 +16,7 @@ export default function LegalNotice({ isOpen, onClose, embedInModal = false }: L
   const content = (
     <div className="md:w-[45%] w-[95%] relative rounded-[5px] overflow-hidden z-10">
       {/* Image - BEHIND */}
-      <div className="absolute right-56 md:right-96 w-40 h-40 md:w-48 md:h-48 z-20">
+      <div className="absolute right-40 md:right-96 w-40 h-40 md:w-48 md:h-48 z-20">
         <Image
           src="/images/chefs-group.png"
           alt="Chefs group"
@@ -71,7 +71,7 @@ export default function LegalNotice({ isOpen, onClose, embedInModal = false }: L
 
   // Otherwise, render the full modal structure
   return (
-    <div className="flex items-start justify-end inset-0 z-50">
+    <div className="md:fixed lg:fixed xl:fixed 2xl:fixed -mt-72 md:mt-[20vh] lg:[20vh] xl:[20vh] 2xl:[20vh] z-50 flex items-start justify-end inset-0">
      
       {content}
     </div>

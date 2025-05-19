@@ -11,7 +11,7 @@ export default function HowItWorksMobile({ isOpen, onClose }: HowItWorksProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="relative rounded-lg shadow-lg pl-6 -mt-72 z-50">
+        <div className="absolute rounded-lg shadow-lg pl-6 mt-96 z-50">
             {/* Fixed Chefs Image */}
             <div className="absolute top-4 left-[10%] w-40 h-40 z-10 opacity-100 pointer-events-none">
                 <Image
