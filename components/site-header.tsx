@@ -17,13 +17,16 @@ export default function SiteHeader() {
   const languages = ["ENGLISH", "DEUTSCH", "FRANÇAIS", "ESPAÑOL"]
 
   const iconButtonStyle =
-    "bg-white p-2 text-amber-800 hover:bg-gray-100 transition duration-200 border-2 border-transparent"
+    "bg-white p-2 text-amber-800 hover:bg-gray-100 transition duration-200 border-2 border-transparent rounded-lg" 
 
   const languageButtonStyle =
     "flex items-center gap-1 text-white hover:text-yellow-200 text-sm font-medium transition duration-200"
 
+  // Function to get the first two letters of the language
+  const getLanguageCode = (lang: string) => lang.slice(0, 2).toUpperCase()
+
   return (
-    <header className="w-full z-30 pt-0 pb-12 md:pt-0 md:pb-4 px-3 md:px-4 flex justify-between items-center">
+    <header className="w-full z-30 pt-0 pb-12 md:pt-0 md:pb-1 px-3 md:px-4 flex justify-between items-center">
       {/* Left section with Logo and Language Selector */}
       <div className="flex items-center gap-4 md:gap-6">
         {/* Logo */}
@@ -33,7 +36,7 @@ export default function SiteHeader() {
             <Image src="/images/logo.png" alt="Eat African Logo" fill className="object-contain" priority />
           </div>
         </div>
-
+{/* 
         <style jsx>{`
           @keyframes heartbeat {
             0%, 100% {
@@ -55,12 +58,12 @@ export default function SiteHeader() {
           .animate-heartbeat {
             animation: heartbeat 1.5s ease-in-out infinite;
           }
-        `}</style>
+        `}</style> */}
 
         {/* Language Selector */}
-        <div className="relative">
+        <div className="relative ">
           <button onClick={() => setLanguageOpen(!languageOpen)} className={languageButtonStyle}>
-            {currentLanguage} <ChevronDown size={18} strokeWidth={3} />
+            {getLanguageCode(currentLanguage)} <ChevronDown size={18} strokeWidth={3} />
           </button>
 
           {languageOpen && (
@@ -68,9 +71,8 @@ export default function SiteHeader() {
               {languages.map((lang) => (
                 <button
                   key={lang}
-                  className={`block w-full text-left px-3 py-1.5 text-xs md:text-sm hover:bg-white/10 ${
-                    currentLanguage === lang ? "text-amber-400" : "text-white"
-                  }`}
+                  className={`block w-full text-left px-3 py-1.5 text-xs md:text-sm hover:bg-white/10 ${currentLanguage === lang ? "text-amber-400" : "text-white"
+                    }`}
                   onClick={() => {
                     setCurrentLanguage(lang)
                     setLanguageOpen(false)
@@ -86,28 +88,16 @@ export default function SiteHeader() {
 
       {/* Right Section with User Icon and Shopping Cart */}
       <div className="flex items-center gap-4 md:gap-6">
-        {/* login test */}
-        <button
-          onClick={() => {
-            console.log("Test button clicked, opening test modal")
-            setLoginModalTestOpen(true)
-          }}
-          className={iconButtonStyle}
-          aria-label="test"
-        >
-          <User size={10} />
-        </button>
-        
         {/* User Icon */}
         <button
           onClick={() => {
             console.log("Login button clicked, opening modal")
             setLoginModalOpen(true)
           }}
-          className={iconButtonStyle}
+          className="bg-amber-900 text-white border-2 border-amber-400 rounded-xl py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
           aria-label="Login"
         >
-          <User size={20} />
+          LOGIN
         </button>
 
         {/* Shopping Cart */}
@@ -125,7 +115,7 @@ export default function SiteHeader() {
 
       {/* Login Modal */}
       <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
-      
+
       {/* Login Modal Test */}
       <LoginModalTest isOpen={loginModalTestOpen} onClose={() => setLoginModalTestOpen(false)} />
 
