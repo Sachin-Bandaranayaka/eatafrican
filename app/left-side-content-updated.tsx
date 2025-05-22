@@ -68,7 +68,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
     <div className="relative flex flex-col items-center w-full px-0 md:px-4 sm:px-0 xs:px-0 lg:px-10 h-full">
       {/* Side Buttons 02 - Desktop View (Left Side, Between Heading and Ending Text) */}
       {!isMobile && (
-        <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-1 md:z-20">
+        <div className="hidden md:fixed md:left-0 md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-1 md:z-50">
           <TribalButton
             text="HOW WE DELIVER"
             onClick={openDeliveryGuide}
@@ -92,7 +92,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Side Buttons - Desktop View (Right Side, Between Heading and Ending Text) */}
       {!isMobile && isViewingMenu && (
-        <nav className="hidden sm:flex flex-col md:top-[60%] space-y-4 absolute right-0 top-1/3 transform -translate-y-1/2">
+        <nav className="hidden sm:flex flex-col md:top-[55%] space-y-4 absolute right-10 top-1/3 transform -translate-y-1/2">
           <TribalButton
             text="RESTAURANTS IN LUZERN"
             onClick={openViewMenu}
@@ -107,10 +107,10 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
       )}
 
       {/* Lower Section */}
-      <div className="relative max-w-2xl mt-2 xs:mt-6 sm:mt-8 lg:mt-2 mb-4 xs:mb-4 sm:mb-5 text-start hidden lg:block">
+      <div className="relative  mt-2  mb-4 text-start hidden lg:block">
         {/* Ending Text */}
         {(!isMobile || (visibleComponent !== 'viewMenu' && visibleComponent !== 'restaurantList')) && (
-          <p className="text-white font-bold text-xs xs:text-sm sm:text-base md:-ml-4 lg:text-md uppercase leading-relaxed">
+          <p className="w-[90%] text-white font-bold text-xs xs:text-sm sm:text-base mt-10 md:-ml-4 lg:text-md uppercase leading-relaxed">
             YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
           </p>
         )}
@@ -166,7 +166,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Desktop view: Render ViewMenu and RestaurantListing on the right side */}
       {!isMobile && (
-        <div className="fixed right-0 top-0 w-1/2 max-w-2xl h-full overflow-y-auto overflow-x-hidden z-20 bg-transparent p-4 box-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="fixed right-0 w-[850px] top-0 h-[95vh] overflow-x-hidden z-20 bg-transparent p-4 box-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {visibleComponent === 'restaurantList' && <RestaurantListing />}
           {visibleComponent === 'viewMenu' && <ViewMenu />}
         </div>

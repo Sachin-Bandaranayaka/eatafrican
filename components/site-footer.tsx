@@ -30,7 +30,7 @@ export default function SiteFooter() {
   return (
     <>
       {/* Desktop footer */}
-      <footer className="footer-container hidden md:block py-6 mt-auto z-50">
+      <footer className="footer-container hidden md:block py-6 mt-4 z-50">
         <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center">
           <div className="flex space-x-6 mb-2 md:mb-0">
             <button
@@ -53,7 +53,7 @@ export default function SiteFooter() {
             </button>
           </div>
 
-          <div className="text-center mb-2 md:mb-0">
+          <div className="text-center mb-2 md:mb-0 font-bold">
             <p className="text-white text-sm">© EAT AFRICAN 2025</p>
           </div>
 

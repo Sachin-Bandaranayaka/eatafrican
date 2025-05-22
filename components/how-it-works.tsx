@@ -29,7 +29,7 @@ export default function HowItWorks({ isOpen, onClose }: HowItWorksProps) {
                     <div className="flex items-center justify-end p-0 relative z-10 mt-14">
                         <div className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover bg-center inline-block rounded-l-full border border-[#ffe599] rounded-r-sm pl-6 pr-2 py-2">
                             <h2 className="block text-black text-sm font-bold uppercase rounded whitespace-nowrap">
-                                HOW WE DELIVER
+                                HOW IT WORKS
                             </h2>
                         </div>
                         {/* Close Button */}
