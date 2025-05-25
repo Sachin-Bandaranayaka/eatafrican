@@ -92,7 +92,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Side Buttons - Desktop View (Right Side, Between Heading and Ending Text) */}
       {!isMobile && isViewingMenu && (
-        <nav className="hidden sm:flex flex-col md:top-[55%] space-y-4 absolute right-10 top-1/3 transform -translate-y-1/2">
+        <nav className="z-50 hidden sm:flex flex-col md:top-[55%] space-y-4 absolute right-10 top-1/3 transform -translate-y-1/2">
           <TribalButton
             text="RESTAURANTS IN LUZERN"
             onClick={openViewMenu}
@@ -166,7 +166,7 @@ export default function LeftSideContent({ onViewMenu, isViewingMenu, selectedRes
 
       {/* Desktop view: Render ViewMenu and RestaurantListing on the right side */}
       {!isMobile && (
-        <div className="fixed right-0 w-[850px] top-0 h-[95vh] overflow-x-hidden z-20 bg-transparent p-4 box-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="fixed right-0 w-[850px] top-16 mb-10 h-[85vh] overflow-x-hidden z-20 bg-transparent p-4 box-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {visibleComponent === 'restaurantList' && <RestaurantListing />}
           {visibleComponent === 'viewMenu' && <ViewMenu />}
         </div>
