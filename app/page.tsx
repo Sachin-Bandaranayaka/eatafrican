@@ -57,10 +57,12 @@ export default function Home() {
         {/* Content Overlay */}
         <div className={`relative z-10 flex flex-col ${isMobile ? 'min-h-screen' : 'h-screen'}`}>
           {/* Header with user icon and language selector */}
-          <SiteHeader />
+          <div className="overflow-hidden">
+            <SiteHeader />
+          </div>
 
           {/* Main Content Area */}
-          <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-4 md:pb-6 mt`}>
+          <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} overflow-y-hidden items-start justify-between px-4 sm:px-6 md:px-8 pb-4 md:pb-6 mt`}>
             {/* Left Side Content */}
             <div className="w-full md:w-1/2 max-w-2xl flex flex-col">
               <LeftSideContent

@@ -34,19 +34,19 @@ export default function SiteFooter() {
         <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center">
           <div className="flex space-x-6 mb-2 md:mb-0">
             <button
-              className="text-white hover:text-yellow-200 text-sm font-bold"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
               onClick={() => openModal("about")}
             >
               ABOUT US
             </button>
             <button
-              className="text-white hover:text-yellow-200 text-sm font-bold"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
               onClick={() => openModal("contact")}
             >
               CONTACT US
             </button>
             <button
-              className="text-white hover:text-yellow-200 text-sm font-bold"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
               onClick={() => openModal("termsConditions")}
             >
               TERMS & CONDITIONS
@@ -54,18 +54,18 @@ export default function SiteFooter() {
           </div>
 
           <div className="text-center mb-2 md:mb-0 font-bold">
-            <p className="text-white text-sm">© EAT AFRICAN 2025</p>
+            <p className="text-white text-xs">© EAT AFRICAN 2025</p>
           </div>
 
           <div className="flex space-x-6">
             <button
-              className="text-white hover:text-yellow-200 text-sm font-bold"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
               onClick={() => openModal("privacy")}
             >
               PRIVACY POLICY
             </button>
             <button
-              className="text-white hover:text-yellow-200 text-sm font-bold"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
               onClick={() => openModal("legal")}
             >
               LEGAL NOTICE

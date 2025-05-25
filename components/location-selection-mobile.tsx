@@ -15,6 +15,23 @@ interface LocationSelectionProps {
     onAboutSpecialtyClose: () => void;
 }
 
+interface CustomButtonProps {
+    onClick: () => void;
+    children: React.ReactNode;
+    className?: string;
+}
+
+const CustomButton: React.FC<CustomButtonProps> = ({ onClick, children, className = "" }) => {
+    return (
+        <button
+            onClick={onClick}
+            className={`bg-red-900 text-white border border-amber-400 rounded-lg py-1 px-3 text-[10px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap ${className}`}
+        >
+            {children}
+        </button>
+    );
+};
+
 export default function LocationSelectionMobile({
     onViewMenu,
     isViewingMenu,
@@ -174,14 +191,14 @@ export default function LocationSelectionMobile({
                     </div>
 
                     {/* Headings */}
-                    <div className="flex justify-around mb-0 -mt-5">
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-24 md:-mr-4">
+                    <div className="flex justify-between mb-0 -mt-5">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 ">
                             <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-24 md:-mr-10">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 mr-6">
                             <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">LOCATION</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 -ml-4 md:-ml-14 md:mr-2 lg:-ml-14 lg:mr-2 xl:-ml-14 xl:mr-2 2xl:-ml-14 2xl:-mr-2">
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 md:mr-[22%]">
                             <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">RESTAURANT</h3>
                         </div>
                     </div>
@@ -217,17 +234,14 @@ export default function LocationSelectionMobile({
                             )}
 
                             {isViewingMenu && selectedCountry && (
-                                <button
-                                    onClick={handleChange}
-                                    className="mt-4 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 w-[80px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                                >
+                                <CustomButton onClick={handleChange} className="mt-4">
                                     CHANGE
-                                </button>
+                                </CustomButton>
                             )}
                         </div>
 
                         {/* Location Selection */}
-                        <div className="space-y-1 pl-1 w-28 mt-4 md:-ml-14">
+                        <div className="space-y-1 pl-1 w-28 mt-4 md:-ml-20">
                             {selectedCountry ? Object.keys(locations).map((location) => {
                                 const isVisible = !isViewingMenu || selectedLocation === location;
                                 if (!isVisible) return null;
@@ -249,10 +263,10 @@ export default function LocationSelectionMobile({
                         </div>
 
                         {/* Restaurant Selection */}
-                        <div className="space-y-1 pl-1 w-56 mt-4 mr-2">
+                        <div className="space-y-1 pl-1 w-56 mt-4 mr-6">
                             {selectedCountry && !selectedLocation && (
-                                <div className="p-0 flex items-center justify-center md:mb-10 w-full" style={{ maxWidth: '160px' }}>
-                                    <div className="text-start py-0.5 px-1 rounded-lg">
+                                <div className="p-0 absolute md:mb-10 w-[120%]" style={{ maxWidth: '160px' }}>
+                                    <div className="text-start py-0.5 px-1 rounded-lg ml-10">
                                         <h3 className="font-semibold text-white text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
                                             CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
                                         </h3>
@@ -296,25 +310,23 @@ export default function LocationSelectionMobile({
                                 </div>
                             )}
 
-                            <div className="mt-6 flex justify-end mr-14 gap-2">
-                                {/* View Menu Button */}
-                                {selectedLocation && !isViewingMenu && (
-                                    <button
-                                        onClick={handleViewMenuClick}
-                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                                    >
-                                        VIEW MENU
-                                    </button>
-                                )}
-                                {/* Home Button */}
-                                {isViewingMenu && (
-                                    <button
-                                        onClick={handleHome}
-                                        className="bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 w-[70px] text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                                    >
-                                        HOME
-                                    </button>
-                                )}
+                            <div className="mt-6 flex justify-start  mr-14 gap-2">
+                                <div className="flex justify-start ml-14">
+                                    {/* View Menu Button */}
+                                    {selectedLocation && !isViewingMenu && (
+                                        <CustomButton onClick={handleViewMenuClick}>
+                                            VIEW MENU
+                                        </CustomButton>
+                                    )}
+                                </div>
+                                <div className="flex justify-end ml-10">
+                                    {/* Home Button */}
+                                    {isViewingMenu && (
+                                        <CustomButton onClick={handleHome}>
+                                            HOME
+                                        </CustomButton>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -324,7 +336,7 @@ export default function LocationSelectionMobile({
                         {!isViewingMenu && selectedCountry && (
                             <span
                                 onClick={handleAboutSpecialtyClick}
-                                className="text-[#ff9920] hover:text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold  transition duration-200 whitespace-nowrap"
+                                className="text-[#ff9920] hover:text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold transition duration-200 whitespace-nowrap"
                             >
                                 ABOUT {getCuisineType(selectedCountry)} SPECIALTY
                             </span>
@@ -332,12 +344,9 @@ export default function LocationSelectionMobile({
 
                         {/* Back Button */}
                         {showBackButton && !isViewingMenu && (
-                            <button
-                                onClick={handleBack}
-                                className="mb-10 md:mb-0 lg:mb-0 xl:mb-0 2xl:mb-0 bg-red-900 text-white border-2 border-amber-400 rounded-lg py-1 px-3 sm:py-2 sm:px-4 text-[10px] sm:text-xs font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-                            >
+                            <CustomButton onClick={handleBack}>
                                 BACK
-                            </button>
+                            </CustomButton>
                         )}
                     </div>
                 </div>
