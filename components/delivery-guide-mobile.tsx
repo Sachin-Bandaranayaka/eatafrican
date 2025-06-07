@@ -52,48 +52,36 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
     if (!isOpen) return null;
 
     return (
-        <div className="absolute rounded-lg mt-96 pl-6 z-50">
+        <div className="absolute rounded-lg mt-[95%] right-0 z-50 w-[95%]">
 
             {/* Fixed Chefs Image */}
-            <div className="absolute top-4 left-[10%] w-40 h-40 z-10 opacity-100 pointer-events-none">
+            <div className="absolute top-4 left-[10%] z-10 opacity-100 pointer-events-none">
                 <Image
                     src="/images/chefs-group.png"
                     alt="Chefs group"
-                    fill
+                    width={120}
+                    height={120}
                     className="object-cover rounded-md"
                 />
             </div>
 
-            {/* Close Button */}
-            {/* <button
-                onClick={onClose}
-                className="absolute top-11 right-0 bg-[#ff9920] border border-white rounded-full p-1 z-50"
-                type="button"
-                aria-label="Close"
-            >
-                <img
-                    src="/images/cancelBtnBlack.png"
-                    alt="Close"
-                    className="w-4 h-4 object-contain"
-                />
-            </button> */}
-
-            {/* Header */}
-            <div className="flex flex-row">
-                <div className="mt-4 ml-40 left-10 rounded-l-full pl-6 pr-2 py-2 mb-4 w-[100%]">
+            {/* heading & cancel btn */}
+            <div className="flex justify-end items-center ml-[35%]">
+                {/* Header */}
+                <div className="flex mt-4 inline-block rounded-l-full p-1 mb-4 w-full ml-10">
                     <div
-                        className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover  rounded-l-full bg-center px-6 py-1 border border-[#ffe599]"
+                        className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover  rounded-l-full bg-center px-4 py-1 border border-[#ffe599]"
                     >
-                        <h2 className="text-black text-[10px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold uppercase rounded">
+                        <h2 className="inline-block text-black text-xs font-bold uppercase rounded">
                             HOW WE DELIVER
                         </h2>
                     </div>
                 </div>
 
- </div>
+                {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-11 right-0 bg-[#ff9920] border border-white rounded-full p-1 z-50"
+                    className="top-11 right-0 bg-[#ff9920] border border-white rounded-full p-1 z-50"
                     type="button"
                     aria-label="Close"
                 >
@@ -103,7 +91,10 @@ export default function DeliveryGuideMobile({ isOpen, onClose }: DeliveryGuidePr
                         className="w-4 h-4 object-contain"
                     />
                 </button>
-           
+            </div>
+
+
+
             {/* Delivery Zones Section */}
             <div className="relative z-10 mt-2">
                 {deliveryZones.map((zone) => (

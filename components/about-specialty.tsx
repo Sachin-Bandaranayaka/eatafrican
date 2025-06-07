@@ -10,7 +10,6 @@ interface AboutSpecialtyProps {
 }
 
 export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyProps) {
-    const [showFullDescription, setShowFullDescription] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const paginationRef = useRef<HTMLDivElement>(null);
@@ -51,7 +50,7 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
             ],
             endDescription: "With just a few clicks, eatafrican.ch brings the authentic tastes of Kenya straight to your doorstep.",
         },
-        "NIGERIAN, GHANA": {
+        "NIGERIAN, GHANAIAN": {
             title: "NIGERIAN & GHANAIAN CUISINE",
             description: "Discover West Africa's vibrant flavors through Nigerian and Ghanaian cuisine, where bold spices and hearty ingredients combine in community-centered dishes. Both culinary traditions feature beloved jollof rice alongside regional specialties like Nigerian egusi soup with pounded yam and Ghanaian fufu with groundnut soup. Enjoy Ghana's waakye and spiced kelewele plantains or Nigeria's fiery pepper soup and suya skewers. These generations-old recipes offer a delicious gateway to West Africa's rich food heritage that satisfies both body and soul.",
             image: "/images/nigerian-ghanaian-cuisine.jpg",
@@ -78,19 +77,14 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         meals: [],
     };
 
-    const halfDescription = content.description.split(" ").slice(0, 20).join(" ") + "...";
-
-    // Carousel images
     const carouselImages = [
         { src: "/images/ethiopia-eritrea01.png", alt: content.title },
         { src: "/images/ethiopia-eritrea02.png", alt: content.title },
     ];
 
-    // Calculate the number of pairs (2 meals per pair)
     const mealsPerPair = 2;
     const totalPairs = Math.ceil(content.meals.length / mealsPerPair);
 
-    // Auto-rotate carousel
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
@@ -106,12 +100,11 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
     };
 
-    // Scroll to a specific pair
     const scrollToPair = (pairIndex: number) => {
         if (scrollContainerRef.current) {
             const cardWidth = scrollContainerRef.current.querySelector(".meal-card")?.clientWidth || 0;
-            const gap = 8; // space-x-2 = 0.5rem = 8px
-            const pairWidth = (cardWidth * 2) + gap; // Width of two cards + gap
+            const gap = 8;
+            const pairWidth = (cardWidth * 2) + gap;
             scrollContainerRef.current.scrollTo({
                 left: pairIndex * pairWidth,
                 behavior: "smooth",
@@ -123,19 +116,14 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         if (scrollContainerRef.current && paginationRef.current) {
             const scrollPos = scrollContainerRef.current.scrollLeft;
             const cardWidth = scrollContainerRef.current.querySelector(".meal-card")?.clientWidth || 0;
-            const gap = 8; // space-x-2 = 0.5rem = 8px
-            const pairWidth = (cardWidth * 2) + gap; // Width of two cards + gap
-
-            // Update current pair index
+            const gap = 8;
+            const pairWidth = (cardWidth * 2) + gap;
             const newPairIndex = Math.round(scrollPos / pairWidth);
             setCurrentPairIndex(newPairIndex);
-
-            // Update pagination bar
             const scrollBarWidth = paginationRef.current.clientWidth;
-            const thumbWidth = 40; // w-10 = 40px
+            const thumbWidth = 40;
             const maxThumbLeft = scrollBarWidth - thumbWidth;
             const thumbLeft = totalPairs > 1 ? (newPairIndex / (totalPairs - 1)) * maxThumbLeft : 0;
-
             const bar = paginationRef.current.querySelector(".pagination-bar");
             if (bar) {
                 bar.style.width = `${thumbWidth}px`;
@@ -146,7 +134,6 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
 
     useEffect(() => {
         updatePagination();
-        // Reset to first pair when cuisine changes
         setCurrentPairIndex(0);
         scrollToPair(0);
     }, [cuisineType, content.meals.length]);
@@ -158,14 +145,11 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
                     const scrollBarRect = paginationRef.current.getBoundingClientRect();
                     const thumb = paginationRef.current.querySelector(".pagination-bar");
                     if (thumb) {
-                        const thumbWidth = 40; // w-10 = 40px
+                        const thumbWidth = 40;
                         const maxThumbLeft = scrollBarRect.width - thumbWidth;
                         const mouseDelta = e.clientX - initialMouseX.current;
                         const newThumbLeft = Math.max(0, Math.min(initialThumbLeft.current + mouseDelta, maxThumbLeft));
-
                         thumb.style.left = `${newThumbLeft}px`;
-
-                        // Calculate the corresponding pair index
                         const thumbRatio = maxThumbLeft > 0 ? newThumbLeft / maxThumbLeft : 0;
                         const newPairIndex = Math.round(thumbRatio * (totalPairs - 1));
                         scrollToPair(newPairIndex);
@@ -188,171 +172,213 @@ export default function AboutSpecialty({ cuisineType, onClose }: AboutSpecialtyP
         }
     }, [isDragging, totalPairs]);
 
-    // Correct country name typo for display
     const getDisplayCountryName = (countryName: string) => {
         return countryName === "GAHANA" ? "GHANA" : countryName;
     };
 
     return (
-        <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[100vw] md:ml-[38vw] md:w-[35vw]">
-            <div className="relative ml-auto max-w-6xl w-full">
-                <div className="flex justify-end items-center p-0 z-10">
-                    <div className="bg-[#85200cff] border border-[2px] border-[#fff2ccff] inline-block rounded-l-full rounded-r-sm pl-6 pr-2 py-2 relative mr-2">
-                        <div className="bg-[url('/images/title-background.png')] bg-contain bg-center px-10 py-1">
-                            <h2 className="block bg-[#2A5910] text-white text-[11px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold uppercase rounded whitespace-nowrap">
+        <>
+            <div className="flex flex-col bg-transparent text-gray-900 font-sans p-4 w-[90vw] md:ml-[18vw] md:w-[35vw] md:max-h-[80vh] -mt-[90%] md:mt-0 ml-3 md:overflow-y-auto hide-scrollbar">
+            
+                <div className="flex flex-col justify-between  ml-auto max-w-6xl w-full">
+                    <div className="relative flex justify-end items-center p-0 ">
+                        {/* title */}
+                        <div className="absolute left-0 top-14 z-10 bg-[url('/images/Content_Title_Background.png')] bg-contain border border-[2px] pr-5 border-[#fff2ccff] rounded-r-full p-6 pr-2 py-2">
+                            <h2 className="block text-black text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold uppercase rounded whitespace-nowrap">
                                 {content.title}
                             </h2>
                         </div>
-                    </div>
-                    {/* close button */}
-                    <button
-                        onClick={onClose}
-                        className="bg-[#FFF3C7] text-black rounded-full p-1 mr-2 z-30"
-                        type="button"
-                    >
-                        <img
-                            src="/images/cancelBtn.png"
-                            alt="Close"
-                            className="w-4 h-4 object-contain"
-                        />
-                    </button>
-                </div>
-
-                <div className="mx-auto mt-1 flex flex-row justify-between">
-                    <div className="bg-[#FFF3C7] bg-opacity-90 rounded-xl w-1/2 h-auto p-2 -mr-56 z-50 mt-4 overflow-auto ">
-                        <div className="float-left mr-4">
-                            {(content.flags && content.flags.length > 1 ? content.flags : [content.flag]).map((flag, index) => (
-                                <Image
-                                    key={index}
-                                    src={flag || "/flags/placeholder.png"}
-                                    alt={`${content.title} flag ${index + 1}`}
-                                    width={60}
-                                    height={40}
-                                    className="mb-2"
+                        {/* cancel btn and chef image */}
+                        <div className="flex items-center md:space-x-4 mt-6 md:mt-0 lg:mt-0 xl:mt-0 m2xl:mt-0">
+                            <div className="flex flex-col z-0">
+                                <div className="w-[70%] md:w-full lg:w-full xl:w-full 2xl:w-full h-[70%] md:h-full lg:h-full xl:h-full 2xl:h-full 
+                                flex items-end justify-end rounded-lg ">
+                                    <Image
+                                        src={"/images/kenyaspecialty1.png"}
+                                        alt={"kenyaspecialty1.png"}
+                                        width={250}
+                                        height={250}
+                                        className="object-cover"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                onClick={onClose}
+                                className="bg-[#ff9920] text-black border rounded-full p-1 z-50 -ml-16"
+                                type="button"
+                            >
+                                <img
+                                    src="/images/cancelBtnBlack.png"
+                                    alt="Close"
+                                    className="w-4 h-4 object-contain"
                                 />
-                            ))}
-                        </div>
-                        <div className="">
-                            <p className="text-[7px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] text-gray-700">
-                                {showFullDescription ? content.description : halfDescription}
-                            </p>
-                            {content.description.split(" ").length > 60 && (
-                                <span
-                                    onClick={() => setShowFullDescription(!showFullDescription)}
-                                    className="text-red-500 text-[3px] md:text-[7px] lg:text-[7px] xl:text-[7px] 2xl:text-[7px] cursor-pointer underline"
-                                >
-                                    {showFullDescription ? "<-Read Less" : "Read More ->"}
-                                </span>
-                            )}
-                        </div>
-                        <p className="text-[7px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] bottom text-gray-700 mt-2">
-                            {content.endDescription}
-                        </p>
-                    </div>
-
-                    <div className="w-1/2 md:w-1/2 bg-gray-200 flex items-center justify-center m-2 rounded-lg relative z-10 h-full">
-                        <div className="relative w-auto h-[250px]">
-                            <Image
-                                src={carouselImages[currentImageIndex].src}
-                                alt={carouselImages[currentImageIndex].alt}
-                                width={128}
-                                height={132}
-                                className="object-cover w-full h-full"
-                            />
+                            </button>
                         </div>
                     </div>
-                </div>
 
-                {/* meal card */}
-                {content.meals.length > 0 && (
-                    <div className="relative mx-1 mr-4 mt-4 ml-10">
-                        <div className="bg-transparent overflow-hidden">
-                            <div className="flex items-start">
-                                <div
-                                    ref={scrollContainerRef}
-                                    className="flex space-x-2 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory"
-                                    style={{
-                                        scrollbarWidth: "none",
-                                        msOverflowStyle: "none",
-                                        width: "calc(80vw + 0.5rem)", // 2 cards (40vw each) + space-x-2 (0.5rem)
-                                    }}
-                                    onScroll={updatePagination}
-                                >
-                                    {content.meals.map((meal, index) => (
-                                        <div
+                    {/* description div */}
+                    <div className="flex flex-col z-10 ">
+
+                        {/* background chef image with the main */}
+                        <div className="border border-[#f1c232] rounded-[10px] -mt-10 relative h-auto "
+                            style={{
+                                backgroundImage: `url('/images/kenyaspecialty2.png')`,
+                                backgroundSize: '50%',
+                                backgroundPosition: 'left bottom',
+                                backgroundRepeat: 'no-repeat'
+                            }}>
+                            {/* dark overlay */}
+                            <div
+                                className="absolute inset-0 z-20"
+                                style={{
+                                    borderRadius: '10px',
+                                    opacity: '75%',
+                                    background: '#312708'
+                                }}
+                            ></div>
+
+                            <div className="relative h-full p-2 mt-4">
+                                {/* flag image */}
+                                <div className="float-left mr-4 z-30 relative">
+                                    {(content.flags && content.flags.length > 1 ? content.flags : [content.flag]).map((flag, index) => (
+                                        <Image
                                             key={index}
-                                            className="meal-card flex-none w-[40vw] md:w-[220px] md:ml-10 bg-[#ebd1dc] p-1 rounded-lg border border-gray-300 snap-start"
-                                        >
-                                            <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded-lg">
-                                                <Image
-                                                    src={meal.image || "/images/meal-placeholder.jpg"}
-                                                    alt={meal.name}
-                                                    width={128}
-                                                    height={128}
-                                                    className="object-cover w-full h-full rounded-lg"
-                                                />
-                                            </div>
-                                            <div className="p-2">
-                                                <div className="flex items-center justify-between">
-                                                    <p className="text-[7px] flex-1">
-                                                        <span className="font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
-                                                        {meal.description}
-                                                    </p>
-                                                    {meal.flag && (
-                                                        <div className="flex flex-col items-center">
-                                                            <Image
-                                                                src={meal.flag}
-                                                                alt={`${meal.name} flag`}
-                                                                width={60}
-                                                                height={40}
-                                                                className="ml-0 object-contain"
-                                                            />
-                                                            {meal.countryName && (
-                                                                <span className="pt-[3px] font-bold uppercase text-[7px]">
-                                                                    {getDisplayCountryName(meal.countryName)}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
+                                            src={flag || "/flags/placeholder.png"}
+                                            alt={`${content.title} flag ${index + 1}`}
+                                            width={60}
+                                            height={40}
+                                            className="mb-2"
+                                        />
                                     ))}
                                 </div>
-                            </div>
 
-                            {/* pagination button */}
-                            <div className="flex justify-center">
-                                <div
-                                    ref={paginationRef}
-                                    className="relative border-yellow-300 w-1/2 h-6 bg-white border-2 mt-2 rounded-full overflow-hidden"
-                                >
-                                    <button
-                                        type="button"
-                                        className="pagination-bar absolute h-6 w-10 bg-red-900 rounded-full cursor-pointer z-50 pointer-events-auto"
-                                        style={{
-                                            left: totalPairs > 1
-                                                ? `${(currentPairIndex / (totalPairs - 1)) * (100 - (40 / (paginationRef.current?.clientWidth || 1)) * 100)}%`
-                                                : "0",
-                                        }}
-                                        onClick={() => console.log("Button clicked via onClick!")}
-                                        onMouseDown={(e) => {
-                                            console.log("Button mousedown triggered!");
-                                            setIsDragging(true);
-                                            const thumb = e.currentTarget;
-                                            const thumbRect = thumb.getBoundingClientRect();
-                                            const scrollBarRect = paginationRef.current!.getBoundingClientRect();
-                                            initialMouseX.current = e.clientX;
-                                            initialThumbLeft.current = thumbRect.left - scrollBarRect.left;
-                                            e.preventDefault();
-                                        }}
-                                    ></button>
+                                {/* description */}
+                                <div className="z-30 relative">
+                                    <p className="text-white text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]">
+                                        {content.description}
+                                    </p>
+                                </div>
+
+                                {/* end description */}
+                                <div className="z-30 relative">
+                                    <p className="text-white text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] mt-2">
+                                        {content.endDescription}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}
+
+
+                    {/* meal card */}
+                    {content.meals.length > 0 && (
+                        <div className="relative mx-1 md:mr-4 mt-4 md:ml-9 z-50">
+                            <div className="bg-transparent overflow-hidden" >
+                                <div className="flex items-start">
+                                    <div
+                                        ref={scrollContainerRef}
+                                        className="flex space-x-2 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory"
+                                        style={{
+                                            scrollbarWidth: "none",
+                                            msOverflowStyle: "none",
+                                            width: "calc(80vw + 0.5rem)",
+                                        }}
+                                        onScroll={updatePagination}
+                                    >
+                                        {content.meals.map((meal, index) => (
+                                            <div
+                                                key={index}
+                                                className="meal-card flex-none w-[38vw] md:w-[220px] md:ml-10 border border-[#ffe599] rounded-lg snap-start overflow-hidden"
+                                                style={{
+                                                    backgroundImage: `url('/images/dishbck.png')`,
+                                                    backgroundSize: 'contain',
+                                                    backgroundPosition: 'center',
+                                                    borderColor: '#f1c232',
+                                                    borderRadius: '10px'
+                                                }}
+                                            >
+                                                <div style={{ background: 'rgba(49, 39, 8, 0.75)' }} className="h-full">
+                                                    <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded-lg">
+                                                        <Image
+                                                            src={meal.image || "/images/meal-placeholder.jpg"}
+                                                            alt={meal.name}
+                                                            width={128}
+                                                            height={128}
+                                                            className="object-cover w-full h-full rounded-lg p-0"
+                                                        />
+                                                    </div>
+                                                    <div className="px-2 text-white" >
+                                                        <div className="flex items-center justify-between">
+                                                            <p className="text-[10px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px] flex-1">
+                                                                <span className="text-amber-300 font-semibold whitespace-nowrap overflow-auto">{meal.name}:</span>{" "}
+                                                                {meal.description}
+                                                            </p>
+                                                            {meal.flag && (
+                                                                <div className="flex flex-col items-center">
+                                                                    {/* <Image
+                                                                        src={meal.flag}
+                                                                        alt={`${meal.name} flag`}
+                                                                        width={60}
+                                                                        height={40}
+                                                                        className="ml-0 object-contain"
+                                                                    /> */}
+                                                                    {/* {meal.countryName && (
+                                                                        <span className="pt-[3px] font-bold uppercase text-[7px]">
+                                                                            {getDisplayCountryName(meal.countryName)}
+                                                                        </span>
+                                                                    )} */}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="flex justify-center">
+                                    <div
+                                        ref={paginationRef}
+                                        className="relative border-yellow-300 w-1/2 h-7 bg-white border-2 mt-0 rounded-full overflow-hidden"
+                                    >
+                                        <button
+                                            type="button"
+                                            className="pagination-bar absolute h-6 w-10 bg-[#274e13ff] rounded-full cursor-pointer z-50 pointer-events-auto"
+                                            style={{
+                                                left: totalPairs > 1
+                                                    ? `${(currentPairIndex / (totalPairs - 1)) * (100 - (40 / (paginationRef.current?.clientWidth || 1)) * 100)}%`
+                                                    : "0",
+                                            }}
+                                            onClick={() => console.log("Button clicked via onClick!")}
+                                            onMouseDown={(e) => {
+                                                console.log("Button mousedown triggered!");
+                                                setIsDragging(true);
+                                                const thumb = e.currentTarget;
+                                                const thumbRect = thumb.getBoundingClientRect();
+                                                const scrollBarRect = paginationRef.current!.getBoundingClientRect();
+                                                initialMouseX.current = e.clientX;
+                                                initialThumbLeft.current = thumbRect.left - scrollBarRect.left;
+                                                e.preventDefault();
+                                            }}
+                                        ></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+            <style>
+                {`
+                    .hide-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .hide-scrollbar {
+                        scrollbar-width: none;
+                        -ms-overflow-style: none;
+                    }
+                `}
+            </style>
+        </>
     );
 }
