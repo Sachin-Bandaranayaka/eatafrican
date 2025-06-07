@@ -1,7 +1,7 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import AboutSpecialty from "./about-specialty";
 
 type CountrySpecialty = "ETHIOPIA, ERITREA" | "KENYA" | "NIGERIA, GHANA";
 type Location = "BERN" | "OLTEN" | "LUZERN" | "ZURICH";
@@ -11,8 +11,7 @@ interface LocationSelectionProps {
     isViewingMenu: boolean;
     selectedRestaurant: string | null;
     onChange: () => void;
-    onAboutSpecialtyOpen: () => void;
-    onAboutSpecialtyClose: () => void;
+    onAboutSpecialtyOpen: (cuisineType: string) => void;
 }
 
 interface CustomButtonProps {
@@ -25,7 +24,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({ onClick, children, classNam
     return (
         <button
             onClick={onClick}
-            className={`bg-red-900 text-white border border-amber-400 rounded-lg py-1 px-3 text-[10px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap ${className}`}
+            className={`bg-red-900 text-white border border-amber-400 rounded-lg pt-[3px] pb-[2.5px] px-3 font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap 
+            text-[7px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px]${className}`}
         >
             {children}
         </button>
@@ -38,13 +38,11 @@ export default function LocationSelectionMobile({
     selectedRestaurant,
     onChange,
     onAboutSpecialtyOpen,
-    onAboutSpecialtyClose,
 }: LocationSelectionProps) {
     const [selectedCountry, setSelectedCountry] = useState<CountrySpecialty | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [showError, setShowError] = useState(false);
     const [selectedRestaurantInternal, setSelectedRestaurantInternal] = useState<string | null>(null);
-    const [showAboutSpecialty, setShowAboutSpecialty] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [showBackButton, setShowBackButton] = useState(false);
 
@@ -56,10 +54,9 @@ export default function LocationSelectionMobile({
         "ZURICH": 3
     };
 
-    // Detect mobile screen size
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 640); // Tailwind's 'sm' breakpoint
+            setIsMobile(window.innerWidth < 640);
         };
         handleResize();
         window.addEventListener("resize", handleResize);
@@ -71,7 +68,6 @@ export default function LocationSelectionMobile({
         setSelectedLocation(null);
         setSelectedRestaurantInternal(null);
         setShowError(false);
-        setShowAboutSpecialty(false);
         setShowBackButton(true);
         onChange();
     };
@@ -80,7 +76,6 @@ export default function LocationSelectionMobile({
         setSelectedLocation(location);
         setSelectedRestaurantInternal(null);
         setShowError(false);
-        setShowAboutSpecialty(false);
         onChange();
     };
 
@@ -110,13 +105,9 @@ export default function LocationSelectionMobile({
     };
 
     const handleAboutSpecialtyClick = () => {
-        setShowAboutSpecialty(true);
-        onAboutSpecialtyOpen();
-    };
-
-    const handleCloseAboutSpecialty = () => {
-        setShowAboutSpecialty(false);
-        onAboutSpecialtyClose();
+        if (selectedCountry) {
+            onAboutSpecialtyOpen(getCuisineType(selectedCountry));
+        }
     };
 
     const handleBack = () => {
@@ -129,7 +120,6 @@ export default function LocationSelectionMobile({
             setShowBackButton(false);
         }
         setShowError(false);
-        setShowAboutSpecialty(false);
         onChange();
     };
 
@@ -142,7 +132,6 @@ export default function LocationSelectionMobile({
 
     return (
         <div>
-            {/* Heading Text */}
             <div className="max-w-3xl md:w-[100%] mb-4 md:mb-40 sm:mb-8 lg:mb-28 md:text-start md:m-14 text-center mt-10 md:ml-6">
                 <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
                     ORDER FRESHLY PREPARED AFRICAN FOOD DIRECTLY FROM AFRICAN RESTAURANTS AND HAVE IT CONVENIENTLY DELIVERED TO YOUR HOME
@@ -150,11 +139,8 @@ export default function LocationSelectionMobile({
             </div>
 
             <div
-                className="border rounded-lg p-2 xs:w-auto w-[90%] md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-40"
+                className="border p-2 xs:w-auto w-[98%] md:w-[80%] md:ml-6 mx-auto relative shadow-lg md:mt-40 animated-background"
                 style={{
-                    backgroundImage: `url('/images/Box_Restaurant_BckgImg01.png')`,
-                    backgroundSize: 'contain',
-                    backgroundPosition: 'center',
                     borderColor: '#f1c232',
                     borderRadius: '10px'
                 }}
@@ -163,12 +149,11 @@ export default function LocationSelectionMobile({
                     className="absolute inset-0"
                     style={{
                         borderRadius: '10px',
-                        opacity: '75%',
-                        background: '#312708'
+                        opacity: '70%',
+                        background: '#5b0f00ff'
                     }}
                 ></div>
                 <div className="relative z-10">
-                    {/* Chef Images */}
                     <div className="relative flex justify-between mb-4 mt-1">
                         <div className="hidden sm:block absolute w-28 h-28 -left-0 -mt-[95px]">
                             <Image
@@ -190,22 +175,19 @@ export default function LocationSelectionMobile({
                         </div>
                     </div>
 
-                    {/* Headings */}
                     <div className="flex justify-between mb-0 -mt-5">
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 ">
-                            <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 mr-6">
-                            <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">LOCATION</h3>
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 mr-6 md:ml-4 ml-6">
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">LOCATION</h3>
                         </div>
-                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 md:mr-[22%]">
-                            <h3 className="font-semibold text-black text-[6px] md:text-[9px] sm:text-xs uppercase">RESTAURANT</h3>
+                        <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 md:mr-[22%] mr-[11%] ">
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">RESTAURANT</h3>
                         </div>
                     </div>
 
-                    {/* Sections */}
                     <div className="flex justify-around">
-                        {/* Country Selection */}
                         <div className="space-y-1 pl-0 mt-4 w-1/2 md:w-50">
                             {!isViewingMenu ? (
                                 countrySpecialties.map((country) => (
@@ -217,7 +199,7 @@ export default function LocationSelectionMobile({
                                             onChange={() => handleCountrySelect(country)}
                                             className="appearance-none mr-2"
                                         />
-                                        <span className="text-[6px] md:text-[9px] font-bold sm:text-xs">{country}</span>
+                                        <span className="text-[7px] md:text-[9px] font-bold sm:text-xs">{country}</span>
                                     </label>
                                 ))
                             ) : (
@@ -229,7 +211,7 @@ export default function LocationSelectionMobile({
                                         readOnly
                                         className="appearance-none mr-2"
                                     />
-                                    <span className="text-[6px] md:text-[9px] font-bold">{selectedCountry}</span>
+                                    <span className="text-[7px] md:text-[9px] font-bold">{selectedCountry}</span>
                                 </label>
                             )}
 
@@ -240,8 +222,7 @@ export default function LocationSelectionMobile({
                             )}
                         </div>
 
-                        {/* Location Selection */}
-                        <div className="space-y-1 pl-1 w-28 mt-4 md:-ml-20">
+                        <div className="space-y-1 pl-1 w-28 mt-4 md:-ml-12 ml-10 absolute">
                             {selectedCountry ? Object.keys(locations).map((location) => {
                                 const isVisible = !isViewingMenu || selectedLocation === location;
                                 if (!isVisible) return null;
@@ -254,7 +235,7 @@ export default function LocationSelectionMobile({
                                             onChange={() => handleLocationSelect(location as Location)}
                                             className="appearance-none mr-2"
                                         />
-                                        <span className="text-[6px] md:text-[9px] font-bold">{location} ({locations[location] || 0})</span>
+                                        <span className="text-[7px] md:text-[9px] font-bold">{location} ({locations[location] || 0})</span>
                                     </label>
                                 );
                             }) : (
@@ -262,12 +243,11 @@ export default function LocationSelectionMobile({
                             )}
                         </div>
 
-                        {/* Restaurant Selection */}
-                        <div className="space-y-1 pl-1 w-56 mt-4 mr-6">
+                        <div className="space-y-1 pl-1 w-56 mt-4 md:mr-7 -mr-[17%]">
                             {selectedCountry && !selectedLocation && (
                                 <div className="p-0 absolute md:mb-10 w-[120%]" style={{ maxWidth: '160px' }}>
-                                    <div className="text-start py-0.5 px-1 rounded-lg ml-10">
-                                        <h3 className="font-semibold text-white text-[6px] sm:text-[8px] uppercase p-1 leading-tight">
+                                    <div className="text-start py-0.5 px-1 rounded-lg md:ml-10 ml-14">
+                                        <h3 className="font-semibold text-white text-[7px] sm:text-[8px] uppercase p-1 leading-tight">
                                             CHOOSE A LOCATION TO SEE RESTAURANT LIST AND VIEW THEIR MENU
                                         </h3>
                                     </div>
@@ -279,8 +259,8 @@ export default function LocationSelectionMobile({
                                 const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
                                 if (!isVisible) return null;
                                 return (
-                                    <label key={restaurantName} className="custom-radio text-white font-bold flex flex-col items-center cursor-pointer gap-1 flex-wrap">
-                                        <div className="flex items-center">
+                                    <label key={restaurantName} className="custom-radio text-white font-bold flex md:ml-2 flex-col items-center cursor-pointer gap-1 flex-wrap">
+                                        <div className="flex items-center -ml-2 md:ml-0">
                                             <input
                                                 type="radio"
                                                 name="restaurant"
@@ -288,7 +268,7 @@ export default function LocationSelectionMobile({
                                                 onChange={() => handleRestaurantSelect(restaurantName)}
                                                 className="appearance-none mr-2"
                                             />
-                                            <span className="text-[6px] md:text-[9px] font-bold">{restaurantName}</span>
+                                            <span className="text-[7px] md:text-[9px] font-bold">{restaurantName}</span>
                                         </div>
                                     </label>
                                 );
@@ -297,30 +277,30 @@ export default function LocationSelectionMobile({
                             )}
 
                             {showError && (
-                                <p className="text-red-600 text-[10px] sm:text-xs font-bold mt-1">Choose a restaurant to view menu</p>
+                                <div className="w-[70%] ml-[55px]">
+                                    <p className="text-white text-[7px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-bold mt-3">Choose a restaurant to view menu</p>
+                                </div>
                             )}
 
                             {!selectedCountry && (
-                                <div className="relavent p-0 flex items-center justify-center w-50 mt-6 -ml-28 md:mr-4">
+                                <div className="relavent p-0 flex items-center justify-center w-56 md:w-auto mt-6 md:-ml-24 -ml-12 mr-6 md:mr-4">
                                     <div className="text-start md:py-2 py-1 px-1 rounded-md p-4">
-                                        <h3 className="font-semibold text-white text-[6px] md:text-[9px] text-[6px] uppercase p-4 md:p-1 leading-tight">
+                                        <h3 className="font-semibold text-white text-[7px] md:text-[9px] text-[7px] uppercase p-4 md:p-1 leading-tight">
                                             CHOOSE A COUNTRY SPECIALTY TO EXPLORE ITS DETAILS AND SEE LOCATIONS WITH RESTAURANTS OFFERING IT
                                         </h3>
                                     </div>
                                 </div>
                             )}
 
-                            <div className="mt-6 flex justify-start  mr-14 gap-2">
-                                <div className="flex justify-start ml-14">
-                                    {/* View Menu Button */}
+                            <div className="mt-6 flex justify-start md:mr-14 gap-2">
+                                <div className="flex justify-start ml-[27%] md:ml-14 mt-[6px]">
                                     {selectedLocation && !isViewingMenu && (
-                                        <CustomButton onClick={handleViewMenuClick}>
+                                        <button className="bg-red-900 text-white border border-amber-400 rounded-lg p-1 px-3 text-[7px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap" onClick={handleViewMenuClick}>
                                             VIEW MENU
-                                        </CustomButton>
+                                        </button>
                                     )}
                                 </div>
-                                <div className="flex justify-end ml-10">
-                                    {/* Home Button */}
+                                <div className="flex justify-end md:ml-[104px] ">
                                     {isViewingMenu && (
                                         <CustomButton onClick={handleHome}>
                                             HOME
@@ -331,32 +311,32 @@ export default function LocationSelectionMobile({
                         </div>
                     </div>
 
-                    {/* Buttons Section */}
-                    <div className="flex justify-between gap-2 mt-2 md:ml-0 md:-mb-1 ml-10 z-20">
-                        {!isViewingMenu && selectedCountry && (
-                            <span
-                                onClick={handleAboutSpecialtyClick}
-                                className="text-[#ff9920] hover:text-[#ebeb48] underline cursor-pointer text-[8px] sm:text-xs font-semibold transition duration-200 whitespace-nowrap"
-                            >
-                                ABOUT {getCuisineType(selectedCountry)} SPECIALTY
-                            </span>
-                        )}
-
-                        {/* Back Button */}
+                    <div className="flex justify-between items-center gap-2 mt-6 md:ml-0 md:-mb-1 ml-10 z-20">
+                        <div className=" ml-0 md:ml-0">
+                            {!isViewingMenu && selectedCountry && (
+                                <div
+                                    onClick={handleAboutSpecialtyClick}
+                                    className="text-[#ebeb48] hover:text-[#0ff502] cursor-pointer text-[7px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] font-semibold transition duration-200 whitespace-nowrap -mb-3 md:-mb-2"
+                                >
+                                    ABOUT {getCuisineType(selectedCountry)} SPECIALTY
+                                </div>
+                            )}
+                        </div>
                         {showBackButton && !isViewingMenu && (
-                            <CustomButton onClick={handleBack}>
-                                BACK
-                            </CustomButton>
+                            <div className="mr-9 flex items-center justify-center">
+                                <CustomButton onClick={handleBack}>
+                                    BACK
+                                </CustomButton>
+                            </div>
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* Lower Section */}
             <div className="max-w-2xl mt-2 xs:mt-12 w-[95vw] ml-0 sm:mt-16 lg:mt-10 mb-6 xs:mb-8 sm:mb-10 text-center">
                 {isMobile && (
                     <div className="flex justify-between items-center w-full mt-4">
-                        <div className="w-16 xs:w-20 h-16 -mt-20 xs:h-20 z-10">
+                        <div className="w-16 xs:w-20 h-16 -mt-20 -ml-2 xs:h-20 z-10">
                             <Image
                                 src="/images/chef-male.png"
                                 alt="Male Chef"
@@ -366,7 +346,6 @@ export default function LocationSelectionMobile({
                                 priority
                             />
                         </div>
-                        {/* only shows in mobile view */}
                         <div className="flex-1 mx-2">
                             <p className="text-white font-bold text-xs uppercase leading-relaxed">
                                 YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
@@ -385,20 +364,6 @@ export default function LocationSelectionMobile({
                     </div>
                 )}
             </div>
-
-            {/* AboutSpecialty for Mobile */}
-            {showAboutSpecialty && selectedCountry && (
-                <div className="md:hidden mt-2 mx-auto w-full max-w-full flex justify-center">
-                    <AboutSpecialty cuisineType={getCuisineType(selectedCountry)} onClose={handleCloseAboutSpecialty} />
-                </div>
-            )}
-
-            {/* AboutSpecialty for Large Devices */}
-            {showAboutSpecialty && selectedCountry && (
-                <div className="hidden md:block absolute top-0 right-0 w-1/2 p-0 -mr-4">
-                    <AboutSpecialty cuisineType={getCuisineType(selectedCountry)} onClose={handleCloseAboutSpecialty} />
-                </div>
-            )}
         </div>
     );
 }

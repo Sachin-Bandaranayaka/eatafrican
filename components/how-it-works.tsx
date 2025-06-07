@@ -48,7 +48,7 @@ export default function HowItWorks({ isOpen, onClose }: HowItWorksProps) {
                     </div>
                 </div>
 
-                <div className="relative z-40 mt-10 ml-10 mb-24">
+                <div className="relative z-30 mt-10 ml-10 mb-24">
                     {[
                         {
                             step: "Step 1: Check the Delivery Guide",
