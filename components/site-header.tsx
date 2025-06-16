@@ -9,9 +9,10 @@ import { CartComponent } from "./cart";
 
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
+  onToggleAdminDashboard: () => void; // Prop to toggle admin view
 }
 
-export default function SiteHeader({ onOpenDashboard }: SiteHeaderProps) {
+export default function SiteHeader({ onOpenDashboard, onToggleAdminDashboard }: SiteHeaderProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -55,9 +56,8 @@ export default function SiteHeader({ onOpenDashboard }: SiteHeaderProps) {
                 {languages.map((lang) => (
                   <button
                     key={lang}
-                    className={`block w-full px-3 py-1.5 text-[10px] md:text-[15px] md:text-sm hover:bg-white/10 ${
-                      currentLanguage === lang ? "text-amber-400" : "text-white"
-                    }`}
+                    className={`block w-full px-3 py-1.5 text-[10px] md:text-[15px] md:text-sm hover:bg-white/10 ${currentLanguage === lang ? "text-amber-400" : "text-white"
+                      }`}
                     onClick={() => {
                       setCurrentLanguage(lang);
                       setLanguageOpen(false);
@@ -70,6 +70,20 @@ export default function SiteHeader({ onOpenDashboard }: SiteHeaderProps) {
             )}
           </div>
         </div>
+
+        <div>
+          {/* admin dashboard */}
+          <div className="hidden md:block relative w-12 max-w-[400px]">
+            <button
+              onClick={onToggleAdminDashboard} // Triggers the view switch
+              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold  transition duration-200 whitespace-nowrap"
+              aria-label="Dashboard"
+            >
+              DASHBOARD testing
+            </button>
+          </div>
+        </div>
+
         {/* Right Section with User Icon and Shopping Cart */}
         <div className="flex items-center gap-4 md:gap-2">
           {/* Dashboard btn */}
