@@ -9,10 +9,11 @@ import { CartComponent } from "./cart";
 
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
-  onToggleAdminDashboard: () => void; // Prop to toggle admin view
+  onShowAdminDashboard: () => void; // Prop for the dashboard view
+  onShowAdminLogin: () => void;      // Prop for the admin login view
 }
 
-export default function SiteHeader({ onOpenDashboard, onToggleAdminDashboard }: SiteHeaderProps) {
+export default function SiteHeader({ onOpenDashboard, onShowAdminDashboard, onShowAdminLogin }: SiteHeaderProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -75,11 +76,24 @@ export default function SiteHeader({ onOpenDashboard, onToggleAdminDashboard }: 
           {/* admin dashboard */}
           <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
-              onClick={onToggleAdminDashboard} // Triggers the view switch
-              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold  transition duration-200 whitespace-nowrap"
+              onClick={onShowAdminDashboard} // Triggers the dashboard view
+              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
               aria-label="Dashboard"
             >
               DASHBOARD testing
+            </button>
+          </div>
+        </div>
+
+        <div>
+          {/* admin login */}
+          <div className="hidden md:block relative w-12 max-w-[400px]">
+            <button
+              onClick={onShowAdminLogin} // Triggers the admin login view
+              className="bg-black text-white border rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
+              aria-label="Admin Login"
+            >
+              Admin login testing
             </button>
           </div>
         </div>

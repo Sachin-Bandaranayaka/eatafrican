@@ -87,6 +87,12 @@ export default function AdminDashboard({ onClose }) {
     const [activeTab, setActiveTab] = useState('MEALS');
     const [isAddMealVisible, setIsAddMealVisible] = useState(false);
 
+    // --- State for toggling card lists visibility ---
+    const [showMealCardsList, setShowMealCardsList] = useState(true);
+    const [showDrinkCardsList, setShowDrinkCardsList] = useState(true);
+    const [showDealCardsList, setShowDealCardsList] = useState(true);
+
+
     // State for MY RESTAURANT view
     const [myRestaurantTab, setMyRestaurantTab] = useState('RESTAURANT_INFORMATION');
 
@@ -103,6 +109,12 @@ export default function AdminDashboard({ onClose }) {
     const [redeemedState, setRedeemedState] = useState({});
     const [isRewardActive, setIsRewardActive] = useState(false);
     const [isLinkCopied, setIsLinkCopied] = useState(false);
+
+    // --- Handlers for toggling card lists ---
+    const toggleMealCardsVisibility = () => setShowMealCardsList(prevState => !prevState);
+    const toggleDrinkCardsVisibility = () => setShowDrinkCardsList(prevState => !prevState);
+    const toggleDealCardsVisibility = () => setShowDealCardsList(prevState => !prevState);
+
 
     const handleRedeem = (points) => {
         setRedeemedState(prevState => ({ ...prevState, [points]: true }));
@@ -313,8 +325,6 @@ export default function AdminDashboard({ onClose }) {
                                     <div className="z-10 relative p-4">
 
                                         {/* order section */}
-                                        {/* this section shows when user clicking the ORDERS in dropdown from the header section */}
-                                        {/* and this section is showing in default */}
                                         {currentView === 'ORDERS' && (
                                             <>
                                                 {/* This shows the list of orders */}
@@ -389,7 +399,6 @@ export default function AdminDashboard({ onClose }) {
                                                 )}
 
                                                 {/* order details */}
-                                                {/* this section shows when clicking the NEW button in the oders main page */}
                                                 {showOrderDetails && (
                                                     <div className="flex flex-col w-full px-2 ">
                                                         <div className="flex flex-row justify-between items-between w-full mb-3">
@@ -406,25 +415,19 @@ export default function AdminDashboard({ onClose }) {
                                                                 <h3 className="font-bold">Items</h3>
                                                                 <div className="space-y-3">
                                                                     <div className="flex gap-x-4">
-                                                                        {/* Image Placeholder */}
                                                                         <div className="w-20 h-20 bg-gray-600 rounded-md flex-shrink-0"></div>
-                                                                        {/* Meal Name */}
                                                                         <p className="text-black mt-2 text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             Meal Name Lorem ipsum dolor sit
                                                                         </p>
                                                                     </div>
                                                                     <div className="flex gap-x-4">
-                                                                        {/* Image Placeholder */}
                                                                         <div className="w-20 h-20 bg-gray-600 rounded-md flex-shrink-0"></div>
-                                                                        {/* Meal Name */}
                                                                         <p className="text-black mt-2 text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             Meal Name Lorem ipsum dolor sit
                                                                         </p>
                                                                     </div>
                                                                     <div className="flex gap-x-4">
-                                                                        {/* Image Placeholder */}
                                                                         <div className="w-20 h-20 bg-gray-600 rounded-md flex-shrink-0"></div>
-                                                                        {/* Meal Name */}
                                                                         <p className="text-black mt-2 text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             Meal Name Lorem ipsum dolor sit
                                                                         </p>
@@ -434,36 +437,27 @@ export default function AdminDashboard({ onClose }) {
 
                                                             {/* total items */}
                                                             <div className="flex flex-col w-[35%]">
-                                                                {/* Red header for the grand total */}
                                                                 <div className="bg-red-600 text-white font-bold px-3 py-1 flex justify-between items-center text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                     <span>Total all Items:</span>
                                                                     <span>Fr. 135.00</span>
                                                                 </div>
-
-                                                                {/* Main content area for item details */}
                                                                 <div className="p-3">
-                                                                    {/* Sub-header for the item columns */}
                                                                     <div className="grid grid-cols-3 gap-4 text-sm font-bold mb-3 text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                         <span className="text-left">Cost</span>
                                                                         <span className="text-center">Qty</span>
                                                                         <span className="text-right">Total per Item</span>
                                                                     </div>
-
-                                                                    {/* List of items with hardcoded static data */}
                                                                     <div className="space-y-4">
-                                                                        {/* Item Row 1 */}
                                                                         <div className="grid grid-cols-3 gap-4 text-sm text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             <span className="text-left">Fr 45.00</span>
                                                                             <span className="text-center">5</span>
                                                                             <span className="text-right">Fr. 45.00</span>
                                                                         </div>
-                                                                        {/* Item Row 2 */}
                                                                         <div className="grid grid-cols-3 gap-4 text-sm text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             <span className="text-left">Fr 90.00</span>
                                                                             <span className="text-center">5</span>
                                                                             <span className="text-right">Fr. 45.00</span>
                                                                         </div>
-                                                                        {/* Item Row 3 */}
                                                                         <div className="grid grid-cols-3 gap-4 text-sm text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
                                                                             <span className="text-left">Fr 90.00</span>
                                                                             <span className="text-center">5</span>
@@ -475,7 +469,6 @@ export default function AdminDashboard({ onClose }) {
 
                                                             {/* delivery address */}
                                                             <div className="flex flex-col w-[40%] bg-yellow-300 p-2 rounded-lg">
-                                                                {/* Delivery Address Section */}
                                                                 <div className="mb-8 mt-2">
                                                                     <h3 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-gray-800 mb-2">Delivery Address</h3>
                                                                     <div className="mt-6 text-blue-700 font-semibold text-[6px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px]">
@@ -484,8 +477,6 @@ export default function AdminDashboard({ onClose }) {
                                                                         <p>8530 Zürich</p>
                                                                     </div>
                                                                 </div>
-
-                                                                {/* Status Section */}
                                                                 <div className="flex flex-row justify-center items-center mb-6 gap-3">
                                                                     <label className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] flex flex-row justify-center items-center font-bold text-gray-800 ">Status:</label>
                                                                     <div className="relative w-full">
@@ -495,7 +486,6 @@ export default function AdminDashboard({ onClose }) {
                                                                             <option value="IN TRANSIT">IN TRANSIT</option>
                                                                             <option value="CANCELLED">CANCELLED</option>
                                                                         </select>
-                                                                        {/* <ChevronDown size={20} className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" /> */}
                                                                         <ChevronDown style={{ strokeWidth: 6 }} size={12} className="text-white absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" />
                                                                     </div>
                                                                 </div>
@@ -517,7 +507,6 @@ export default function AdminDashboard({ onClose }) {
                                         )}
 
                                         {/* menu section */}
-                                        {/* this section shows when user clicking the MENU in dropdown from the header section */}
                                         {currentView === 'MENU' && (
                                             <div className="relative w-full z-50">
                                                 {/* Tab Buttons Section */}
@@ -551,53 +540,65 @@ export default function AdminDashboard({ onClose }) {
                                                                 <button
                                                                     onClick={() => setIsAddMealVisible(true)}
                                                                     className={`
-                                                                                ml-[13%] text-white font-bold py-1 px-4 rounded-lg 
-                                                                                transition-colors duration-200 shadow-lg 
-                                                                                text-[9px] md:text-[13px]
-                                                                                ${isAddMealVisible
+                                                                        ml-[13%] text-white font-bold py-1 px-4 rounded-lg 
+                                                                        transition-colors duration-200 shadow-lg 
+                                                                        text-[9px] md:text-[13px]
+                                                                        ${isAddMealVisible
                                                                             ? 'bg-blue-900 hover:bg-teal-800'
                                                                             : 'bg-red-900 hover:bg-red-800'
                                                                         }
-                                                                            `}
+                                                                    `}
                                                                 >
                                                                     ADD MEAL
-                                                                </button>                                                                   </div>
-                                                            <p className="text-[9px] md:text-[13px] mb-1 text-black font-bold ">Currently no meals added</p>
-                                                        </div>
-                                                        <div className="bg-transparent space-y-4 w-5/6 -mt-[10%] ">
-                                                            <div className="flex flex-row justify-end items-end mb-10 mt-3">
-                                                                <button className="w-auto bg-red-900 text-white font-bold py-1 px-4 rounded-lg hover:bg-red-800 transition-colors duration-200 shadow-lg text-[9px] md:text-[13px]">SORT BY</button>
-                                                                <button className="ml-4 w-auto bg-red-900 text-white font-bold py-1 px-4 rounded-lg hover:bg-red-800 transition-colors duration-200 shadow-lg text-[9px] md:text-[13px]">FILTER BY</button>
+                                                                </button>
+                                                                <button onClick={toggleMealCardsVisibility} className="bg-black w-10 rounded text-white">test</button>
                                                             </div>
-                                                            {mealCardsData.map(card => (
-                                                                <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 p-1">
-                                                                    <div className="w-28 h-28 m-1 flex-shrink-0 rounded-md bg-gray-300 "></div>
-                                                                    <div className="flex-grow">
-                                                                        <div className="flex items-start justify-between">
-                                                                            <h3 className="text-[14px] font-bold text-red-800 mt-2">Meal Name Lorem ipsum dolor sit</h3>
-                                                                            <span className={`rounded-full px-4 py-1 text-xs font-bold text-white mt-2 mr-2 ${card.tagColor}`}>{card.tag}</span>
-                                                                        </div>
-                                                                        <p className="mt-1 mb-3 text-xs font-bold text-black">
-                                                                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.m nonumy eirmod t
-                                                                        </p>
-                                                                        <div className="flex items-center justify-between">
-                                                                            <div className="flex items-center gap-2">
-                                                                                <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
-                                                                                    <span>LIVE</span>
-                                                                                    <ChevronDown size={16} className="ml-1" />
-                                                                                </button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
-                                                                                <span className={`rounded-md px-3 py-1 text-xs font-bold text-black ${card.qtyColor}`}>Qty: {card.qty}</span>
+                                                            {!showMealCardsList && (
+                                                                <p className="text-[9px] md:text-[13px] mb-1 text-black font-bold ">Currently no meals added</p>
+                                                            )}</div>
+
+
+
+                                                        {showMealCardsList && (
+                                                            <div className="bg-transparent w-5/6 -mt-[7.5%]">
+                                                                <div className="flex flex-row justify-end items-end mb-4 mt-3">
+                                                                    <button className="w-auto bg-red-900 text-white font-bold py-1 px-4 rounded-lg hover:bg-red-800 transition-colors duration-200 shadow-lg text-[9px] md:text-[13px]">SORT BY</button>
+                                                                    <button className="ml-4 w-auto bg-red-900 text-white font-bold py-1 px-4 rounded-lg hover:bg-red-800 transition-colors duration-200 shadow-lg text-[9px] md:text-[13px]">FILTER BY</button>
+                                                                </div>
+                                                                <div className="max-h-[60vh] overflow-y-auto custom-scrollbar-orange pr-2">
+                                                                    <div className="space-y-4">
+                                                                        {mealCardsData.map(card => (
+                                                                            <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 p-1">
+                                                                                <div className="w-28 h-28 m-1 flex-shrink-0 rounded-md bg-gray-300 "></div>
+                                                                                <div className="flex-grow">
+                                                                                    <div className="flex items-start justify-between">
+                                                                                        <h3 className="text-[14px] font-bold text-red-800 mt-2">Meal Name Lorem ipsum dolor sit</h3>
+                                                                                        <span className={`rounded-full px-4 py-1 text-xs font-bold text-white mt-2 mr-2 ${card.tagColor}`}>{card.tag}</span>
+                                                                                    </div>
+                                                                                    <p className="mt-1 mb-3 text-xs font-bold text-black">
+                                                                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.m nonumy eirmod t
+                                                                                    </p>
+                                                                                    <div className="flex items-center justify-between">
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
+                                                                                                <span>LIVE</span>
+                                                                                                <ChevronDown size={16} className="ml-1" />
+                                                                                            </button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
+                                                                                            <span className={`rounded-md px-3 py-1 text-xs font-bold text-black ${card.qtyColor}`}>Qty: {card.qty}</span>
+                                                                                        </div>
+                                                                                        <span className="text-[14px] font-bold text-gray-800 mr-6 mt-2">Fr. {card.price}.-</span>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                            <span className="text-[14px] font-bold text-gray-800 mr-6 mt-2">Fr. {card.price}.-</span>
-                                                                        </div>
+                                                                        ))}
                                                                     </div>
                                                                 </div>
-                                                            ))}
-                                                        </div>
+                                                            </div>
+                                                        )}
                                                         {isAddMealVisible && (
-                                                            <div className="absolute top-4 -left-4 mb-10 w-full h-full bg-transperant flex items-start justify-start pt-10 pl-4 z-20">
+                                                            <div className="absolute top-4 -left-4 mb-10 w-full h-full bg-transparent flex items-start justify-start pt-10 pl-4 z-20">
                                                                 <div className="flex flex-col w-[55%] no-scrollbar overflow-y-auto max-h-[55vh] ml-2 p-3 bg-[#fde5ce] rounded-lg shadow-xl">
                                                                     <div className="flex justify-between items-center mb-2">
                                                                         <h2 className="text-[9px] md:text-[15px] font-bold text-red-700">Add a Meal</h2>
@@ -652,50 +653,61 @@ export default function AdminDashboard({ onClose }) {
                                                                 <button
                                                                     onClick={() => setIsAddMealVisible(true)}
                                                                     className={`
-                                                                                ml-14 text-white font-bold py-1 px-4 rounded-lg 
-                                                                                transition-colors duration-200 shadow-lg 
-                                                                                text-[9px] md:text-[13px]
-                                                                                ${isAddMealVisible
+                                                                        ml-14 text-white font-bold py-1 px-4 rounded-lg 
+                                                                        transition-colors duration-200 shadow-lg 
+                                                                        text-[9px] md:text-[13px]
+                                                                        ${isAddMealVisible
                                                                             ? 'bg-blue-900 hover:bg-teal-800'
                                                                             : 'bg-red-900 hover:bg-red-800'
                                                                         }
-                                                                            `}
+                                                                    `}
                                                                 >
                                                                     ADD DRINKS
-                                                                </button>                                                                   </div>
-                                                            <p className="text-[9px] md:text-[13px] mb-1 text-black font-bold ">Currently no drinks.</p>
-                                                        </div>
-                                                        <div className="bg-transparent space-y-4 w-5/6 -mt-[10%] max-h-[85vh] ">
-                                                            <div className="flex flex-row justify-end items-end mb-10 mt-3 ">
-                                                                <button className="bg-red-900 text-white font-bold text-xs py-2 px-3 rounded-md hover:bg-opacity-90 flex items-center flex-shrink-0 text-[9px] md:text-[13px]">
-                                                                    FILTER BY <ChevronDown style={{ strokeWidth: 6 }} size={12} className="ml-2" />
                                                                 </button>
+                                                                <button onClick={toggleDrinkCardsVisibility} className="bg-black w-10 rounded text-white">test</button>
+
                                                             </div>
-                                                            {mealCardsData.map(card => (
-                                                                <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 p-1">
-                                                                    <div className="w-28 h-28 m-1 flex-shrink-0 rounded-md bg-gray-300"></div>
-                                                                    <div className="flex-grow">
-                                                                        <div className="flex items-start justify-between mb-4">
-                                                                            <h3 className="text-[14px] font-bold text-red-800 mt-2">Drink Name Lorem ipsum dolor sit</h3>
-                                                                        </div>
-                                                                        <div className="flex items-center justify-between">
-                                                                            <div className="flex items-center gap-2">
-                                                                                <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
-                                                                                    <span>LIVE</span>
-                                                                                    <ChevronDown size={16} className="ml-1" />
-                                                                                </button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
-                                                                                <span className={`rounded-md px-3 py-1 text-xs font-bold text-black ${card.qtyColor}`}>Qty: {card.qty}</span>
+                                                            {!showDrinkCardsList && (
+                                                                <p className="text-[9px] md:text-[13px] mb-1 text-black font-bold ">Currently no drinks.</p>
+                                                            )}</div>
+
+                                                        {showDrinkCardsList && (
+                                                            <div className="bg-transparent w-5/6 -mt-[8%]">
+                                                                <div className="flex flex-row justify-end items-end mb-4 mt-3 ">
+                                                                    <button className="bg-red-900 text-white font-bold text-xs py-2 px-3 rounded-md hover:bg-opacity-90 flex items-center flex-shrink-0 text-[9px] md:text-[13px]">
+                                                                        FILTER BY <ChevronDown style={{ strokeWidth: 6 }} size={12} className="ml-2" />
+                                                                    </button>
+                                                                </div>
+                                                                <div className="max-h-[60vh] overflow-y-auto custom-scrollbar-orange pr-2">
+                                                                    <div className="space-y-4">
+                                                                        {mealCardsData.map(card => (
+                                                                            <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 p-1">
+                                                                                <div className="w-28 h-28 m-1 flex-shrink-0 rounded-md bg-gray-300"></div>
+                                                                                <div className="flex-grow">
+                                                                                    <div className="flex items-start justify-between mb-4">
+                                                                                        <h3 className="text-[14px] font-bold text-red-800 mt-2">Drink Name Lorem ipsum dolor sit</h3>
+                                                                                    </div>
+                                                                                    <div className="flex items-center justify-between">
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
+                                                                                                <span>LIVE</span>
+                                                                                                <ChevronDown size={16} className="ml-1" />
+                                                                                            </button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
+                                                                                            <span className={`rounded-md px-3 py-1 text-xs font-bold text-black ${card.qtyColor}`}>Qty: {card.qty}</span>
+                                                                                        </div>
+                                                                                        <span className="text-[14px] font-bold text-gray-800 mr-6 mt-2">Fr. {card.price}.-</span>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                            <span className="text-[14px] font-bold text-gray-800 mr-6 mt-2">Fr. {card.price}.-</span>
-                                                                        </div>
+                                                                        ))}
                                                                     </div>
                                                                 </div>
-                                                            ))}
-                                                        </div>
+                                                            </div>
+                                                        )}
                                                         {isAddMealVisible && (
-                                                            <div className="absolute top-4 -left-4 w-full h-full bg-transperant flex items-start justify-start pt-10 pl-4 z-20">
+                                                            <div className="absolute top-4 -left-4 w-full h-full bg-transparent flex items-start justify-start pt-10 pl-4 z-20">
                                                                 <div className="flex flex-col w-[55%] ml-2 p-3 bg-[#fde5ce] rounded-lg shadow-xl">
                                                                     <div className="flex justify-between items-center mb-2">
                                                                         <h2 className="text-[9px] md:text-[15px] font-bold text-red-700">Add a Drink</h2>
@@ -738,54 +750,61 @@ export default function AdminDashboard({ onClose }) {
                                                                 <button
                                                                     onClick={() => setIsAddMealVisible(true)}
                                                                     className={`
-                                                                                ml-4 text-white font-bold py-1 px-4 rounded-lg 
-                                                                                transition-colors duration-200 shadow-lg 
-                                                                                text-[9px] md:text-[13px]
-                                                                                ${isAddMealVisible
+                                                                        ml-4 text-white font-bold py-1 px-4 rounded-lg 
+                                                                        transition-colors duration-200 shadow-lg 
+                                                                        text-[9px] md:text-[13px]
+                                                                        ${isAddMealVisible
                                                                             ? 'bg-blue-900 hover:bg-teal-800'
                                                                             : 'bg-red-900 hover:bg-red-800'
                                                                         }
-                                                                            `}
+                                                                    `}
                                                                 >
                                                                     ADD DEAL
                                                                 </button>
+                                                                <button onClick={toggleDealCardsVisibility} className="bg-black w-10 rounded text-white">test</button>
                                                             </div>
                                                         </div>
-                                                        <div className="bg-transparent space-y-4 w-5/6 ">
-                                                            {mealCardsData.map(card => (
-                                                                <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 ">
-                                                                    <div className="w-28 h-28 m-2 flex-shrink-0 rounded-md bg-gray-300"></div>
-                                                                    <div className="flex-grow">
-                                                                        <div className="flex items-start justify-between">
-                                                                            <h3 className="text-[14px] font-bold text-red-800 mt-2">Meal Name</h3>
-                                                                        </div>
-                                                                        <div className="flex flex-row gap-6">
-                                                                            <div className="flex flex-col">
-                                                                                <p className="mt-1 text-xs text-black">Meal Category: [Main Dishes]</p>
-                                                                                <p className="mt-1 mb-3 text-xs font-bold text-black">Discount Percentage: 10%</p>
+                                                        {showDealCardsList && (
+                                                            <div className="bg-transparent w-5/6 ">
+                                                                <div className="max-h-[60vh] overflow-y-auto no-scrollbar pr-2">
+                                                                    <div className="space-y-4">
+                                                                        {mealCardsData.map(card => (
+                                                                            <div key={card.id} className="flex w-full items-center gap-4 rounded-lg bg-gray-50 ">
+                                                                                <div className="w-28 h-28 m-2 flex-shrink-0 rounded-md bg-gray-300"></div>
+                                                                                <div className="flex-grow">
+                                                                                    <div className="flex items-start justify-between">
+                                                                                        <h3 className="text-[14px] font-bold text-red-800 mt-2">Meal Name</h3>
+                                                                                    </div>
+                                                                                    <div className="flex flex-row gap-6">
+                                                                                        <div className="flex flex-col">
+                                                                                            <p className="mt-1 text-xs text-black">Meal Category: [Main Dishes]</p>
+                                                                                            <p className="mt-1 mb-3 text-xs font-bold text-black">Discount Percentage: 10%</p>
+                                                                                        </div>
+                                                                                        <div className="flex flex-col">
+                                                                                            <p className="mt-1 text-xs text-black">Active From: [Date]</p>
+                                                                                            <p className="mt-1 mb-3 text-xs text-black">Nr of Meals: [3]</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="flex items-center justify-between">
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
+                                                                                                <span>LIVE</span>
+                                                                                                <ChevronDown size={16} className="ml-1" />
+                                                                                            </button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
+                                                                                            <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                            <div className="flex flex-col">
-                                                                                <p className="mt-1 text-xs text-black">Active From: [Date]</p>
-                                                                                <p className="mt-1 mb-3 text-xs text-black">Nr of Meals: [3]</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="flex items-center justify-between">
-                                                                            <div className="flex items-center gap-2">
-                                                                                <button className="flex items-center rounded-md bg-teal-900 px-3 py-1 text-xs font-semibold text-white">
-                                                                                    <span>LIVE</span>
-                                                                                    <ChevronDown size={16} className="ml-1" />
-                                                                                </button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">EDIT</button>
-                                                                                <button className="rounded-md bg-teal-900 px-4 py-1 text-xs font-semibold text-white">DELETE</button>
-                                                                            </div>
-                                                                        </div>
+                                                                        ))}
                                                                     </div>
                                                                 </div>
-                                                            ))}
-                                                        </div>
+                                                            </div>
+                                                        )}
                                                         {isAddMealVisible && (
-                                                            <div className="absolute top-0 -ml-4 w-[85%] h-full bg-transperant flex items-start justify-start pt-10 pl-4 z-20 mt-4">
-                                                                <div className="p-6 bg-[#fde5ce] rounded-lg mx-auto overflow-y-auto custom-scrollbar-orange overflow-y-auto max-h-[55vh]">
+                                                            <div className="absolute top-0 -ml-4 w-[85%] h-full bg-transparent flex items-start justify-start pt-10 pl-4 z-20 mt-4">
+                                                                <div className="p-6 bg-[#fde5ce] rounded-lg mx-auto overflow-y-auto no-scrollbar max-h-[55vh]">
                                                                     <div className="flex justify-between items-center mb-4">
                                                                         <h2 className="text-[15px] font-bold text-red-800">Add a Special Deal</h2>
                                                                         <button onClick={() => setIsAddMealVisible(false)} className="text-black hover:text-red-500"><X size={28} /></button>
@@ -814,7 +833,7 @@ export default function AdminDashboard({ onClose }) {
                                                                             </div>
                                                                         </div>
                                                                         <div className="mt-2 mb-14">
-                                                                            <div className="space-y-3 max-h-80 bg-transperant pr-5 rounded-lg">
+                                                                            <div className="space-y-3 max-h-80 bg-transparent pr-5 rounded-lg custom-scrollbar-orange overflow-y-auto">
                                                                                 {mealList.map(meal => (
                                                                                     <div key={meal.id} className="w-full flex items-center pl-2 gap-4 rounded-lg bg-gray-50 border border-gray-200">
                                                                                         <div className="w-24 h-24 bg-gray-300 rounded-md flex-shrink-0"></div>
@@ -826,8 +845,8 @@ export default function AdminDashboard({ onClose }) {
                                                                                             <p className="text-xs text-gray-600 my-1">{meal.description}</p>
                                                                                             <p className="font-semibold text-sm text-gray-800">Fr. {meal.price}.-</p>
                                                                                         </div>
-                                                                                        <div className="mr-4 mt-20 bg-oraange-900">
-                                                                                            <input type="checkbox" className="h-5 w-5 rounded border-orange-900 border-2 text-orange-900 focus:ring-orange-900 checked:bg-orange-900 checked:border-orange-900 cursor-pointer" />
+                                                                                        <div className="mr-4 mt-20">
+                                                                                            <input type="checkbox" className="h-5 w-5 rounded border-orange-900 border-2 accent-orange-600 cursor-pointer" />
                                                                                         </div>
                                                                                     </div>
                                                                                 ))}
@@ -847,7 +866,6 @@ export default function AdminDashboard({ onClose }) {
                                         )}
 
                                         {/* my restaurant section */}
-                                        {/* this section shows when user clicking the MY RESTAURANT in dropdown from the header section */}
                                         {currentView === 'MY RESTAURANT' && (
                                             <div className="relative w-full p-2 z-50">
                                                 <div className="flex flex-col w-5/6">
@@ -869,8 +887,8 @@ export default function AdminDashboard({ onClose }) {
                                                 </div>
 
                                                 {myRestaurantTab === 'RESTAURANT_INFORMATION' && (
-                                                    <div className="pt-6 bg-transparent rounded-lg mx-auto">
-                                                        <div className="flex flex-row gap-x-12 w-5/6">
+                                                    <div className="p-6 bg-transparent rounded-lg max-w-4xl mx-auto max-h-[65vh] overflow-y-auto no-scrollbar">
+                                                        <div className="flex flex-row gap-x-12">
                                                             <div className="flex flex-col space-y-2 w-[30%]">
                                                                 <h3 className="font-bold text-gray-800">Restaurant's Logo</h3>
                                                                 <div className="w-32 h-32 bg-gray-400 rounded-md"></div>
@@ -922,8 +940,8 @@ export default function AdminDashboard({ onClose }) {
                                             </div>
                                         )}
 
+
                                         {/* earning section */}
-                                        {/* this section shows when user clicking the EARNINGS in dropdown from the header section */}
                                         {currentView === 'EARNINGS' && (
                                             <div className=" font-sans text-gray-800 mx-3 z-50">
                                                 <h2 className="text-[17px] font-bold text-[#274e13] mb-8">EARNINGS</h2>
