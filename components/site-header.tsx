@@ -10,10 +10,16 @@ import { CartComponent } from "./cart";
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
   onShowAdminDashboard: () => void; // Prop for the dashboard view
-  onShowAdminLogin: () => void;      // Prop for the admin login view
+  onShowAdminLogin: () => void;     // Prop for the admin login view
+  onShowDriverPortal: () => void;    // Prop for the driver portal view
 }
 
-export default function SiteHeader({ onOpenDashboard, onShowAdminDashboard, onShowAdminLogin }: SiteHeaderProps) {
+export default function SiteHeader({
+  onOpenDashboard,
+  onShowAdminDashboard,
+  onShowAdminLogin,
+  onShowDriverPortal, // Destructure the new prop
+}: SiteHeaderProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -81,6 +87,19 @@ export default function SiteHeader({ onOpenDashboard, onShowAdminDashboard, onSh
               aria-label="Dashboard"
             >
               DASHBOARD testing
+            </button>
+          </div>
+        </div>
+
+        <div>
+          {/* driver portal */}
+          <div className="hidden md:block relative w-12 max-w-[400px]">
+            <button
+              onClick={onShowDriverPortal} // <-- ADDED ONCLICK HANDLER
+              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
+              aria-label="Driver Portal"
+            >
+              DRIVER PORTAL login test
             </button>
           </div>
         </div>
