@@ -80,7 +80,7 @@ export default function SiteHeader({
 
         <div>
           {/* admin dashboard */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
+          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
               onClick={onShowAdminDashboard} // Triggers the dashboard view
               className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
@@ -88,12 +88,12 @@ export default function SiteHeader({
             >
               DASHBOARD testing
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div>
           {/* driver portal */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
+          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
               onClick={onShowDriverPortal} // <-- ADDED ONCLICK HANDLER
               className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
@@ -101,12 +101,12 @@ export default function SiteHeader({
             >
               DRIVER PORTAL login test
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div>
           {/* admin login */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
+          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
               onClick={onShowAdminLogin} // Triggers the admin login view
               className="bg-black text-white border rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
@@ -114,7 +114,7 @@ export default function SiteHeader({
             >
               Admin login testing
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Right Section with User Icon and Shopping Cart */}
