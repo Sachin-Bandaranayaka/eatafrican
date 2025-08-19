@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,18 +9,37 @@ import ClientOnly from '../components/client-only';
 import LeftSideContent from './left-side-content-updated';
 import React from "react";
 import { useIsMobile } from '../hooks/use-mobile';
-import AdminDashboard from "../components/adminDashboard";
-import AdminSiteHeader from "../components/adminSite-header";
-import AdminSiteFooter from "../components/adminSiteFooter";
+import AdminDashboard from "../components/admin/dashboard/page";
+import AdminSiteHeader from "../components/admin/adminSite-header";
+import AdminSiteFooter from "../components/admin/adminSiteFooter";
 import PartnerRestaurant from "../components/restaurantRegistration";
 import DriverPortalAuth from "../components/driverPortalAuth";
-import DriverPortal from "../components/driverPortal"; // Import the DriverPortal component
+import DriverPortal from "../components/driverPortal";
+import SuperAdminLogin from "../components/superAdmin/auth/login";
+import SuperAdminHeader from "../components/superAdmin/header";
+
+// Import all the components for the Super Admin dashboard views.
+// If an error occurs, it's likely one of these files is not exporting
+// the component with the correct name.
+import { SuperAdminDashboard } from "../components/superAdmin/dashboard";
+import { SuperAdminOrders } from "../components/superAdmin/orders/page";
+import { SuperAdminEarnings } from "../components/superAdmin/earnings/page";
+import { SuperAdminPayouts } from "../components/superAdmin/payouts/page";
+import { SuperAdminRestaurant } from "../components/superAdmin/restaurant";
+import { SuperAdminDeliveryDrivers } from "../components/superAdmin/delivery-drivers/page";
+import { SuperAdminCustomerAccount } from "../components/superAdmin/customer-accounts/page";
+import { SuperAdminSettings } from "../components/superAdmin/settings/page";
+import { SuperAdminDeliveryBackend } from "../components/superAdmin/delivery-backend/page";
+
 
 export default function Home() {
     const [visibleComponent, setVisibleComponent] = useState<string | null>(null);
     const [isViewingMenu, setIsViewingMenu] = useState(false);
     const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
-    const [adminView, setAdminView] = useState<'none' | 'dashboard' | 'login' | 'partner' | 'driver' | 'driverPortal'>('none');
+    const [adminView, setAdminView] = useState<'none' | 'dashboard' | 'login' | 'partner' | 'driver' | 'driverPortal' | 'superAdmin' | 'superAdminDashboard'>('none');
+    
+    // Add state to manage the view within the Super Admin Dashboard
+    const [superAdminView, setSuperAdminView] = useState('DASHBOARD');
 
     const { t } = useLocationContext();
     const isMobile = useIsMobile();
@@ -54,12 +74,87 @@ export default function Home() {
 
     // --- START OF CONDITIONAL RENDERING ---
 
+    if (adminView === 'superAdminDashboard') {
+        // --- MODIFIED ---
+        // This function now checks if the imported component is undefined and
+        // will render an error message if it is.
+        const renderSuperAdminComponent = () => {
+            // A helper component for displaying errors
+            const ErrorDisplay = ({ name }: { name: string }) => (
+                <div className="text-center p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <p className="font-bold">Component Loading Error</p>
+                    <p>The component <code className="bg-red-200 p-1 rounded">{name}</code> is undefined.</p>
+                    <p>Please ensure you have <code className="bg-red-200 p-1 rounded">export const {name} = ...</code> in your component file.</p>
+                </div>
+            );
+
+            switch (superAdminView) {
+                case 'DASHBOARD':
+                    return SuperAdminDashboard ? <SuperAdminDashboard /> : <ErrorDisplay name="SuperAdminDashboard" />;
+                case 'ORDERS':
+                    return SuperAdminOrders ? <SuperAdminOrders /> : <ErrorDisplay name="SuperAdminOrders" />;
+                case 'EARNINGS':
+                    return SuperAdminEarnings ? <SuperAdminEarnings /> : <ErrorDisplay name="SuperAdminEarnings" />;
+                case 'PAYOUTS':
+                    return SuperAdminPayouts ? <SuperAdminPayouts /> : <ErrorDisplay name="SuperAdminPayouts" />;
+                case 'RESTAURANT':
+                    return SuperAdminRestaurant ? <SuperAdminRestaurant /> : <ErrorDisplay name="SuperAdminRestaurant" />;
+                case 'DELIVERY BACKEND':
+                    return SuperAdminDeliveryBackend ? <SuperAdminDeliveryBackend /> : <ErrorDisplay name="SuperAdminDeliveryDrivers" />;
+                case 'DELIVERY DRIVERS':
+                    return SuperAdminDeliveryDrivers ? <SuperAdminDeliveryDrivers /> : <ErrorDisplay name="SuperAdminDeliveryDrivers" />;
+                case 'CUSTOMER ACCOUNT':
+                    return SuperAdminCustomerAccount ? <SuperAdminCustomerAccount /> : <ErrorDisplay name="SuperAdminCustomerAccount" />;
+                case 'SETTINGS':
+                    return SuperAdminSettings ? <SuperAdminSettings /> : <ErrorDisplay name="SuperAdminSettings" />;
+                default:
+                    // Fallback to the dashboard
+                    return SuperAdminDashboard ? <SuperAdminDashboard /> : <ErrorDisplay name="SuperAdminDashboard" />;
+            }
+        };
+
+        return (
+            <ClientOnly>
+                <main className="relative w-full min-h-screen">
+                    {/* Pass the state and the updater function to the header */}
+                    <SuperAdminHeader 
+                        currentView={superAdminView} 
+                        onViewChange={setSuperAdminView} 
+                    />
+                    {/* Render the selected component or an error message */}
+                    <div className="mt-4 px-4">
+                        {renderSuperAdminComponent()}
+                    </div>
+                </main>
+            </ClientOnly>
+        );
+    }
+
+    // ... (The rest of your component remains the same)
+
     if (adminView === 'dashboard') {
         return (
             <ClientOnly>
                 <main className="relative w-full min-h-screen">
                     <AdminSiteHeader onToggleAdminDashboard={exitAdminView} />
                     <AdminDashboard />
+                </main>
+            </ClientOnly>
+        );
+    }
+
+    if (adminView === 'superAdmin') {
+        return (
+            <ClientOnly>
+                <main className="relative w-full min-h-screen flex flex-col">
+                    <AdminSiteHeader onToggleAdminDashboard={exitAdminView} />
+                    <div className="flex-1">
+                        <SuperAdminLogin onLoginSuccess={() => setAdminView('superAdminDashboard')} />
+                    </div>
+                    <SiteFooter
+                        onOpenComponent={setVisibleComponent}
+                        onCloseComponent={() => setVisibleComponent(null)}
+                    />
                 </main>
             </ClientOnly>
         );
@@ -142,6 +237,7 @@ export default function Home() {
                             onShowAdminDashboard={() => setAdminView('dashboard')}
                             onShowAdminLogin={() => setAdminView('login')}
                             onShowDriverPortal={() => setAdminView('driver')}
+                            onShowSuperAdminLogin={() => setAdminView('superAdmin')}
                         />
                     </div>
                     <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-4 md:pb-6 mt`}>

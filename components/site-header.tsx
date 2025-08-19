@@ -1,3 +1,5 @@
+// components\site-header.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -9,16 +11,18 @@ import { CartComponent } from "./cart";
 
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
-  onShowAdminDashboard: () => void; // Prop for the dashboard view
-  onShowAdminLogin: () => void;     // Prop for the admin login view
-  onShowDriverPortal: () => void;    // Prop for the driver portal view
+  onShowAdminDashboard: () => void;
+  onShowAdminLogin: () => void;
+  onShowDriverPortal: () => void;
+  onShowSuperAdminLogin: () => void; // 1. Add new prop for Super Admin login
 }
 
 export default function SiteHeader({
   onOpenDashboard,
   onShowAdminDashboard,
   onShowAdminLogin,
-  onShowDriverPortal, // Destructure the new prop
+  onShowDriverPortal,
+  onShowSuperAdminLogin, // 2. Destructure the new prop
 }: SiteHeaderProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
@@ -80,42 +84,56 @@ export default function SiteHeader({
 
         <div>
           {/* admin dashboard */}
-          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
+          <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
-              onClick={onShowAdminDashboard} // Triggers the dashboard view
+              onClick={onShowAdminDashboard}
               className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
               aria-label="Dashboard"
             >
               DASHBOARD testing
             </button>
-          </div> */}
+          </div>
         </div>
 
         <div>
           {/* driver portal */}
-          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
+          <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
-              onClick={onShowDriverPortal} // <-- ADDED ONCLICK HANDLER
+              onClick={onShowDriverPortal}
               className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
               aria-label="Driver Portal"
             >
               DRIVER PORTAL login test
             </button>
-          </div> */}
+          </div>
         </div>
 
         <div>
           {/* admin login */}
-          {/* <div className="hidden md:block relative w-12 max-w-[400px]">
+          <div className="hidden md:block relative w-12 max-w-[400px]">
             <button
-              onClick={onShowAdminLogin} // Triggers the admin login view
+              onClick={onShowAdminLogin}
               className="bg-black text-white border rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
               aria-label="Admin Login"
             >
               Admin login testing
             </button>
-          </div> */}
+          </div>
         </div>
+
+        <div>
+          {/* Super Admin Button */}
+          <div className="hidden md:block relative w-12 max-w-[400px]">
+            <button
+              onClick={onShowSuperAdminLogin} // 3. Set onClick to call the new prop
+              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
+              aria-label="Super Admin"
+            >
+              Super Admin
+            </button>
+          </div>
+        </div>
+
 
         {/* Right Section with User Icon and Shopping Cart */}
         <div className="flex items-center gap-4 md:gap-2">
@@ -123,7 +141,6 @@ export default function SiteHeader({
           <div className="md:mr-12">
             <button
               onClick={() => {
-                console.log("Dashboard button clicked, opening dashboard");
                 onOpenDashboard();
               }}
               className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
@@ -136,7 +153,6 @@ export default function SiteHeader({
           <div className="md:mr-12">
             <button
               onClick={() => {
-                console.log("Login button clicked, opening modal");
                 setLoginModalOpen(true);
               }}
               className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
@@ -148,7 +164,6 @@ export default function SiteHeader({
           {/* Shopping Cart */}
           <button
             onClick={() => {
-              console.log("Cart button clicked, opening cart");
               setCartOpen(true);
             }}
             className={iconButtonStyle}
