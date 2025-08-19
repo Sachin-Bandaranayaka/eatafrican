@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import LoginModal from "./login-modal";
-import LoginModalTest from "./login-modal-test";
-import { CartComponent } from "./cart";
+import LoginModal from "../login-modal";
+import LoginModalTest from "../login-modal-test";
+import { CartComponent } from "../cart";
 
 interface AdminSiteHeaderProps {
   onToggleAdminDashboard: () => void; // Added prop to toggle admin view

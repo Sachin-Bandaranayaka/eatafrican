@@ -328,6 +328,37 @@ body {
   transform: translate(-50%, -50%);
 }
 
+
+/* Radio2 and checkbox styling */
+.custom-radio2 {
+  display: flex;
+  align-items: center;
+  /* margin-bottom: 0.5rem; */
+  cursor: pointer;
+}
+
+.custom-radio2 input[type="radio"] {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  position: relative;
+}
+
+.custom-radio2 input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: orange;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* Footer styling */
 .footer-container {
   padding: 0.75rem;

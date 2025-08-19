@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Login from "../components/driverPortalAuth/login";
+import Login from "./driverPortal/auth/login";
 
 export default function DriverPortalAuth({ onLoginSuccess }: { onLoginSuccess: () => void }) {
 
