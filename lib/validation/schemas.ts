@@ -184,10 +184,51 @@ export const approveDriverSchema = z.object({
   status: z.enum(['active', 'suspended']),
 });
 
+export const adminDriverQuerySchema = z.object({
+  status: z.enum(['pending', 'active', 'inactive', 'suspended']).optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
+
+export const adminCustomerQuerySchema = z.object({
+  search: z.string().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
+
+export const adminOrderQuerySchema = z.object({
+  status: orderStatusSchema.optional(),
+  region: z.string().optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
+
 export const analyticsQuerySchema = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime(),
   region: z.string().optional(),
+});
+
+export const deliverySettingsSchema = z.object({
+  deliveryRadius: z.number().min(1).max(100).optional(),
+  baseDeliveryFee: z.number().min(0).optional(),
+  perKmFee: z.number().min(0).optional(),
+  zones: z.array(z.object({
+    name: z.string(),
+    radius: z.number(),
+    baseFee: z.number(),
+  })).optional(),
+});
+
+export const createAdminUserSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().optional(),
+  language: languageSchema.optional(),
 });
 
 // File Upload Validation Schema
@@ -201,4 +242,17 @@ export const fileUploadSchema = z.object({
 export const paginationSchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
+});
+
+// Notification Validation Schemas
+export const notificationTypeSchema = z.enum(['order_status', 'account', 'system', 'promotion']);
+
+export const notificationQuerySchema = z.object({
+  unreadOnly: z.coerce.boolean().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
+
+export const markNotificationReadSchema = z.object({
+  notificationId: z.string().uuid('Invalid notification ID'),
 });
