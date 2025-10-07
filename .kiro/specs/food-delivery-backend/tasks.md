@@ -308,80 +308,80 @@
   - Mark notifications as read
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7_
 
-- [ ] 12. Implement voucher system
-- [ ] 12.1 Create voucher validation utility
+- [x] 12. Implement voucher system
+- [x] 12.1 Create voucher validation utility
   - Validate voucher code exists and is active
   - Check usage limits and expiration
   - Calculate discount amount
   - _Requirements: 3.8, 6.6, 6.7_
 
-- [ ] 12.2 Create voucher application logic
+- [x] 12.2 Create voucher application logic
   - Apply voucher discount to order total
   - Increment voucher usage count
   - Create voucher usage record
   - _Requirements: 3.8, 6.6, 6.7_
 
-- [ ] 12.3 Create admin voucher management endpoints
+- [x] 12.3 Create admin voucher management endpoints
   - Create voucher creation endpoint (POST /api/admin/vouchers)
   - Create voucher listing endpoint (GET /api/admin/vouchers)
   - Create voucher update endpoint (PATCH /api/admin/vouchers/[id])
   - Validate super admin role
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7_
 
-- [ ] 13. Implement activity logging
-- [ ] 13.1 Create activity log utility
+- [x] 13. Implement activity logging
+- [x] 13.1 Create activity log utility
   - Function to create activity log entries
   - Log user actions (login, order creation, status changes)
   - Log admin actions (approvals, settings changes)
   - Store IP address and user agent
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8_
 
-- [ ] 13.2 Create activity log viewing endpoints
+- [x] 13.2 Create activity log viewing endpoints
   - Create restaurant activity log endpoint (GET /api/admin/restaurants/[id]/activity)
   - Create driver activity log endpoint (GET /api/admin/drivers/[id]/activity)
   - Validate admin role
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8_
 
-- [ ] 14. Implement search and filtering utilities
-- [ ] 14.1 Create distance calculation utility
+- [x] 14. Implement search and filtering utilities
+- [x] 14.1 Create distance calculation utility
   - Calculate distance between two coordinates using Haversine formula
   - Format distance string (e.g., "9 km, 47 min from Olten")
   - _Requirements: 7.3, 7.4, 7.5, 7.6, 7.7_
 
-- [ ] 14.2 Create sorting and filtering utilities
+- [x] 14.2 Create sorting and filtering utilities
   - Implement generic sorting function for database queries
   - Implement filtering logic for restaurants and menu items
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7_
 
 
 - [ ] 15. Implement multi-language support
-- [ ] 15.1 Create language detection utility
+- [x] 15.1 Create language detection utility
   - Detect user language from Accept-Language header
   - Fall back to user profile language preference
   - Default to English if no preference found
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7_
 
-- [ ] 15.2 Create content localization utility
+- [x] 15.2 Create content localization utility
   - Function to return localized content based on user language
   - Support for menu item translations
   - Support for notification translations
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7_
 
-- [ ] 15.3 Create currency and date formatting utilities
+- [x] 15.3 Create currency and date formatting utilities
   - Format prices as Swiss Francs (Fr. XX.XX.-)
   - Format dates in European format (DD.MM.YYYY)
   - Format times in 24-hour format (HH:mm)
   - _Requirements: 11.4, 11.5, 11.6, 11.7_
 
-- [ ] 16. Implement data seeding and migration scripts
-- [ ] 16.1 Create database seed script
+- [x] 16. Implement data seeding and migration scripts
+- [x] 16.1 Create database seed script
   - Create sample users for each role (customer, restaurant owner, driver, super admin)
   - Create sample restaurants with menu items
   - Create sample orders in various states
   - Create sample loyalty points and vouchers
   - _Requirements: All requirements for testing purposes_
 
-- [ ] 16.2 Create data migration utilities
+- [x] 16.2 Create data migration utilities
   - Script to migrate existing mock data to database (if needed)
   - Script to export data for backup
   - _Requirements: All requirements for data management_

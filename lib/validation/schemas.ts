@@ -256,3 +256,37 @@ export const notificationQuerySchema = z.object({
 export const markNotificationReadSchema = z.object({
   notificationId: z.string().uuid('Invalid notification ID'),
 });
+
+// Voucher Validation Schemas
+export const voucherDiscountTypeSchema = z.enum(['percentage', 'fixed_amount']);
+export const voucherStatusSchema = z.enum(['active', 'inactive', 'expired']);
+
+export const createVoucherSchema = z.object({
+  code: z.string().min(3, 'Voucher code must be at least 3 characters').max(50).toUpperCase(),
+  discountType: voucherDiscountTypeSchema,
+  discountValue: z.number().min(0, 'Discount value must be positive'),
+  minOrderAmount: z.number().min(0).optional(),
+  maxDiscountAmount: z.number().min(0).optional(),
+  usageLimit: z.number().min(1).optional(),
+  validFrom: z.string().datetime().optional(),
+  validUntil: z.string().datetime().optional(),
+  status: voucherStatusSchema.default('active'),
+});
+
+export const updateVoucherSchema = z.object({
+  code: z.string().min(3).max(50).toUpperCase().optional(),
+  discountType: voucherDiscountTypeSchema.optional(),
+  discountValue: z.number().min(0).optional(),
+  minOrderAmount: z.number().min(0).optional(),
+  maxDiscountAmount: z.number().min(0).optional(),
+  usageLimit: z.number().min(1).optional(),
+  validFrom: z.string().datetime().optional(),
+  validUntil: z.string().datetime().optional(),
+  status: voucherStatusSchema.optional(),
+});
+
+export const voucherQuerySchema = z.object({
+  status: voucherStatusSchema.optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
