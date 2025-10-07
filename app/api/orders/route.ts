@@ -3,6 +3,7 @@ import { db } from '@/lib/supabase/database';
 import { optionalAuth } from '@/lib/middleware/auth';
 import { createOrderSchema } from '@/lib/validation/schemas';
 import { calculateDeliveryFee, calculateDistance } from '@/lib/utils/distance';
+import { applyVoucherToOrder } from '@/lib/utils/voucher';
 
 /**
  * POST /api/orders
@@ -171,104 +172,26 @@ export async function POST(req: NextRequest) {
     // Validate and apply voucher if provided
     let discountAmount = 0;
     if (validatedData.voucherCode) {
-      const { data: voucher, error: voucherError } = await db
-        .from('vouchers')
-        .select('*')
-        .eq('code', validatedData.voucherCode)
-        .single();
+      const voucherResult = await applyVoucherToOrder(
+        validatedData.voucherCode,
+        subtotal,
+        undefined, // orderId will be set after order creation
+        customerId
+      );
 
-      if (voucherError || !voucher) {
+      if (!voucherResult.success) {
         return NextResponse.json(
           {
             error: {
               code: 'VOUCHER_INVALID',
-              message: 'Invalid voucher code',
+              message: voucherResult.error || 'Invalid voucher code',
             },
           },
           { status: 422 }
         );
       }
 
-      // Validate voucher status
-      if (voucher.status !== 'active') {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VOUCHER_INVALID',
-              message: 'Voucher is not active',
-            },
-          },
-          { status: 422 }
-        );
-      }
-
-      // Validate voucher dates
-      const now = new Date();
-      if (voucher.valid_from && new Date(voucher.valid_from) > now) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VOUCHER_INVALID',
-              message: 'Voucher is not yet valid',
-            },
-          },
-          { status: 422 }
-        );
-      }
-
-      if (voucher.valid_until && new Date(voucher.valid_until) < now) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VOUCHER_INVALID',
-              message: 'Voucher has expired',
-            },
-          },
-          { status: 422 }
-        );
-      }
-
-      // Validate usage limit
-      if (voucher.usage_limit && voucher.usage_count >= voucher.usage_limit) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VOUCHER_INVALID',
-              message: 'Voucher usage limit reached',
-            },
-          },
-          { status: 422 }
-        );
-      }
-
-      // Validate minimum order amount
-      if (voucher.min_order_amount && subtotal < voucher.min_order_amount) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'VOUCHER_INVALID',
-              message: `Minimum order amount for this voucher is Fr. ${voucher.min_order_amount.toFixed(2)}`,
-            },
-          },
-          { status: 422 }
-        );
-      }
-
-      // Calculate discount
-      if (voucher.discount_type === 'percentage') {
-        discountAmount = (subtotal * voucher.discount_value) / 100;
-        if (voucher.max_discount_amount) {
-          discountAmount = Math.min(discountAmount, voucher.max_discount_amount);
-        }
-      } else {
-        discountAmount = voucher.discount_value;
-      }
-
-      // Update voucher usage count
-      await db
-        .from('vouchers')
-        .update({ usage_count: voucher.usage_count + 1 })
-        .eq('id', voucher.id);
+      discountAmount = voucherResult.discountAmount || 0;
     }
 
     // Calculate tax (8.1% VAT in Switzerland)
