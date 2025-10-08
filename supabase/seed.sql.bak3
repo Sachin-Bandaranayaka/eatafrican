@@ -161,41 +161,41 @@ INSERT INTO orders (id, order_number, customer_id, restaurant_id, driver_id, sta
   -- Delivered orders
   ('00000000-0001-0001-0001-000000000001', 'ORD-20250107-000001', '22222222-2222-2222-2222-222222222222', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'delivered', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Teststrasse 10', 'Basel', '4052', 47.5596, 7.5886, NOW() - INTERVAL '3 hours', NOW() - INTERVAL '2 hours', 34.50, 2.99, 0.00, 0.00, 37.49, 'completed', 'card', NULL, NOW() - INTERVAL '3 hours'),
   
-  ('11111111-0002-0002-0002-111111111111', 'ORD-20250107-000002', '55555555-5555-5555-5555-555555555555', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'eeeeeeee-dddd-dddd-dddd-dddddddddddd', 'delivered', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Bahnhofplatz 5', 'Zürich', '8001', 47.3769, 8.5417, NOW() - INTERVAL '5 hours', NOW() - INTERVAL '4 hours', 43.00, 3.50, 4.30, 0.00, 42.20, 'completed', 'card', 'WELCOME10', NOW() - INTERVAL '5 hours'),
+  ('11111111-oooo-oooo-oooo-111111111111', 'ORD-20250107-000002', '55555555-5555-5555-5555-555555555555', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'eeeeeeee-dddd-dddd-dddd-dddddddddddd', 'delivered', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Bahnhofplatz 5', 'Zürich', '8001', 47.3769, 8.5417, NOW() - INTERVAL '5 hours', NOW() - INTERVAL '4 hours', 43.00, 3.50, 4.30, 0.00, 42.20, 'completed', 'card', 'WELCOME10', NOW() - INTERVAL '5 hours'),
   
-  ('22222222-0003-0003-0003-222222222222', 'ORD-20250106-000001', '66666666-6666-6666-6666-666666666666', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'ffffffff-dddd-dddd-dddd-dddddddddddd', 'delivered', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Bundesplatz 12', 'Bern', '3011', 46.9480, 7.4474, NOW() - INTERVAL '1 day', NOW() - INTERVAL '23 hours', 52.50, 4.00, 0.00, 0.00, 56.50, 'completed', 'card', NULL, NOW() - INTERVAL '1 day'),
+  ('22222222-oooo-oooo-oooo-222222222222', 'ORD-20250106-000001', '66666666-6666-6666-6666-666666666666', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'ffffffff-dddd-dddd-dddd-dddddddddddd', 'delivered', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Bundesplatz 12', 'Bern', '3011', 46.9480, 7.4474, NOW() - INTERVAL '1 day', NOW() - INTERVAL '23 hours', 52.50, 4.00, 0.00, 0.00, 56.50, 'completed', 'card', NULL, NOW() - INTERVAL '1 day'),
   
   -- In transit orders
-  ('33333333-0004-0004-0004-333333333333', 'ORD-20250107-000003', '77777777-7777-7777-7777-777777777777', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'in_transit', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Seestrasse 45', 'Luzern', '6003', 47.0502, 8.3093, NOW() + INTERVAL '30 minutes', NULL, 35.00, 3.20, 0.00, 0.00, 38.20, 'completed', 'card', NULL, NOW() - INTERVAL '45 minutes'),
+  ('33333333-oooo-oooo-oooo-333333333333', 'ORD-20250107-000003', '77777777-7777-7777-7777-777777777777', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'in_transit', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Seestrasse 45', 'Luzern', '6003', 47.0502, 8.3093, NOW() + INTERVAL '30 minutes', NULL, 35.00, 3.20, 0.00, 0.00, 38.20, 'completed', 'card', NULL, NOW() - INTERVAL '45 minutes'),
   
-  ('44444444-0005-0005-0005-444444444444', 'ORD-20250107-000004', '22222222-2222-2222-2222-222222222222', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'in_transit', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Ringstrasse 78', 'Olten', '4600', 47.3500, 7.9000, NOW() + INTERVAL '20 minutes', NULL, 46.00, 3.80, 9.20, 0.00, 40.60, 'completed', 'card', 'SUMMER20', NOW() - INTERVAL '35 minutes'),
+  ('44444444-oooo-oooo-oooo-444444444444', 'ORD-20250107-000004', '22222222-2222-2222-2222-222222222222', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'in_transit', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Ringstrasse 78', 'Olten', '4600', 47.3500, 7.9000, NOW() + INTERVAL '20 minutes', NULL, 46.00, 3.80, 9.20, 0.00, 40.60, 'completed', 'card', 'SUMMER20', NOW() - INTERVAL '35 minutes'),
   
   -- Assigned orders (driver accepted, not picked up yet)
-  ('55555555-0006-0006-0006-555555555555', 'ORD-20250107-000005', '55555555-5555-5555-5555-555555555555', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'assigned', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Hauptstrasse 234', 'Basel', '4051', 47.5596, 7.5886, NOW() + INTERVAL '45 minutes', NULL, 32.00, 2.99, 0.00, 0.00, 34.99, 'completed', 'card', NULL, NOW() - INTERVAL '15 minutes'),
+  ('55555555-oooo-oooo-oooo-555555555555', 'ORD-20250107-000005', '55555555-5555-5555-5555-555555555555', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'assigned', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Hauptstrasse 234', 'Basel', '4051', 47.5596, 7.5886, NOW() + INTERVAL '45 minutes', NULL, 32.00, 2.99, 0.00, 0.00, 34.99, 'completed', 'card', NULL, NOW() - INTERVAL '15 minutes'),
   
   -- Ready for pickup orders
-  ('66666666-0007-0007-0007-666666666666', 'ORD-20250107-000006', '66666666-6666-6666-6666-666666666666', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'ready_for_pickup', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Limmatquai 89', 'Zürich', '8001', 47.3769, 8.5417, NOW() + INTERVAL '1 hour', NULL, 36.50, 3.50, 0.00, 0.00, 40.00, 'completed', 'card', NULL, NOW() - INTERVAL '25 minutes'),
+  ('66666666-oooo-oooo-oooo-666666666666', 'ORD-20250107-000006', '66666666-6666-6666-6666-666666666666', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'ready_for_pickup', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Limmatquai 89', 'Zürich', '8001', 47.3769, 8.5417, NOW() + INTERVAL '1 hour', NULL, 36.50, 3.50, 0.00, 0.00, 40.00, 'completed', 'card', NULL, NOW() - INTERVAL '25 minutes'),
   
-  ('77777777-0008-0008-0008-777777777777', 'ORD-20250107-000007', '77777777-7777-7777-7777-777777777777', 'cccccccc-cccc-cccc-cccc-cccccccccccc', NULL, 'ready_for_pickup', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Kramgasse 56', 'Bern', '3011', 46.9480, 7.4474, NOW() + INTERVAL '50 minutes', NULL, 33.50, 4.00, 0.00, 0.00, 37.50, 'completed', 'card', NULL, NOW() - INTERVAL '20 minutes'),
+  ('77777777-oooo-oooo-oooo-777777777777', 'ORD-20250107-000007', '77777777-7777-7777-7777-777777777777', 'cccccccc-cccc-cccc-cccc-cccccccccccc', NULL, 'ready_for_pickup', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Kramgasse 56', 'Bern', '3011', 46.9480, 7.4474, NOW() + INTERVAL '50 minutes', NULL, 33.50, 4.00, 0.00, 0.00, 37.50, 'completed', 'card', NULL, NOW() - INTERVAL '20 minutes'),
   
   -- Preparing orders
   ('88888888-0008-0008-0008-888888888888', 'ORD-20250107-000008', '22222222-2222-2222-2222-222222222222', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NULL, 'preparing', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Teststrasse 10', 'Basel', '4052', 47.5596, 7.5886, NOW() + INTERVAL '1 hour 15 minutes', NULL, 39.50, 2.99, 0.00, 0.00, 42.49, 'completed', 'card', NULL, NOW() - INTERVAL '10 minutes'),
   
-  ('99999999-0010-0010-0010-999999999999', 'ORD-20250107-000009', '55555555-5555-5555-5555-555555555555', 'dddddddd-dddd-dddd-dddd-dddddddddddd', NULL, 'preparing', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Seestrasse 23', 'Luzern', '6003', 47.0502, 8.3093, NOW() + INTERVAL '1 hour 10 minutes', NULL, 28.00, 3.20, 0.00, 0.00, 31.20, 'completed', 'card', NULL, NOW() - INTERVAL '8 minutes'),
+  ('99999999-oooo-oooo-oooo-999999999999', 'ORD-20250107-000009', '55555555-5555-5555-5555-555555555555', 'dddddddd-dddd-dddd-dddd-dddddddddddd', NULL, 'preparing', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Seestrasse 23', 'Luzern', '6003', 47.0502, 8.3093, NOW() + INTERVAL '1 hour 10 minutes', NULL, 28.00, 3.20, 0.00, 0.00, 31.20, 'completed', 'card', NULL, NOW() - INTERVAL '8 minutes'),
   
   -- Confirmed orders (restaurant confirmed, not started preparing)
-  ('aaaaaaaa-0011-0011-0011-aaaaaaaaaaaa', 'ORD-20250107-000010', '66666666-6666-6666-6666-666666666666', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'confirmed', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Bahnhofstrasse 101', 'Zürich', '8001', 47.3769, 8.5417, NOW() + INTERVAL '1 hour 30 minutes', NULL, 57.00, 3.50, 0.00, 0.00, 60.50, 'completed', 'card', NULL, NOW() - INTERVAL '5 minutes'),
+  ('aaaaaaaa-oooo-oooo-oooo-aaaaaaaaaaaa', 'ORD-20250107-000010', '66666666-6666-6666-6666-666666666666', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'confirmed', 'customer3@example.com', '+41791234572', 'Pierre', 'Dubois', 'Bahnhofstrasse 101', 'Zürich', '8001', 47.3769, 8.5417, NOW() + INTERVAL '1 hour 30 minutes', NULL, 57.00, 3.50, 0.00, 0.00, 60.50, 'completed', 'card', NULL, NOW() - INTERVAL '5 minutes'),
   
   -- New orders (just placed, awaiting restaurant confirmation)
-  ('bbbbbbbb-0012-0012-0012-bbbbbbbbbbbb', 'ORD-20250107-000011', '77777777-7777-7777-7777-777777777777', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', NULL, 'new', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Ringstrasse 34', 'Olten', '4600', 47.3500, 7.9000, NOW() + INTERVAL '1 hour 45 minutes', NULL, 33.00, 3.80, 0.00, 0.00, 36.80, 'completed', 'card', NULL, NOW() - INTERVAL '2 minutes'),
+  ('bbbbbbbb-oooo-oooo-oooo-bbbbbbbbbbbb', 'ORD-20250107-000011', '77777777-7777-7777-7777-777777777777', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', NULL, 'new', 'customer4@example.com', '+41791234573', 'Marco', 'Rossi', 'Ringstrasse 34', 'Olten', '4600', 47.3500, 7.9000, NOW() + INTERVAL '1 hour 45 minutes', NULL, 33.00, 3.80, 0.00, 0.00, 36.80, 'completed', 'card', NULL, NOW() - INTERVAL '2 minutes'),
   
-  ('cccccccc-0013-0013-0013-cccccccccccc', 'ORD-20250107-000012', '22222222-2222-2222-2222-222222222222', 'cccccccc-cccc-cccc-cccc-cccccccccccc', NULL, 'new', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Spitalstrasse 45', 'Bern', '3011', 46.9480, 7.4474, NOW() + INTERVAL '1 hour 40 minutes', NULL, 50.50, 4.00, 0.00, 0.00, 54.50, 'completed', 'card', NULL, NOW() - INTERVAL '1 minute'),
+  ('cccccccc-oooo-oooo-oooo-cccccccccccc', 'ORD-20250107-000012', '22222222-2222-2222-2222-222222222222', 'cccccccc-cccc-cccc-cccc-cccccccccccc', NULL, 'new', 'customer@example.com', '+41791234568', 'John', 'Doe', 'Spitalstrasse 45', 'Bern', '3011', 46.9480, 7.4474, NOW() + INTERVAL '1 hour 40 minutes', NULL, 50.50, 4.00, 0.00, 0.00, 54.50, 'completed', 'card', NULL, NOW() - INTERVAL '1 minute'),
   
   -- Guest order (no customer_id)
-  ('dddddddd-0014-0014-0014-dddddddddddd', 'ORD-20250107-000013', NULL, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NULL, 'new', 'guest@example.com', '+41791234599', 'Guest', 'User', 'Hauptstrasse 456', 'Basel', '4051', 47.5596, 7.5886, NOW() + INTERVAL '2 hours', NULL, 34.50, 2.99, 0.00, 0.00, 37.49, 'pending', NULL, NULL, NOW() - INTERVAL '30 seconds'),
+  ('dddddddd-oooo-oooo-oooo-dddddddddddd', 'ORD-20250107-000013', NULL, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NULL, 'new', 'guest@example.com', '+41791234599', 'Guest', 'User', 'Hauptstrasse 456', 'Basel', '4051', 47.5596, 7.5886, NOW() + INTERVAL '2 hours', NULL, 34.50, 2.99, 0.00, 0.00, 37.49, 'pending', NULL, NULL, NOW() - INTERVAL '30 seconds'),
   
   -- Cancelled order
-  ('eeeeeeee-0015-0015-0015-eeeeeeeeeeee', 'ORD-20250106-000002', '55555555-5555-5555-5555-555555555555', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'cancelled', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Bahnhofplatz 5', 'Zürich', '8001', 47.3769, 8.5417, NOW() - INTERVAL '12 hours', NULL, 29.00, 3.50, 0.00, 0.00, 32.50, 'refunded', 'card', NULL, NOW() - INTERVAL '13 hours')
+  ('eeeeeeee-oooo-oooo-oooo-eeeeeeeeeeee', 'ORD-20250106-000002', '55555555-5555-5555-5555-555555555555', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', NULL, 'cancelled', 'customer2@example.com', '+41791234571', 'Sarah', 'Smith', 'Bahnhofplatz 5', 'Zürich', '8001', 47.3769, 8.5417, NOW() - INTERVAL '12 hours', NULL, 29.00, 3.50, 0.00, 0.00, 32.50, 'refunded', 'card', NULL, NOW() - INTERVAL '13 hours')
 ON CONFLICT (id) DO NOTHING;
 
 -- ============================================================================
@@ -207,63 +207,63 @@ INSERT INTO order_items (order_id, menu_item_id, name, price, quantity, subtotal
   ('00000000-0001-0001-0001-000000000001', '22222222-aaaa-aaaa-aaaa-222222222222', 'Vegetarian Combo', 16.00, 1, 16.00, 'Extra spicy please'),
   
   -- Order 2 items
-  ('11111111-0002-0002-0002-111111111111', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
-  ('11111111-0002-0002-0002-111111111111', '55555555-bbbb-bbbb-bbbb-555555555555', 'Sukuma Wiki', 12.00, 1, 12.00, NULL),
-  ('11111111-0002-0002-0002-111111111111', 'eeeeeeee-bbbb-bbbb-bbbb-222222222222', 'Kenyan Tea', 3.50, 2, 7.00, NULL),
+  ('11111111-oooo-oooo-oooo-111111111111', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
+  ('11111111-oooo-oooo-oooo-111111111111', '55555555-bbbb-bbbb-bbbb-555555555555', 'Sukuma Wiki', 12.00, 1, 12.00, NULL),
+  ('11111111-oooo-oooo-oooo-111111111111', 'eeeeeeee-bbbb-bbbb-bbbb-222222222222', 'Kenyan Tea', 3.50, 2, 7.00, NULL),
   
   -- Order 3 items
-  ('22222222-0003-0003-0003-222222222222', 'eeeeeeee-cccc-cccc-cccc-111111111111', 'Jollof Rice with Chicken', 17.50, 2, 35.00, NULL),
-  ('22222222-0003-0003-0003-222222222222', 'eeeeeeee-cccc-cccc-cccc-222222222222', 'Suya Platter', 19.00, 1, 19.00, 'Medium spice'),
+  ('22222222-oooo-oooo-oooo-222222222222', 'eeeeeeee-cccc-cccc-cccc-111111111111', 'Jollof Rice with Chicken', 17.50, 2, 35.00, NULL),
+  ('22222222-oooo-oooo-oooo-222222222222', 'eeeeeeee-cccc-cccc-cccc-222222222222', 'Suya Platter', 19.00, 1, 19.00, 'Medium spice'),
   
   -- Order 4 items
-  ('33333333-0004-0004-0004-333333333333', 'eeeeeeee-dddd-dddd-dddd-111111111111', 'Waakye', 15.00, 1, 15.00, NULL),
-  ('33333333-0004-0004-0004-333333333333', 'eeeeeeee-dddd-dddd-dddd-222222222222', 'Banku with Tilapia', 20.00, 1, 20.00, 'Well done fish'),
+  ('33333333-oooo-oooo-oooo-333333333333', 'eeeeeeee-dddd-dddd-dddd-111111111111', 'Waakye', 15.00, 1, 15.00, NULL),
+  ('33333333-oooo-oooo-oooo-333333333333', 'eeeeeeee-dddd-dddd-dddd-222222222222', 'Banku with Tilapia', 20.00, 1, 20.00, 'Well done fish'),
   
   -- Order 5 items
-  ('44444444-0005-0005-0005-444444444444', 'eeeeeeee-eeee-eeee-eeee-111111111111', 'Zigni', 19.00, 2, 38.00, NULL),
-  ('44444444-0005-0005-0005-444444444444', 'eeeeeeee-eeee-eeee-eeee-222222222222', 'Shiro', 14.00, 1, 14.00, NULL),
+  ('44444444-oooo-oooo-oooo-444444444444', 'eeeeeeee-eeee-eeee-eeee-111111111111', 'Zigni', 19.00, 2, 38.00, NULL),
+  ('44444444-oooo-oooo-oooo-444444444444', 'eeeeeeee-eeee-eeee-eeee-222222222222', 'Shiro', 14.00, 1, 14.00, NULL),
   
   -- Order 6 items
-  ('55555555-0006-0006-0006-555555555555', '11111111-aaaa-aaaa-aaaa-111111111111', 'Doro Wot', 18.50, 1, 18.50, NULL),
-  ('55555555-0006-0006-0006-555555555555', 'eeeeeeee-aaaa-aaaa-aaaa-111111111111', 'Kitfo', 20.00, 1, 20.00, 'Medium rare'),
+  ('55555555-oooo-oooo-oooo-555555555555', '11111111-aaaa-aaaa-aaaa-111111111111', 'Doro Wot', 18.50, 1, 18.50, NULL),
+  ('55555555-oooo-oooo-oooo-555555555555', 'eeeeeeee-aaaa-aaaa-aaaa-111111111111', 'Kitfo', 20.00, 1, 20.00, 'Medium rare'),
   
   -- Order 7 items
-  ('66666666-0007-0007-0007-666666666666', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
-  ('66666666-0007-0007-0007-666666666666', 'eeeeeeee-bbbb-bbbb-bbbb-111111111111', 'Ugali with Fish', 21.00, 1, 21.00, NULL),
+  ('66666666-oooo-oooo-oooo-666666666666', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
+  ('66666666-oooo-oooo-oooo-666666666666', 'eeeeeeee-bbbb-bbbb-bbbb-111111111111', 'Ugali with Fish', 21.00, 1, 21.00, NULL),
   
   -- Order 8 items
-  ('77777777-0008-0008-0008-777777777777', 'eeeeeeee-cccc-cccc-cccc-333333333333', 'Egusi Soup', 16.50, 2, 33.00, NULL),
-  ('77777777-0008-0008-0008-777777777777', 'eeeeeeee-cccc-cccc-cccc-555555555555', 'Chapman', 6.00, 1, 6.00, NULL),
+  ('77777777-oooo-oooo-oooo-777777777777', 'eeeeeeee-cccc-cccc-cccc-333333333333', 'Egusi Soup', 16.50, 2, 33.00, NULL),
+  ('77777777-oooo-oooo-oooo-777777777777', 'eeeeeeee-cccc-cccc-cccc-555555555555', 'Chapman', 6.00, 1, 6.00, NULL),
   
   -- Order 9 items
   ('88888888-0008-0008-0008-888888888888', 'eeeeeeee-aaaa-aaaa-aaaa-222222222222', 'Tibs', 19.50, 2, 39.00, NULL),
   ('88888888-0008-0008-0008-888888888888', '33333333-aaaa-aaaa-aaaa-333333333333', 'Ethiopian Coffee', 4.50, 1, 4.50, NULL),
   
   -- Order 10 items
-  ('99999999-0010-0010-0010-999999999999', 'eeeeeeee-dddd-dddd-dddd-111111111111', 'Waakye', 15.00, 1, 15.00, NULL),
-  ('99999999-0010-0010-0010-999999999999', 'eeeeeeee-dddd-dddd-dddd-333333333333', 'Kelewele', 8.00, 1, 8.00, NULL),
-  ('99999999-0010-0010-0010-999999999999', 'eeeeeeee-dddd-dddd-dddd-444444444444', 'Sobolo', 4.00, 1, 4.00, NULL),
+  ('99999999-oooo-oooo-oooo-999999999999', 'eeeeeeee-dddd-dddd-dddd-111111111111', 'Waakye', 15.00, 1, 15.00, NULL),
+  ('99999999-oooo-oooo-oooo-999999999999', 'eeeeeeee-dddd-dddd-dddd-333333333333', 'Kelewele', 8.00, 1, 8.00, NULL),
+  ('99999999-oooo-oooo-oooo-999999999999', 'eeeeeeee-dddd-dddd-dddd-444444444444', 'Sobolo', 4.00, 1, 4.00, NULL),
   
   -- Order 11 items
-  ('aaaaaaaa-0011-0011-0011-aaaaaaaaaaaa', 'ffffffff-bbbb-bbbb-bbbb-111111111111', 'Lunch Special', 14.90, 2, 29.80, NULL),
-  ('aaaaaaaa-0011-0011-0011-aaaaaaaaaaaa', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
-  ('aaaaaaaa-0011-0011-0011-aaaaaaaaaaaa', 'eeeeeeee-bbbb-bbbb-bbbb-222222222222', 'Kenyan Tea', 3.50, 2, 7.00, NULL),
+  ('aaaaaaaa-oooo-oooo-oooo-aaaaaaaaaaaa', 'ffffffff-bbbb-bbbb-bbbb-111111111111', 'Lunch Special', 14.90, 2, 29.80, NULL),
+  ('aaaaaaaa-oooo-oooo-oooo-aaaaaaaaaaaa', '44444444-bbbb-bbbb-bbbb-444444444444', 'Nyama Choma', 22.00, 1, 22.00, NULL),
+  ('aaaaaaaa-oooo-oooo-oooo-aaaaaaaaaaaa', 'eeeeeeee-bbbb-bbbb-bbbb-222222222222', 'Kenyan Tea', 3.50, 2, 7.00, NULL),
   
   -- Order 12 items
-  ('bbbbbbbb-0012-0012-0012-bbbbbbbbbbbb', 'eeeeeeee-eeee-eeee-eeee-111111111111', 'Zigni', 19.00, 1, 19.00, NULL),
-  ('bbbbbbbb-0012-0012-0012-bbbbbbbbbbbb', 'eeeeeeee-eeee-eeee-eeee-333333333333', 'Ful', 13.00, 1, 13.00, NULL),
+  ('bbbbbbbb-oooo-oooo-oooo-bbbbbbbbbbbb', 'eeeeeeee-eeee-eeee-eeee-111111111111', 'Zigni', 19.00, 1, 19.00, NULL),
+  ('bbbbbbbb-oooo-oooo-oooo-bbbbbbbbbbbb', 'eeeeeeee-eeee-eeee-eeee-333333333333', 'Ful', 13.00, 1, 13.00, NULL),
   
   -- Order 13 items
-  ('cccccccc-0013-0013-0013-cccccccccccc', 'eeeeeeee-cccc-cccc-cccc-111111111111', 'Jollof Rice with Chicken', 17.50, 2, 35.00, NULL),
-  ('cccccccc-0013-0013-0013-cccccccccccc', 'eeeeeeee-cccc-cccc-cccc-222222222222', 'Suya Platter', 19.00, 1, 19.00, NULL),
+  ('cccccccc-oooo-oooo-oooo-cccccccccccc', 'eeeeeeee-cccc-cccc-cccc-111111111111', 'Jollof Rice with Chicken', 17.50, 2, 35.00, NULL),
+  ('cccccccc-oooo-oooo-oooo-cccccccccccc', 'eeeeeeee-cccc-cccc-cccc-222222222222', 'Suya Platter', 19.00, 1, 19.00, NULL),
   
   -- Order 14 items (guest order)
-  ('dddddddd-0014-0014-0014-dddddddddddd', '11111111-aaaa-aaaa-aaaa-111111111111', 'Doro Wot', 18.50, 1, 18.50, NULL),
-  ('dddddddd-0014-0014-0014-dddddddddddd', '22222222-aaaa-aaaa-aaaa-222222222222', 'Vegetarian Combo', 16.00, 1, 16.00, NULL),
+  ('dddddddd-oooo-oooo-oooo-dddddddddddd', '11111111-aaaa-aaaa-aaaa-111111111111', 'Doro Wot', 18.50, 1, 18.50, NULL),
+  ('dddddddd-oooo-oooo-oooo-dddddddddddd', '22222222-aaaa-aaaa-aaaa-222222222222', 'Vegetarian Combo', 16.00, 1, 16.00, NULL),
   
   -- Order 15 items (cancelled)
-  ('eeeeeeee-0015-0015-0015-eeeeeeeeeeee', '55555555-bbbb-bbbb-bbbb-555555555555', 'Sukuma Wiki', 12.00, 1, 12.00, NULL),
-  ('eeeeeeee-0015-0015-0015-eeeeeeeeeeee', 'eeeeeeee-bbbb-bbbb-bbbb-111111111111', 'Ugali with Fish', 21.00, 1, 21.00, NULL)
+  ('eeeeeeee-oooo-oooo-oooo-eeeeeeeeeeee', '55555555-bbbb-bbbb-bbbb-555555555555', 'Sukuma Wiki', 12.00, 1, 12.00, NULL),
+  ('eeeeeeee-oooo-oooo-oooo-eeeeeeeeeeee', 'eeeeeeee-bbbb-bbbb-bbbb-111111111111', 'Ugali with Fish', 21.00, 1, 21.00, NULL)
 ON CONFLICT DO NOTHING;
 
 -- ============================================================================
@@ -272,10 +272,10 @@ ON CONFLICT DO NOTHING;
 INSERT INTO loyalty_transactions (customer_id, order_id, transaction_type, points, description, created_at) VALUES
   -- Earned points from orders
   ('22222222-2222-2222-2222-222222222222', '00000000-0001-0001-0001-000000000001', 'earned', 37, 'Points earned from order ORD-20250107-000001', NOW() - INTERVAL '2 hours'),
-  ('55555555-5555-5555-5555-555555555555', '11111111-0002-0002-0002-111111111111', 'earned', 42, 'Points earned from order ORD-20250107-000002', NOW() - INTERVAL '4 hours'),
-  ('66666666-6666-6666-6666-666666666666', '22222222-0003-0003-0003-222222222222', 'earned', 56, 'Points earned from order ORD-20250106-000001', NOW() - INTERVAL '23 hours'),
-  ('77777777-7777-7777-7777-777777777777', '33333333-0004-0004-0004-333333333333', 'earned', 38, 'Points earned from order ORD-20250107-000003', NOW() - INTERVAL '45 minutes'),
-  ('22222222-2222-2222-2222-222222222222', '44444444-0005-0005-0005-444444444444', 'earned', 40, 'Points earned from order ORD-20250107-000004', NOW() - INTERVAL '35 minutes'),
+  ('55555555-5555-5555-5555-555555555555', '11111111-oooo-oooo-oooo-111111111111', 'earned', 42, 'Points earned from order ORD-20250107-000002', NOW() - INTERVAL '4 hours'),
+  ('66666666-6666-6666-6666-666666666666', '22222222-oooo-oooo-oooo-222222222222', 'earned', 56, 'Points earned from order ORD-20250106-000001', NOW() - INTERVAL '23 hours'),
+  ('77777777-7777-7777-7777-777777777777', '33333333-oooo-oooo-oooo-333333333333', 'earned', 38, 'Points earned from order ORD-20250107-000003', NOW() - INTERVAL '45 minutes'),
+  ('22222222-2222-2222-2222-222222222222', '44444444-oooo-oooo-oooo-444444444444', 'earned', 40, 'Points earned from order ORD-20250107-000004', NOW() - INTERVAL '35 minutes'),
   
   -- Redeemed points
   ('22222222-2222-2222-2222-222222222222', NULL, 'redeemed', -100, 'Redeemed 10% discount voucher', NOW() - INTERVAL '5 days'),
@@ -362,21 +362,21 @@ INSERT INTO activity_logs (user_id, entity_type, entity_id, action, details, ip_
   ('88888888-8888-8888-8888-888888888888', 'restaurant', 'ffffffff-ffff-ffff-ffff-ffffffffffff', 'created', '{"restaurant_name": "Senegalese Delights", "status": "pending"}'::jsonb, '192.168.1.102', NOW() - INTERVAL '2 days'),
   
   -- Driver actions
-  ('44444444-4444-4444-4444-444444444444', 'order', '55555555-0006-0006-0006-555555555555', 'accepted', '{"order_number": "ORD-20250107-000005", "pickup_zone": "Basel"}'::jsonb, '192.168.1.103', NOW() - INTERVAL '15 minutes'),
+  ('44444444-4444-4444-4444-444444444444', 'order', '55555555-oooo-oooo-oooo-555555555555', 'accepted', '{"order_number": "ORD-20250107-000005", "pickup_zone": "Basel"}'::jsonb, '192.168.1.103', NOW() - INTERVAL '15 minutes'),
   ('44444444-4444-4444-4444-444444444444', 'order', '00000000-0001-0001-0001-000000000001', 'delivered', '{"order_number": "ORD-20250107-000001", "delivery_time": "45 minutes"}'::jsonb, '192.168.1.103', NOW() - INTERVAL '2 hours'),
-  ('44444444-4444-4444-4444-444444444444', 'order', '44444444-0005-0005-0005-444444444444', 'picked_up', '{"order_number": "ORD-20250107-000004", "restaurant": "Eritrean Taste"}'::jsonb, '192.168.1.103', NOW() - INTERVAL '35 minutes'),
+  ('44444444-4444-4444-4444-444444444444', 'order', '44444444-oooo-oooo-oooo-444444444444', 'picked_up', '{"order_number": "ORD-20250107-000004", "restaurant": "Eritrean Taste"}'::jsonb, '192.168.1.103', NOW() - INTERVAL '35 minutes'),
   
-  ('bbbbbbbb-1111-1111-1111-111111111111', 'order', '11111111-0002-0002-0002-111111111111', 'delivered', '{"order_number": "ORD-20250107-000002", "delivery_time": "52 minutes"}'::jsonb, '192.168.1.104', NOW() - INTERVAL '4 hours'),
+  ('bbbbbbbb-1111-1111-1111-111111111111', 'order', '11111111-oooo-oooo-oooo-111111111111', 'delivered', '{"order_number": "ORD-20250107-000002", "delivery_time": "52 minutes"}'::jsonb, '192.168.1.104', NOW() - INTERVAL '4 hours'),
   
-  ('cccccccc-1111-1111-1111-111111111111', 'order', '22222222-0003-0003-0003-222222222222', 'delivered', '{"order_number": "ORD-20250106-000001", "delivery_time": "48 minutes"}'::jsonb, '192.168.1.105', NOW() - INTERVAL '23 hours'),
+  ('cccccccc-1111-1111-1111-111111111111', 'order', '22222222-oooo-oooo-oooo-222222222222', 'delivered', '{"order_number": "ORD-20250106-000001", "delivery_time": "48 minutes"}'::jsonb, '192.168.1.105', NOW() - INTERVAL '23 hours'),
   
   -- Customer actions
   ('22222222-2222-2222-2222-222222222222', 'order', '00000000-0001-0001-0001-000000000001', 'created', '{"order_number": "ORD-20250107-000001", "total": 37.49}'::jsonb, '192.168.1.106', NOW() - INTERVAL '3 hours'),
-  ('22222222-2222-2222-2222-222222222222', 'order', '44444444-0005-0005-0005-444444444444', 'created', '{"order_number": "ORD-20250107-000004", "total": 40.60, "voucher": "SUMMER20"}'::jsonb, '192.168.1.106', NOW() - INTERVAL '35 minutes'),
+  ('22222222-2222-2222-2222-222222222222', 'order', '44444444-oooo-oooo-oooo-444444444444', 'created', '{"order_number": "ORD-20250107-000004", "total": 40.60, "voucher": "SUMMER20"}'::jsonb, '192.168.1.106', NOW() - INTERVAL '35 minutes'),
   ('22222222-2222-2222-2222-222222222222', 'loyalty', NULL, 'redeemed', '{"points": 100, "reward": "10% discount voucher"}'::jsonb, '192.168.1.106', NOW() - INTERVAL '5 days'),
   
-  ('55555555-5555-5555-5555-555555555555', 'order', '11111111-0002-0002-0002-111111111111', 'created', '{"order_number": "ORD-20250107-000002", "total": 42.20, "voucher": "WELCOME10"}'::jsonb, '192.168.1.107', NOW() - INTERVAL '5 hours'),
-  ('55555555-5555-5555-5555-555555555555', 'order', 'eeeeeeee-0015-0015-0015-eeeeeeeeeeee', 'cancelled', '{"order_number": "ORD-20250106-000002", "reason": "Changed mind"}'::jsonb, '192.168.1.107', NOW() - INTERVAL '12 hours'),
+  ('55555555-5555-5555-5555-555555555555', 'order', '11111111-oooo-oooo-oooo-111111111111', 'created', '{"order_number": "ORD-20250107-000002", "total": 42.20, "voucher": "WELCOME10"}'::jsonb, '192.168.1.107', NOW() - INTERVAL '5 hours'),
+  ('55555555-5555-5555-5555-555555555555', 'order', 'eeeeeeee-oooo-oooo-oooo-eeeeeeeeeeee', 'cancelled', '{"order_number": "ORD-20250106-000002", "reason": "Changed mind"}'::jsonb, '192.168.1.107', NOW() - INTERVAL '12 hours'),
   
   -- Admin settings changes
   ('11111111-1111-1111-1111-111111111111', 'settings', NULL, 'updated', '{"setting": "delivery_radius", "value": "15km", "region": "Basel"}'::jsonb, '192.168.1.100', NOW() - INTERVAL '7 days'),
