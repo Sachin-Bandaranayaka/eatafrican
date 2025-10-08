@@ -93,12 +93,12 @@ export default function LeftSideContent({
       {!isMobile && (
         <div className="hidden md:fixed md:left-[2px] md:top-1/2 md:transform md:-translate-y-1/2 md:flex md:flex-col md:items-start md:gap-4 md:ml-1 md:z-50">
           <TribalButton
-            text="HOW WE DELIVER"
+            text={t('how_we_deliver')}
             onClick={openDeliveryGuide}
             isActive={activeButton === "deliveryGuide"}
           />
           <TribalButton
-            text="HOW IT WORKS"
+            text={t('how_it_works')}
             onClick={openHowItWorks}
             isActive={activeButton === "howItWorks"}
           />
@@ -131,7 +131,7 @@ export default function LeftSideContent({
       <div className="relative mt-2 mb-4 text-start hidden lg:block">
         {(!isMobile || (visibleComponent !== "viewMenu" && visibleComponent !== "restaurantList")) && (
           <p className="w-[90%] text-white font-bold text-xs xs:text-sm sm:text-base mt-10 md:-ml-4 lg:text-md uppercase leading-relaxed">
-            YOUR FAVOURITE AFRICAN MEALS JUST A FEW CLICKS AWAY, WHEREVER YOU ARE IN SWITZERLAND.
+            {t('tagline')}
           </p>
         )}
       </div>
@@ -142,12 +142,12 @@ export default function LeftSideContent({
             }`}
         >
           <TribalButton
-            text="HOW WE DELIVER"
+            text={t('how_we_deliver')}
             onClick={openDeliveryGuide}
             isActive={activeButton === "deliveryGuide"}
           />
           <TribalButton
-            text="HOW IT WORKS"
+            text={t('how_it_works')}
             onClick={openHowItWorks}
             isActive={activeButton === "howItWorks"}
           />
