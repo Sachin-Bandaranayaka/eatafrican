@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import Image from "next/image"
+import { login, register, requestPasswordReset } from "@/lib/auth/client"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -89,20 +90,104 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   if (!isOpen) return null
 
   // --- Handlers ---
-  const handleLogin = () => {
-    setView("loginSuccess")
+  const handleLogin = async () => {
+    setLoading(true)
+    setError("")
+
+    try {
+      const result = await login({ email, password })
+      
+      if (result.error) {
+        setError(result.error.message)
+        setLoading(false)
+        return
+      }
+
+      setView("loginSuccess")
+      
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = "/restaurants"
+      }, 2000)
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      setLoading(false)
+    }
   }
 
-  const handleRegister = () => {
-    setView("registerSuccess")
+  const handleRegister = async () => {
+    setLoading(true)
+    setError("")
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      setLoading(false)
+      return
+    }
+
+    // Validate password requirements
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,}$/
+    if (!passwordRegex.test(password)) {
+      setError("Password must be at least 8 characters with an uppercase letter, number, and special character")
+      setLoading(false)
+      return
+    }
+
+    try {
+      const result = await register({ 
+        email, 
+        password, 
+        firstName, 
+        lastName 
+      })
+      
+      if (result.error) {
+        setError(result.error.message)
+        setLoading(false)
+        return
+      }
+
+      // Account created successfully - automatically log in since backend returns tokens
+      setView("loginSuccess")
+      
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = "/restaurants"
+      }, 2000)
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      setLoading(false)
+    }
   }
 
-  const handleForgotPassword = () => {
-    setView("resetSent")
+  const handleForgotPassword = async () => {
+    setLoading(true)
+    setError("")
+
+    try {
+      const result = await requestPasswordReset(email)
+      
+      if (!result.success) {
+        setError(result.error?.message || "Failed to send reset email")
+        setLoading(false)
+        return
+      }
+
+      setView("resetSent")
+      setLoading(false)
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      setLoading(false)
+    }
   }
 
   // --- Render Logic ---
@@ -130,11 +215,32 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 ></div>
                 <div>
                   <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="relative md:mt-2 w-full bg-white border border-gray-300 rounded p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="relative w-full bg-white border border-gray-300 rounded p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
+                <div>
+                  <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="relative md:mt-2 w-full bg-white border border-gray-300 rounded p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
+                    className="relative w-full bg-white border border-gray-300 rounded p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
                     placeholder="E-mail"
+                    required
                   />
                 </div>
                 <div>
@@ -144,6 +250,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     onChange={(e) => setPassword(e.target.value)}
                     className="relative w-full bg-white border border-gray-300 rounded p-1 -mb-4 md:mb-0 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
                     placeholder="Password"
+                    required
                   />
                 </div>
                 <div>
@@ -153,8 +260,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="relative w-full bg-white border border-gray-300 rounded p-1 -mb-4 md:mb-0 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
                     placeholder="Confirm Password"
+                    required
                   />
                 </div>
+                {error && (
+                  <div className="relative">
+                    <p className="text-red-300 text-[8px] md:text-xs">{error}</p>
+                  </div>
+                )}
                 {/* <p className="text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-white">
                   <span className="text-10"> Your password must include</span>
                   
@@ -173,9 +286,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <div className="md:pt-1 pt-0 flex justify-center md:gap-3 gap-1">
                   <button
                     type="submit"
-                    className="relative bg-red-900 text-white rounded-full md:py-2 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
+                    disabled={loading}
+                    className="relative bg-red-900 text-white rounded-full md:py-2 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="relative z-10">REGISTER</span>
+                    <span className="relative z-10">{loading ? "REGISTERING..." : "REGISTER"}</span>
                     <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
                     <span
                       className="absolute inset-0 rounded-full border-4 border-yellow-500"
@@ -304,15 +418,23 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     onChange={(e) => setEmail(e.target.value)}
                     className="relative md:mt-2 md:w-[50%] bg-white border border-gray-300 rounded p-1 md:p-1.5 sm:p-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-gray-800 focus:ring-2 focus:ring-amber-500 placeholder-black"
                     placeholder="E-mail"
+                    required
                   />
                 </div>
+
+                {error && (
+                  <div className="relative">
+                    <p className="text-red-300 text-[8px] md:text-xs text-center">{error}</p>
+                  </div>
+                )}
 
                 <div className="md:pt-1 pt-0 flex justify-center md:gap-3 gap-1">
                   <button
                     type="submit"
-                    className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
+                    disabled={loading}
+                    className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="relative z-10">SUBMIT</span>
+                    <span className="relative z-10">{loading ? "SUBMITTING..." : "SUBMIT"}</span>
                     <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
                     <span
                       className="absolute inset-0 rounded-full border-4 border-yellow-500"
@@ -419,9 +541,31 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     background: '#783f04ff'
                   }}
                 ></div>
-                <p className="relative text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold">
-                  We’ve sent you a confirmation email. Please check it to complete your registration.
+                <p className="relative text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold mb-3">
+                  🎉 Your account has been created successfully!
                 </p>
+                <p className="relative text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">
+                  You can now log in and start exploring delicious African cuisine.
+                </p>
+                <div className="pt-4 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setView("login")}
+                    className="relative bg-red-900 text-white rounded-full py-1.5 px-6 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
+                  >
+                    <span className="relative z-10">LOGIN NOW</span>
+                    <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
+                    <span
+                      className="absolute inset-0 rounded-full border-4 border-yellow-500"
+                      style={{
+                        borderTopWidth: "3px",
+                        borderBottomWidth: "5px",
+                        borderLeftWidth: "4px",
+                        borderRightWidth: "4px",
+                      }}
+                    ></span>
+                  </button>
+                </div>
                 {/* <ul className="space-y-1 pl-1">
                   <li className="flex items-center text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm text-white">
                     <Image
@@ -644,6 +788,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     placeholder="Password"
                   />
                 </div>
+                {error && (
+                  <div className="relative">
+                    <p className="text-red-300 text-[8px] md:text-xs text-center">{error}</p>
+                  </div>
+                )}
                 <div className="text-center relative">
                   <button
                     type="button"
@@ -656,9 +805,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <div className="md:pt-1 pt-0 flex justify-center md:gap-3 gap-1">
                   <button
                     type="submit"
-                    className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
+                    disabled={loading}
+                    className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="relative z-10">LOGIN</span>
+                    <span className="relative z-10">{loading ? "LOGGING IN..." : "LOGIN"}</span>
                     <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
                     <span
                       className="absolute inset-0 rounded-full border-4 border-yellow-500"

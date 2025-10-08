@@ -13,41 +13,19 @@ import ClientOnly from '@/components/client-only';
 import HowItWorks from "@/components/how-it-works";
 import DeliveryGuide from "@/components/delivery-guide";
 
-// Mock restaurant data
-const mockRestaurants = [
-    {
-        id: "1",
-        name: "Restaurant 1 Name",
-        cuisineType: "Ethiopian, Abbessinisch",
-        location: "Olten",
-        distance: 1.7,
-        minOrder: 24.00,
-        image: "/images/placeholder.jpg",
-        openingHours: "Min Fr. 24.00"
-    },
-    {
-        id: "2",
-        name: "Restaurant 1 Name",
-        cuisineType: "Ethiopian, Abbessinisch",
-        location: "Olten",
-        distance: 2.3,
-        minOrder: 25.00,
-        image: "/images/placeholder.jpg",
-        openingHours: "45 - 50 Min"
-    },
-    {
-        id: "3",
-        name: "Restaurant 1 Name",
-        cuisineType: "Ethiopian, Abbessinisch",
-        location: "Olten",
-        distance: 3.5,
-        minOrder: 18.00,
-        image: "/images/placeholder.jpg",
-        openingHours: "45 - 50 Min"
-    }
-];
-
 type SortOption = "distance" | "minOrder" | "reviews";
+
+interface Restaurant {
+    id: string;
+    name: string;
+    cuisine: string;
+    distance: string;
+    minPrice: number;
+    rating: number;
+    logoUrl: string | null;
+    coverImageUrl: string | null;
+    status: string;
+}
 
 // Helper to get title based on query params
 const getRestaurantHeader = (country?: string, location?: string) => {
@@ -71,7 +49,9 @@ export default function RestaurantsClient() {
     const country = searchParams.get("country") || "Ethiopia, Eritrea";
     const location = searchParams.get("location") || "Olten";
 
-    const [restaurants, setRestaurants] = useState(mockRestaurants);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<SortOption>("distance");
     const [showChangeOptions, setShowChangeOptions] = useState(false);
     const [howItWorksOpen, setHowItWorksOpen] = useState(false);
@@ -79,21 +59,42 @@ export default function RestaurantsClient() {
 
     const headerTitle = getRestaurantHeader(country, location);
 
-    // Sort restaurants
+    // Fetch restaurants from API
     useEffect(() => {
-        let sorted = [...mockRestaurants];
+        async function fetchRestaurants() {
+            try {
+                setLoading(true);
+                setError(null);
 
-        if (sortBy === "distance") {
-            sorted.sort((a, b) => a.distance - b.distance);
-        } else if (sortBy === "minOrder") {
-            sorted.sort((a, b) => a.minOrder - b.minOrder);
-        } else if (sortBy === "reviews") {
-            // Mock sorting by reviews
-            sorted.sort(() => 0.5 - Math.random());
+                // Build query parameters
+                const params = new URLSearchParams();
+                if (location) params.append('city', location);
+                
+                // Map country to cuisine type
+                if (country.includes("Ethiopia") || country.includes("Eritrea")) {
+                    params.append('cuisineType', 'Ethiopian');
+                }
+                
+                params.append('sortBy', sortBy === 'minOrder' ? 'name' : sortBy);
+                
+                const response = await fetch(`/api/restaurants?${params.toString()}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch restaurants');
+                }
+
+                const data = await response.json();
+                setRestaurants(data.restaurants || []);
+            } catch (err: any) {
+                console.error('Error fetching restaurants:', err);
+                setError(err.message || 'Failed to load restaurants');
+            } finally {
+                setLoading(false);
+            }
         }
 
-        setRestaurants(sorted);
-    }, [sortBy]);
+        fetchRestaurants();
+    }, [location, country, sortBy]);
 
     return (
         <ClientOnly>
@@ -144,25 +145,59 @@ export default function RestaurantsClient() {
                         {/* Restaurant selection interface or location selection */}
                         {showChangeOptions ? (
                             <div className="bg-[#fff2d9] rounded-lg p-3 mb-4">
-                                <LocationSelectionMobile />
+                                <LocationSelectionMobile 
+                                    onViewMenu={(restaurant) => {
+                                        // Handle restaurant selection
+                                        console.log('Selected restaurant:', restaurant);
+                                    }}
+                                    isViewingMenu={false}
+                                    selectedRestaurant={null}
+                                    onChange={() => {
+                                        // Handle location/country change
+                                        setShowChangeOptions(false);
+                                    }}
+                                    onAboutSpecialtyOpen={(cuisineType) => {
+                                        // Handle about specialty modal
+                                        console.log('About specialty:', cuisineType);
+                                    }}
+                                />
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 gap-y-4 mx-auto w-full max-w-[680px]">
-                                {restaurants.map((restaurant) => (
-                                    <RestaurantCard
-                                        key={restaurant.id}
-                                        id={restaurant.id}
-                                        name={restaurant.name}
-                                        cuisineType={restaurant.cuisineType}
-                                        location={restaurant.location}
-                                        distance={restaurant.distance}
-                                        minOrder={restaurant.minOrder}
-                                        image={restaurant.image}
-                                        openingHours={restaurant.openingHours}
-                                    />
-                                ))}
-                                {restaurants.length === 0 && (
-                                    <p className="text-center text-white">No restaurants found for this selection.</p>
+                                {loading ? (
+                                    <div className="text-center text-white py-10">
+                                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                                        <p className="mt-4">Loading restaurants...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center text-red-400 py-10">
+                                        <p>{error}</p>
+                                        <button 
+                                            onClick={() => window.location.reload()} 
+                                            className="mt-4 bg-amber-900 text-white px-4 py-2 rounded"
+                                        >
+                                            Try Again
+                                        </button>
+                                    </div>
+                                ) : restaurants.length === 0 ? (
+                                    <div className="text-center text-white py-10">
+                                        <p>No restaurants found for this selection.</p>
+                                        <p className="text-sm mt-2 text-gray-300">Try changing the location or country specialty.</p>
+                                    </div>
+                                ) : (
+                                    restaurants.map((restaurant) => (
+                                        <RestaurantCard
+                                            key={restaurant.id}
+                                            id={restaurant.id}
+                                            name={restaurant.name}
+                                            cuisineType={restaurant.cuisine}
+                                            location={location}
+                                            distance={typeof restaurant.distance === 'string' ? parseFloat(restaurant.distance) || 0 : restaurant.distance}
+                                            minOrder={restaurant.minPrice}
+                                            image={restaurant.coverImageUrl || restaurant.logoUrl || "/images/placeholder.jpg"}
+                                            openingHours={`Min Fr. ${restaurant.minPrice.toFixed(2)}`}
+                                        />
+                                    ))
                                 )}
                             </div>
                         )}

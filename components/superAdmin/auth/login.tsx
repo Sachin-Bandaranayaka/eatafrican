@@ -66,18 +66,82 @@ interface LoginViewProps {
 }
 
 function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error?.message || 'Login failed');
+        setLoading(false);
+        return;
+      }
+
+      // Check if user is super admin
+      if (data.user.role !== 'super_admin') {
+        setError('Access denied. Super admin credentials required.');
+        setLoading(false);
+        return;
+      }
+
+      // Store token and user data
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('refresh_token', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Success
+      onLoginClick();
+    } catch (err) {
+      setError('Network error. Please try again.');
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
       <h2 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-green-700 mb-2">LOGIN</h2>
-      <form className="w-full md:px-36">
+      <form className="w-full md:px-36" onSubmit={handleSubmit}>
         <div className="space-y-1">
           <label htmlFor="email" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Email</label>
-          <input id="email" type="email" className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" />
+          <input 
+            id="email" 
+            type="email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500 px-2 py-1" 
+            required
+          />
         </div>
         <div className="space-y-1 mt-3">
           <label htmlFor="password" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Password</label>
-          <input id="password" type="password" className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" />
+          <input 
+            id="password" 
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
+            className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500 px-2 py-1" 
+            required
+          />
         </div>
+        {error && (
+          <div className="mt-2 text-red-600 text-[7px] md:text-[10px] text-center font-semibold">
+            {error}
+          </div>
+        )}
         <div className="text-center mt-3">
           <a
             href="#"
@@ -92,11 +156,11 @@ function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
         </div>
         <div className="flex flex-row text-center justify-center mt-3">
           <button
-            type="button"
-            onClick={onLoginClick}
-            className="w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
+            type="submit"
+            disabled={loading}
+            className="w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            LOGIN
+            {loading ? 'LOGGING IN...' : 'LOGIN'}
           </button>
         </div>
       </form>
