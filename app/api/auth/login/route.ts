@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/config';
-import { loginSchema } from '@/lib/validation/schemas';
-import { z } from 'zod';
+
+// Lazy load heavy dependencies to avoid module resolution issues
+async function loadDependencies() {
+  const { supabaseAdmin } = await import('@/lib/supabase/config');
+  const { loginSchema } = await import('@/lib/validation/schemas');
+  const { z } = await import('zod');
+  return { supabaseAdmin, loginSchema, z };
+}
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const { supabaseAdmin, loginSchema, z } = await loadDependencies();
     
     // Validate request body
     const validatedData = loginSchema.parse(body);
@@ -101,8 +107,9 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error) {
-    if (error instanceof z.ZodError) {
+  } catch (error: any) {
+    // Handle Zod validation errors
+    if (error?.name === 'ZodError') {
       return NextResponse.json(
         {
           error: {

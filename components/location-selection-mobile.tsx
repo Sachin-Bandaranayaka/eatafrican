@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useLocationContext } from "@/lib/location-context";
 
-type CountrySpecialty = "ETHIOPIA, ERITREA" | "KENYA" | "NIGERIA, GHANA";
-type Location = "BERN" | "OLTEN" | "LUZERN" | "ZURICH";
+type CountrySpecialty = string;
+type Location = string;
 
 interface LocationSelectionProps {
     onViewMenu: (restaurant: string) => void;
@@ -39,20 +40,60 @@ export default function LocationSelectionMobile({
     onChange,
     onAboutSpecialtyOpen,
 }: LocationSelectionProps) {
+    const { t } = useLocationContext();
     const [selectedCountry, setSelectedCountry] = useState<CountrySpecialty | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [showError, setShowError] = useState(false);
     const [selectedRestaurantInternal, setSelectedRestaurantInternal] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [showBackButton, setShowBackButton] = useState(false);
+    
+    // Dynamic data from API
+    const [countrySpecialties, setCountrySpecialties] = useState<CountrySpecialty[]>([]);
+    const [locations, setLocations] = useState<{ [key: string]: number }>({});
+    const [loading, setLoading] = useState(true);
 
-    const countrySpecialties: CountrySpecialty[] = ["ETHIOPIA, ERITREA", "KENYA", "NIGERIA, GHANA"];
-    const locations: { [key: string]: number } = {
-        "BERN": 1,
-        "OLTEN": 1,
-        "LUZERN": 2,
-        "ZURICH": 3
-    };
+    // Fetch available cuisines and locations from API
+    useEffect(() => {
+        async function fetchLocations() {
+            try {
+                setLoading(true);
+                const response = await fetch('/api/locations');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch locations');
+                }
+
+                const data = await response.json();
+                
+                // Set cuisines (country groups)
+                const cuisineGroups = data.cuisines.map((c: any) => c.group);
+                setCountrySpecialties(cuisineGroups);
+                
+                // Set locations with counts
+                const locationMap: { [key: string]: number } = {};
+                data.locations.forEach((loc: any) => {
+                    locationMap[loc.city] = loc.count;
+                });
+                setLocations(locationMap);
+            } catch (error) {
+                console.error('Error fetching locations:', error);
+                // Fallback to default values
+                setCountrySpecialties(["ETHIOPIA, ERITREA", "KENYA", "NIGERIA, GHANA"]);
+                setLocations({
+                    "BERN": 1,
+                    "OLTEN": 1,
+                    "LUZERN": 1,
+                    "ZURICH": 1,
+                    "BASEL": 1
+                });
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchLocations();
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -130,11 +171,27 @@ export default function LocationSelectionMobile({
         return "";
     };
 
+    if (loading) {
+        return (
+            <div>
+                <div className="max-w-3xl md:w-[100%] mb-4 md:mb-40 sm:mb-8 lg:mb-28 md:text-start md:m-14 text-center mt-10 md:ml-6">
+                    <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
+                        {t('main_title')}
+                    </p>
+                </div>
+                <div className="text-center text-white py-10">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                    <p className="mt-4">{t('loading_locations')}</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <div className="max-w-3xl md:w-[100%] mb-4 md:mb-40 sm:mb-8 lg:mb-28 md:text-start md:m-14 text-center mt-10 md:ml-6">
                 <p className="text-white font-bold text-xs xs:text-sm sm:text-base lg:text-md uppercase leading-relaxed">
-                    ORDER FRESHLY PREPARED AFRICAN FOOD DIRECTLY FROM AFRICAN RESTAURANTS AND HAVE IT CONVENIENTLY DELIVERED TO YOUR HOME
+                    {t('main_title')}
                 </p>
             </div>
 
@@ -177,13 +234,13 @@ export default function LocationSelectionMobile({
 
                     <div className="flex justify-between mb-0 -mt-5">
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 ">
-                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">COUNTRY SPECIALTY</h3>
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">{t('country_specialty')}</h3>
                         </div>
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 mr-6 md:ml-4 ml-6">
-                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">LOCATION</h3>
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">{t('location')}</h3>
                         </div>
                         <div className="bg-[#ff9920] border border-[#e89140] text-center py-0.5 px-2 rounded-r-xl z-20 md:mr-[22%] mr-[11%] ">
-                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">RESTAURANT</h3>
+                            <h3 className="font-semibold text-black text-[7px] md:text-[9px] sm:text-xs uppercase">{t('restaurant')}</h3>
                         </div>
                     </div>
 
@@ -217,7 +274,7 @@ export default function LocationSelectionMobile({
 
                             {isViewingMenu && selectedCountry && (
                                 <CustomButton onClick={handleChange} className="mt-4">
-                                    CHANGE
+                                    {t('change')}
                                 </CustomButton>
                             )}
                         </div>
@@ -296,7 +353,7 @@ export default function LocationSelectionMobile({
                                 <div className="flex justify-start ml-[27%] md:ml-14 mt-[6px]">
                                     {selectedLocation && !isViewingMenu && (
                                         <button className="bg-red-900 text-white border border-amber-400 rounded-lg p-1 px-3 text-[7px] md:text-[8px] lg:text-[8px] xl:text-[8px] 2xl:text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap" onClick={handleViewMenuClick}>
-                                            VIEW MENU
+                                            {t('view_menu')}
                                         </button>
                                     )}
                                 </div>
@@ -325,7 +382,7 @@ export default function LocationSelectionMobile({
                         {showBackButton && !isViewingMenu && (
                             <div className="mr-9 flex items-center justify-center">
                                 <CustomButton onClick={handleBack}>
-                                    BACK
+                                    {t('back')}
                                 </CustomButton>
                             </div>
                         )}

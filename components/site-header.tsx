@@ -8,6 +8,8 @@ import { ChevronDown } from "lucide-react";
 import LoginModal from "./login-modal";
 import LoginModalTest from "./login-modal-test";
 import { CartComponent } from "./cart";
+import { useLocationContext } from "@/lib/location-context";
+import type { Language } from "@/lib/translations";
 
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
@@ -17,6 +19,14 @@ interface SiteHeaderProps {
   onShowSuperAdminLogin: () => void; // 1. Add new prop for Super Admin login
 }
 
+// Language mapping
+const LANGUAGE_MAP: Record<string, { code: Language; display: string }> = {
+  'en': { code: 'en', display: 'ENGLISH' },
+  'de': { code: 'de', display: 'DEUTSCH' },
+  'fr': { code: 'fr', display: 'FRANÇAIS' },
+  'it': { code: 'it', display: 'ITALIANO' },
+};
+
 export default function SiteHeader({
   onOpenDashboard,
   onShowAdminDashboard,
@@ -24,13 +34,11 @@ export default function SiteHeader({
   onShowDriverPortal,
   onShowSuperAdminLogin, // 2. Destructure the new prop
 }: SiteHeaderProps) {
+  const { locationInfo, setLanguage } = useLocationContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState("ENGLISH");
   const [cartOpen, setCartOpen] = useState(false);
-
-  const languages = ["ENGLISH", "DEUTSCH", "FRANÇAIS", "ESPAÑOL"];
 
   const iconButtonStyle =
     "bg-white p-2 text-amber-800 hover:bg-gray-100 transition duration-200 border-2 border-transparent rounded-lg";
@@ -39,6 +47,15 @@ export default function SiteHeader({
     "flex items-center gap-1 text-white hover:text-yellow-200 text-[10px] md:text-[15px] font-medium transition duration-200";
 
   const getLanguageCode = (lang: string) => lang.slice(0, 2).toUpperCase();
+
+  // Get current language display name
+  const currentLanguageDisplay = LANGUAGE_MAP[locationInfo.language as Language]?.display || 'EN';
+
+  // Handle language change
+  const handleLanguageChange = (langCode: Language) => {
+    setLanguage(langCode);
+    setLanguageOpen(false);
+  };
 
   return (
     <>
@@ -60,21 +77,18 @@ export default function SiteHeader({
           {/* Language Selector */}
           <div className="relative">
             <button onClick={() => setLanguageOpen(!languageOpen)} className={languageButtonStyle}>
-              {getLanguageCode(currentLanguage)} <ChevronDown size={18} strokeWidth={3} />
+              {getLanguageCode(locationInfo.language)} <ChevronDown size={18} strokeWidth={3} />
             </button>
             {languageOpen && (
               <div className="absolute left-0 mt-1 bg-black/80 backdrop-blur-sm rounded shadow-lg py-1 w-auto md:w-36 z-40">
-                {languages.map((lang) => (
+                {Object.entries(LANGUAGE_MAP).map(([code, { display }]) => (
                   <button
-                    key={lang}
-                    className={`block w-full px-3 py-1.5 text-[10px] md:text-[15px] md:text-sm hover:bg-white/10 ${currentLanguage === lang ? "text-amber-400" : "text-white"
+                    key={code}
+                    className={`block w-full px-3 py-1.5 text-[10px] md:text-[15px] md:text-sm hover:bg-white/10 ${locationInfo.language === code ? "text-amber-400" : "text-white"
                       }`}
-                    onClick={() => {
-                      setCurrentLanguage(lang);
-                      setLanguageOpen(false);
-                    }}
+                    onClick={() => handleLanguageChange(code as Language)}
                   >
-                    {lang}
+                    {display}
                   </button>
                 ))}
               </div>
