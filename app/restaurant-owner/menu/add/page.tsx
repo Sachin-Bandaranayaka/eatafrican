@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function AddMenuItem() {
+function AddMenuItemForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const restaurantId = searchParams.get('restaurantId');
@@ -221,5 +221,17 @@ export default function AddMenuItem() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function AddMenuItem() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 p-4 pt-20 flex items-center justify-center">
+                <div className="text-gray-600">Loading...</div>
+            </div>
+        }>
+            <AddMenuItemForm />
+        </Suspense>
     );
 }

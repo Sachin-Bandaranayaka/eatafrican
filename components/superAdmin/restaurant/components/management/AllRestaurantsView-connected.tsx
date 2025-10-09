@@ -11,6 +11,9 @@ interface AllRestaurantsViewProps {
     onStatusChange: (status: string) => void;
     onApprove?: (restaurantId: string) => void;
     onReject?: (restaurantId: string) => void;
+    onDeactivate?: (restaurantId: string, restaurantName: string) => void;
+    onReactivate?: (restaurantId: string, restaurantName: string) => void;
+    onDelete?: (restaurantId: string, restaurantName: string) => void;
 }
 
 export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({ 
@@ -19,9 +22,14 @@ export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({
     status, 
     onStatusChange,
     onApprove,
-    onReject
+    onReject,
+    onDeactivate,
+    onReactivate,
+    onDelete
 }) => {
-    const showActions = status === 'NEW REGISTRATION';
+    const showPendingActions = status === 'NEW REGISTRATION';
+    const showActiveActions = status === 'ACTIVE';
+    const showInactiveActions = status === 'INACTIVE';
 
     return (
         <div className="relative bg-white/80 border-2 border-amber-400 rounded-lg p-2 md:p-4 min-h-[550px]">
@@ -47,7 +55,7 @@ export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({
                                 <th className="p-3 font-bold text-black uppercase text-[7px] md:text-[15px]">RESTAURANT NAME</th>
                                 <th className="p-3 font-bold text-black uppercase text-[7px] md:text-[15px]">ADDRESS</th>
                                 <th className="p-3 font-bold text-black uppercase text-[7px] md:text-[15px]">REGISTRATION DATE</th>
-                                {showActions && (
+                                {(showPendingActions || showActiveActions || showInactiveActions) && (
                                     <th className="p-3 font-bold text-black uppercase text-[7px] md:text-[15px]">ACTIONS</th>
                                 )}
                             </tr>
@@ -57,7 +65,7 @@ export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({
                                 <React.Fragment key={group.region}>
                                     <tr>
                                         <td className="pl-4 pt-2 font-bold text-black text-[9px] md:text-[15px]">{group.region}</td>
-                                        <td colSpan={showActions ? 4 : 3}></td>
+                                        <td colSpan={(showPendingActions || showActiveActions || showInactiveActions) ? 4 : 3}></td>
                                     </tr>
                                     {group.restaurants.map((restaurant, index) => (
                                         <tr key={restaurant.id || index} className="hover:bg-gray-100/50">
@@ -74,7 +82,7 @@ export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({
                                             <td className="py-1 text-black font-semibold text-[7px] md:text-[12px]">
                                                 {restaurant.registrationDate}
                                             </td>
-                                            {showActions && (
+                                            {showPendingActions && (
                                                 <td className="py-1 px-2">
                                                     <div className="flex gap-2">
                                                         <button
@@ -90,6 +98,46 @@ export const AllRestaurantsViewConnected: React.FC<AllRestaurantsViewProps> = ({
                                                             title="Reject Restaurant"
                                                         >
                                                             REJECT
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            )}
+                                            {showActiveActions && (
+                                                <td className="py-1 px-2">
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => onDeactivate && onDeactivate(restaurant.id, restaurant.name)}
+                                                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-1 px-3 rounded text-[7px] md:text-[10px]"
+                                                            title="Deactivate Restaurant"
+                                                        >
+                                                            DEACTIVATE
+                                                        </button>
+                                                        <button
+                                                            onClick={() => onDelete && onDelete(restaurant.id, restaurant.name)}
+                                                            className="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded text-[7px] md:text-[10px]"
+                                                            title="Permanently Delete Restaurant"
+                                                        >
+                                                            DELETE
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            )}
+                                            {showInactiveActions && (
+                                                <td className="py-1 px-2">
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => onReactivate && onReactivate(restaurant.id, restaurant.name)}
+                                                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-[7px] md:text-[10px]"
+                                                            title="Reactivate Restaurant"
+                                                        >
+                                                            REACTIVATE
+                                                        </button>
+                                                        <button
+                                                            onClick={() => onDelete && onDelete(restaurant.id, restaurant.name)}
+                                                            className="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded text-[7px] md:text-[10px]"
+                                                            title="Permanently Delete Restaurant"
+                                                        >
+                                                            DELETE
                                                         </button>
                                                     </div>
                                                 </td>

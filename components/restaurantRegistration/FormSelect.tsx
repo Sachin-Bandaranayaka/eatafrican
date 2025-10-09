@@ -8,14 +8,18 @@ interface FormSelectProps {
     name?: string;
     options: string[];
     fullWidth?: boolean;
+    required?: boolean;
 }
 
-const FormSelect: React.FC<FormSelectProps> = ({ label, name, options, fullWidth = false }) => (
+const FormSelect: React.FC<FormSelectProps> = ({ label, name, options, fullWidth = false, required = false }) => (
     <div className={`mb-3 ${fullWidth ? 'w-full' : 'w-auto'}`}>
-        <label className="block text-xs font-bold text-gray-800 mb-1">{label}</label>
+        <label className="block text-xs font-bold text-gray-800 mb-1">
+            {label}{required && <span className="text-red-600">*</span>}
+        </label>
         <div className="relative">
             <select 
                 name={name}
+                required={required}
                 className="w-full bg-white text-sm text-black px-3 py-2 rounded-sm border border-gray-400 appearance-none focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
                 {options.map(option => <option key={option} value={option}>{option}</option>)}

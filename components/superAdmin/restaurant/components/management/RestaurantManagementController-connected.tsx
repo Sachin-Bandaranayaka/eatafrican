@@ -13,6 +13,15 @@ export const RestaurantManagementControllerConnected = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Helper to handle auth errors
+    const handleAuthError = () => {
+        console.error('Authentication failed - token expired. Redirecting to login...');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        window.location.href = '/admin';
+    };
+
     // Fetch restaurants from API
     useEffect(() => {
         fetchRestaurants();
@@ -22,12 +31,14 @@ export const RestaurantManagementControllerConnected = () => {
         try {
             setLoading(true);
             // Try both token names (different login components use different names)
-            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
 
             if (!token) {
                 setError('Not authenticated. Please login again.');
                 return;
             }
+
+            console.log('Fetching restaurants with token:', token.substring(0, 20) + '...');
 
             const response = await fetch('/api/admin/restaurants', {
                 headers: {
@@ -35,8 +46,15 @@ export const RestaurantManagementControllerConnected = () => {
                 }
             });
 
+            // Handle 401 - token expired
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
+
             if (!response.ok) {
-                throw new Error('Failed to fetch restaurants');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `Failed to fetch restaurants (${response.status})`);
             }
 
             const data = await response.json();
@@ -65,7 +83,7 @@ export const RestaurantManagementControllerConnected = () => {
 
     const handleApprove = async (restaurantId: string) => {
         try {
-            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
 
             const response = await fetch(`/api/admin/restaurants/${restaurantId}/approve`, {
                 method: 'PATCH',
@@ -78,6 +96,11 @@ export const RestaurantManagementControllerConnected = () => {
                     notes: 'Restaurant approved by admin'
                 })
             });
+
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
 
             if (!response.ok) {
                 throw new Error('Failed to approve restaurant');
@@ -94,7 +117,7 @@ export const RestaurantManagementControllerConnected = () => {
 
     const handleReject = async (restaurantId: string) => {
         try {
-            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
 
             const response = await fetch(`/api/admin/restaurants/${restaurantId}/approve`, {
                 method: 'PATCH',
@@ -108,6 +131,11 @@ export const RestaurantManagementControllerConnected = () => {
                 })
             });
 
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error('Failed to reject restaurant');
             }
@@ -118,6 +146,108 @@ export const RestaurantManagementControllerConnected = () => {
         } catch (err: any) {
             console.error('Error rejecting restaurant:', err);
             alert('Failed to reject restaurant: ' + err.message);
+        }
+    };
+
+    const handleDeactivate = async (restaurantId: string, restaurantName: string) => {
+        if (!confirm(`Are you sure you want to deactivate "${restaurantName}"? The restaurant will be hidden from customers but data will be preserved.`)) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
+
+            const response = await fetch(`/api/admin/restaurants/${restaurantId}/deactivate`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to deactivate restaurant');
+            }
+
+            await fetchRestaurants();
+            alert('Restaurant deactivated successfully!');
+        } catch (err: any) {
+            console.error('Error deactivating restaurant:', err);
+            alert('Failed to deactivate restaurant: ' + err.message);
+        }
+    };
+
+    const handleReactivate = async (restaurantId: string, restaurantName: string) => {
+        if (!confirm(`Are you sure you want to reactivate "${restaurantName}"?`)) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
+
+            const response = await fetch(`/api/admin/restaurants/${restaurantId}/reactivate`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to reactivate restaurant');
+            }
+
+            await fetchRestaurants();
+            alert('Restaurant reactivated successfully!');
+        } catch (err: any) {
+            console.error('Error reactivating restaurant:', err);
+            alert('Failed to reactivate restaurant: ' + err.message);
+        }
+    };
+
+    const handleDelete = async (restaurantId: string, restaurantName: string) => {
+        if (!confirm(`⚠️ PERMANENT DELETION WARNING ⚠️\n\nAre you sure you want to PERMANENTLY DELETE "${restaurantName}"?\n\nThis action:\n- Cannot be undone\n- Will delete all restaurant data\n- Will remove all menu items\n- Will affect order history\n\nType the restaurant name to confirm.`)) {
+            return;
+        }
+
+        const confirmation = prompt(`Type "${restaurantName}" to confirm permanent deletion:`);
+        if (confirmation !== restaurantName) {
+            alert('Deletion cancelled. Restaurant name did not match.');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
+
+            const response = await fetch(`/api/admin/restaurants/${restaurantId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 401) {
+                handleAuthError();
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to delete restaurant');
+            }
+
+            await fetchRestaurants();
+            alert('Restaurant deleted permanently!');
+        } catch (err: any) {
+            console.error('Error deleting restaurant:', err);
+            alert('Failed to delete restaurant: ' + err.message);
         }
     };
 
@@ -155,7 +285,7 @@ export const RestaurantManagementControllerConnected = () => {
     // Transform API data to match the expected format
     console.log('Raw restaurants data:', restaurants); // Debug
     console.log('Total restaurants:', restaurants.length); // Debug
-    
+
     const transformedData = restaurants.reduce((acc: any[], restaurant: any) => {
         const region = restaurant.region || restaurant.city || 'OTHER';
         const regionUpper = region.toUpperCase();
@@ -167,7 +297,7 @@ export const RestaurantManagementControllerConnected = () => {
         } else if (restaurant.status === 'suspended' || restaurant.status === 'inactive') {
             uiStatus = 'INACTIVE';
         }
-        
+
         console.log(`Restaurant: ${restaurant.name}, DB Status: ${restaurant.status}, UI Status: ${uiStatus}`); // Debug
 
         const transformedRestaurant = {
@@ -211,7 +341,7 @@ export const RestaurantManagementControllerConnected = () => {
     // Filter by status
     console.log('Status filter:', statusFilter); // Debug
     console.log('Transformed data before filter:', transformedData); // Debug
-    
+
     const filteredData = transformedData
         .map(region => ({
             ...region,
@@ -222,7 +352,7 @@ export const RestaurantManagementControllerConnected = () => {
             )
         }))
         .filter(region => region.restaurants.length > 0);
-    
+
     console.log('Filtered data:', filteredData); // Debug
 
     return (
@@ -233,6 +363,9 @@ export const RestaurantManagementControllerConnected = () => {
             onStatusChange={setStatusFilter}
             onApprove={handleApprove}
             onReject={handleReject}
+            onDeactivate={handleDeactivate}
+            onReactivate={handleReactivate}
+            onDelete={handleDelete}
         />
     );
 };

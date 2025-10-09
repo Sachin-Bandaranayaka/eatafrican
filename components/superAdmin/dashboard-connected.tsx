@@ -72,12 +72,14 @@ export const SuperAdminDashboardConnected = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const token = localStorage.getItem('auth_token') || localStorage.getItem('accessToken');
             
             if (!token) {
-                console.error('No auth token found');
+                console.error('No auth token found in localStorage');
                 return;
             }
+
+            console.log('Fetching dashboard data with token:', token.substring(0, 20) + '...');
 
             // Fetch all data in parallel
             const [ordersRes, restaurantsRes, driversRes, customersRes, logsRes] = await Promise.all([
@@ -87,6 +89,16 @@ export const SuperAdminDashboardConnected = () => {
                 fetch('/api/admin/customers', { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch('/api/admin/activity-logs?limit=20', { headers: { 'Authorization': `Bearer ${token}` } }).catch(() => null)
             ]);
+
+            // Check for auth errors - redirect to login if token expired
+            if (ordersRes.status === 401 || restaurantsRes.status === 401 || driversRes.status === 401 || customersRes.status === 401) {
+                console.error('Authentication failed - token expired. Redirecting to login...');
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('user');
+                window.location.href = '/admin';
+                return;
+            }
 
             // Process orders
             if (ordersRes.ok) {

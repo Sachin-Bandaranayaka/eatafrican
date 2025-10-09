@@ -235,10 +235,6 @@ export default function Home() {
                     <div className=" ">
                         <SiteHeader
                             onOpenDashboard={openDashboard}
-                            onShowAdminDashboard={() => setAdminView('dashboard')}
-                            onShowAdminLogin={() => setAdminView('login')}
-                            onShowDriverPortal={() => setAdminView('driver')}
-                            onShowSuperAdminLogin={() => setAdminView('superAdmin')}
                         />
                     </div>
                     <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-4 md:pb-6 mt`}>

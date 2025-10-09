@@ -98,12 +98,13 @@ function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
         return;
       }
 
-      // Store token and user data
+      // Store token and user data (both token names for compatibility)
       localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('accessToken', data.token); // Also store as accessToken for admin page
       localStorage.setItem('refresh_token', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Success
+      // Success - call the callback to trigger re-check
       onLoginClick();
     } catch (err) {
       setError('Network error. Please try again.');

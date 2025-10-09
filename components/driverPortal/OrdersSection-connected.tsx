@@ -20,7 +20,22 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
     const [loading, setLoading] = useState(true);
     const [driverId, setDriverId] = useState<string | null>(null);
 
-    const zones = ["Basel", "Bern", "Luzern", "Olten", "Zürich"];
+    const [zones, setZones] = useState<string[]>(["Basel", "Bern", "Luzern", "Olten", "Zürich"]);
+
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('/api/cities');
+            const data = await response.json();
+            const cityNames = data.map((city: any) => city.name);
+            setZones(cityNames);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+        }
+    };
 
     // Get driver ID from localStorage or auth context
     useEffect(() => {

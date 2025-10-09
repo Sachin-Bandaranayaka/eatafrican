@@ -13,10 +13,6 @@ import type { Language } from "@/lib/translations";
 
 interface SiteHeaderProps {
   onOpenDashboard: () => void;
-  onShowAdminDashboard: () => void;
-  onShowAdminLogin: () => void;
-  onShowDriverPortal: () => void;
-  onShowSuperAdminLogin: () => void; // 1. Add new prop for Super Admin login
 }
 
 // Language mapping
@@ -29,10 +25,6 @@ const LANGUAGE_MAP: Record<string, { code: Language; display: string }> = {
 
 export default function SiteHeader({
   onOpenDashboard,
-  onShowAdminDashboard,
-  onShowAdminLogin,
-  onShowDriverPortal,
-  onShowSuperAdminLogin, // 2. Destructure the new prop
 }: SiteHeaderProps) {
   const { locationInfo, setLanguage } = useLocationContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -95,59 +87,6 @@ export default function SiteHeader({
             )}
           </div>
         </div>
-
-        <div>
-          {/* admin dashboard */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
-            <button
-              onClick={onShowAdminDashboard}
-              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
-              aria-label="Dashboard"
-            >
-              DASHBOARD testing
-            </button>
-          </div>
-        </div>
-
-        <div>
-          {/* driver portal */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
-            <button
-              onClick={onShowDriverPortal}
-              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
-              aria-label="Driver Portal"
-            >
-              DRIVER PORTAL login test
-            </button>
-          </div>
-        </div>
-
-        <div>
-          {/* admin login */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
-            <button
-              onClick={onShowAdminLogin}
-              className="bg-black text-white border rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
-              aria-label="Admin Login"
-            >
-              Admin login testing
-            </button>
-          </div>
-        </div>
-
-        <div>
-          {/* Super Admin Button */}
-          <div className="hidden md:block relative w-12 max-w-[400px]">
-            <button
-              onClick={onShowSuperAdminLogin} // 3. Set onClick to call the new prop
-              className="bg-white text-black border border-amber-400 rounded-[8px] py-1 px-3 text-[10px] font-semibold  transition duration-200 whitespace-nowrap"
-              aria-label="Super Admin"
-            >
-              Super Admin
-            </button>
-          </div>
-        </div>
-
 
         {/* Right Section with User Icon and Shopping Cart */}
         <div className="flex items-center gap-4 md:gap-2">
