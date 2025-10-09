@@ -23,6 +23,14 @@ export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
     autoRefreshToken: false,
     persistSession: false,
   },
+  db: {
+    schema: 'public',
+  },
+  global: {
+    headers: {
+      'x-my-custom-header': 'service-role',
+    },
+  },
 });
 
 // Create Supabase client with anon key (for client-side operations)

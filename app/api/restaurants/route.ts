@@ -35,7 +35,8 @@ export async function GET(req: NextRequest) {
 
     // Apply filters
     if (city) {
-      query = query.eq('city', city);
+      // Use case-insensitive comparison for city
+      query = query.ilike('city', city);
     }
 
     if (region) {

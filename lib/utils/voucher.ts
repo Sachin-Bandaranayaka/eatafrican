@@ -150,34 +150,53 @@ export async function getVoucherByCode(code: string): Promise<Voucher | null> {
  * @returns The updated voucher or null if error
  */
 export async function incrementVoucherUsage(voucherId: string): Promise<Voucher | null> {
-  // First get current voucher
-  const { data: currentData, error: fetchError } = await supabaseAdmin
-    .from('vouchers')
-    .select('*')
-    .eq('id', voucherId)
-    .single();
+  try {
+    // First get current voucher
+    const { data: currentData, error: fetchError } = await supabaseAdmin
+      .from('vouchers')
+      .select('*')
+      .eq('id', voucherId)
+      .single();
 
-  if (fetchError || !currentData) {
+    if (fetchError) {
+      console.error('[Voucher] Error fetching voucher for increment:', fetchError);
+      return null;
+    }
+
+    if (!currentData) {
+      console.error('[Voucher] No voucher data found for ID:', voucherId);
+      return null;
+    }
+
+    const currentVoucher = currentData as Voucher;
+    console.log('[Voucher] Current usage count:', currentVoucher.usage_count);
+
+    // Increment usage count
+    const { data, error } = await supabaseAdmin
+      .from('vouchers')
+      .update({ 
+        usage_count: currentVoucher.usage_count + 1
+      })
+      .eq('id', voucherId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('[Voucher] Error updating usage count:', error);
+      return null;
+    }
+
+    if (!data) {
+      console.error('[Voucher] No data returned from update');
+      return null;
+    }
+
+    console.log('[Voucher] Usage count incremented to:', data.usage_count);
+    return data as Voucher;
+  } catch (error) {
+    console.error('[Voucher] Unexpected error in incrementVoucherUsage:', error);
     return null;
   }
-
-  const currentVoucher = currentData as Voucher;
-
-  // Increment usage count
-  const { data, error } = await supabaseAdmin
-    .from('vouchers')
-    .update({ 
-      usage_count: currentVoucher.usage_count + 1
-    })
-    .eq('id', voucherId)
-    .select()
-    .single();
-
-  if (error || !data) {
-    return null;
-  }
-
-  return data as Voucher;
 }
 
 /**
@@ -213,29 +232,43 @@ export async function applyVoucherToOrder(
   voucher?: Voucher;
   error?: string;
 }> {
-  // Validate voucher
-  const validation = await validateVoucher(voucherCode, orderSubtotal);
+  try {
+    // Validate voucher
+    const validation = await validateVoucher(voucherCode, orderSubtotal);
 
-  if (!validation.valid || !validation.voucher) {
+    if (!validation.valid || !validation.voucher) {
+      console.error('[Voucher] Validation failed:', validation.error);
+      return {
+        success: false,
+        error: validation.error || 'Invalid voucher',
+      };
+    }
+
+    console.log('[Voucher] Validation passed, incrementing usage...');
+
+    // Increment usage count
+    const updatedVoucher = await incrementVoucherUsage(validation.voucher.id);
+
+    if (!updatedVoucher) {
+      console.error('[Voucher] Failed to increment usage count');
+      return {
+        success: false,
+        error: 'Failed to update voucher usage',
+      };
+    }
+
+    console.log('[Voucher] Successfully applied voucher:', voucherCode);
+
+    return {
+      success: true,
+      discountAmount: validation.discountAmount,
+      voucher: updatedVoucher,
+    };
+  } catch (error) {
+    console.error('[Voucher] Unexpected error:', error);
     return {
       success: false,
-      error: validation.error || 'Invalid voucher',
+      error: 'An unexpected error occurred while applying voucher',
     };
   }
-
-  // Increment usage count
-  const updatedVoucher = await incrementVoucherUsage(validation.voucher.id);
-
-  if (!updatedVoucher) {
-    return {
-      success: false,
-      error: 'Failed to apply voucher',
-    };
-  }
-
-  return {
-    success: true,
-    discountAmount: validation.discountAmount,
-    voucher: updatedVoucher,
-  };
 }

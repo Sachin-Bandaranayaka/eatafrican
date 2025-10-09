@@ -5,15 +5,19 @@ import React from 'react';
 
 interface FormSelectProps {
     label: string;
+    name?: string;
     options: string[];
     fullWidth?: boolean;
 }
 
-const FormSelect: React.FC<FormSelectProps> = ({ label, options, fullWidth = false }) => (
+const FormSelect: React.FC<FormSelectProps> = ({ label, name, options, fullWidth = false }) => (
     <div className={`mb-3 ${fullWidth ? 'w-full' : 'w-auto'}`}>
         <label className="block text-xs font-bold text-gray-800 mb-1">{label}</label>
         <div className="relative">
-            <select className="w-full bg-white text-sm text-black px-3 py-2 rounded-sm border border-gray-400 appearance-none focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <select 
+                name={name}
+                className="w-full bg-white text-sm text-black px-3 py-2 rounded-sm border border-gray-400 appearance-none focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
                 {options.map(option => <option key={option} value={option}>{option}</option>)}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">

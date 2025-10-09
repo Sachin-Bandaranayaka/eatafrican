@@ -21,12 +21,16 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                     <div>
                         <h2 className="text-sm font-extrabold text-gray-800 mb-2">CONTACT DETAILS</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                            <FormInput label="Manager First Name" placeholder="" required />
-                            <FormInput label="Last Name" placeholder="" required />
+                            <FormInput label="Manager First Name" name="firstName" placeholder="" required />
+                            <FormInput label="Last Name" name="lastName" placeholder="" required />
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                            <FormInput label="Phone Number" placeholder="" type="tel" required />
-                            <FormInput label="Email Address" placeholder="" type="email" required />
+                            <FormInput label="Phone Number" name="phone" placeholder="" type="tel" required />
+                            <FormInput label="Email Address" name="email" placeholder="" type="email" required />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                            <FormInput label="Password" name="password" placeholder="" type="password" required />
+                            <FormInput label="Confirm Password" name="confirmPassword" placeholder="" type="password" required />
                         </div>
                         <p className="text-xs text-gray-600 mt-1">
                             We'll register your restaurant with this email. It will also serve as your login to access and manage your dashboard.
@@ -36,14 +40,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                     {/* Restaurant Information */}
                     <div>
                         <h2 className="text-sm font-extrabold text-gray-800 mb-2 mt-4">RESTAURANT INFORMATION</h2>
-                        <FormInput label="Restaurant name" placeholder="" required fullWidth />
+                        <FormInput label="Restaurant name" name="restaurantName" placeholder="" required fullWidth />
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                            <FormInput label="City" placeholder="" />
-                            <FormInput label="Postal Code" placeholder="" />
+                            <FormInput label="City" name="city" placeholder="" />
+                            <FormInput label="Postal Code" name="postalCode" placeholder="" />
                         </div>
-                        <FormInput label="Street Name & Number" placeholder="" fullWidth />
-                        <FormSelect label="Type of Restaurant" options={['Select Type...', 'Fine Dining', 'Casual Dining', 'Fast Food', 'Cafe']} fullWidth />
-                        <FormSelect label="How does your restaurant do delivery?" options={['Select Method...', 'Own Delivery Fleet', 'Third-party Service', 'Both']} fullWidth />
+                        <FormInput label="Street Name & Number" name="street" placeholder="" fullWidth />
+                        <FormSelect label="Type of Restaurant" name="restaurantType" options={['Select Type...', 'Fine Dining', 'Casual Dining', 'Fast Food', 'Cafe']} fullWidth />
+                        <FormSelect label="How does your restaurant do delivery?" name="deliveryMethod" options={['Select Method...', 'Own Delivery Fleet', 'Third-party Service', 'Both']} fullWidth />
                     </div>
                 </div>
 
@@ -70,7 +74,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <FormInput label="Other Country Specialty Not Listed" placeholder="Input Country" fullWidth />
+                            <FormInput label="Other Country Specialty Not Listed" name="otherSpecialty" placeholder="Input Country" fullWidth />
                         </div>
                     </div>
 

@@ -51,6 +51,7 @@ export default function LocationSelectionMobile({
     // Dynamic data from API
     const [countrySpecialties, setCountrySpecialties] = useState<CountrySpecialty[]>([]);
     const [locations, setLocations] = useState<{ [key: string]: number }>({});
+    const [restaurants, setRestaurants] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Fetch available cuisines and locations from API
@@ -94,6 +95,64 @@ export default function LocationSelectionMobile({
 
         fetchLocations();
     }, []);
+
+    // Fetch restaurants when location is selected
+    useEffect(() => {
+        async function fetchRestaurants() {
+            if (!selectedLocation || !selectedCountry) {
+                setRestaurants([]);
+                return;
+            }
+
+            try {
+                console.log('Fetching restaurants for:', { selectedLocation, selectedCountry });
+                
+                // Use the simpler /api/restaurants endpoint instead of search
+                // Ensure city name is properly encoded for URL
+                const cityParam = encodeURIComponent(selectedLocation);
+                const response = await fetch(`/api/restaurants?city=${cityParam}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch restaurants');
+                }
+
+                const data = await response.json();
+                console.log('Fetched restaurants:', data);
+                
+                const allRestaurants = data.restaurants || [];
+                
+                // Filter by cuisine type on the client side for more flexible matching
+                const cuisineType = getCuisineType(selectedCountry);
+                const cuisineKeywords = cuisineType.split(',').map(c => c.trim().toLowerCase());
+                
+                console.log('Filtering by cuisine keywords:', cuisineKeywords);
+                
+                const filteredRestaurants = allRestaurants.filter((restaurant: any) => {
+                    const restaurantCuisines = restaurant.cuisine?.toLowerCase() || '';
+                    const matches = cuisineKeywords.some(keyword => restaurantCuisines.includes(keyword));
+                    console.log(`Restaurant "${restaurant.name}" cuisines: "${restaurantCuisines}", matches: ${matches}`);
+                    return matches;
+                });
+                
+                console.log('Filtered restaurants:', filteredRestaurants);
+                
+                // Always set the filtered results (even if empty)
+                // This will show the actual availability
+                setRestaurants(filteredRestaurants);
+                
+                // Log a helpful message if no matches
+                if (filteredRestaurants.length === 0 && allRestaurants.length > 0) {
+                    console.log(`No ${cuisineType} restaurants found in ${selectedLocation}.`);
+                    console.log('Available restaurants:', allRestaurants.map((r: any) => `${r.name} (${r.cuisine})`));
+                }
+            } catch (error) {
+                console.error('Error fetching restaurants:', error);
+                setRestaurants([]);
+            }
+        }
+
+        fetchRestaurants();
+    }, [selectedLocation, selectedCountry]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -311,25 +370,36 @@ export default function LocationSelectionMobile({
                                 </div>
                             )}
 
-                            {selectedLocation ? [...Array(locations[selectedLocation] || 1)].map((_, index) => {
-                                const restaurantName = `African Restaurant ${index + 1}`;
-                                const isVisible = !isViewingMenu || selectedRestaurant === restaurantName;
-                                if (!isVisible) return null;
-                                return (
-                                    <label key={restaurantName} className="custom-radio text-white font-bold flex md:ml-2 flex-col items-center cursor-pointer gap-1 flex-wrap">
-                                        <div className="flex items-center -ml-2 md:ml-0">
-                                            <input
-                                                type="radio"
-                                                name="restaurant"
-                                                checked={selectedRestaurantInternal === restaurantName}
-                                                onChange={() => handleRestaurantSelect(restaurantName)}
-                                                className="appearance-none mr-2"
-                                            />
-                                            <span className="text-[7px] md:text-[9px] font-bold">{restaurantName}</span>
+                            {selectedLocation ? (
+                                restaurants.length > 0 ? (
+                                    restaurants.map((restaurant) => {
+                                        const isVisible = !isViewingMenu || selectedRestaurant === restaurant.id;
+                                        if (!isVisible) return null;
+                                        return (
+                                            <label key={restaurant.id} className="custom-radio text-white font-bold flex md:ml-2 flex-col items-center cursor-pointer gap-1 flex-wrap">
+                                                <div className="flex items-center -ml-2 md:ml-0">
+                                                    <input
+                                                        type="radio"
+                                                        name="restaurant"
+                                                        checked={selectedRestaurantInternal === restaurant.id}
+                                                        onChange={() => handleRestaurantSelect(restaurant.id)}
+                                                        className="appearance-none mr-2"
+                                                    />
+                                                    <span className="text-[7px] md:text-[9px] font-bold">{restaurant.name}</span>
+                                                </div>
+                                            </label>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="p-0 absolute md:mb-10 w-[120%]" style={{ maxWidth: '160px' }}>
+                                        <div className="text-start py-0.5 px-1 rounded-lg md:ml-10 ml-14">
+                                            <h3 className="font-semibold text-yellow-300 text-[7px] sm:text-[8px] uppercase p-1 leading-tight">
+                                                NO {getCuisineType(selectedCountry)} RESTAURANTS IN {selectedLocation}. TRY ANOTHER LOCATION.
+                                            </h3>
                                         </div>
-                                    </label>
-                                );
-                            }) : (
+                                    </div>
+                                )
+                            ) : (
                                 <div className="h-0"></div>
                             )}
 

@@ -34,6 +34,12 @@ export default function SiteFooter({ onOpenComponent, onCloseComponent }: SiteFo
             >
               ABOUT US
             </button>
+            <a
+              href="/partner-restaurant"
+              className="text-white hover:text-yellow-200 text-xs font-bold"
+            >
+              PARTNER WITH US
+            </a>
           </div>
 
           <div className="text-center mb-2 md:mb-0 font-bold">
@@ -97,6 +103,13 @@ export default function SiteFooter({ onOpenComponent, onCloseComponent }: SiteFo
                 >
                   ABOUT US
                 </button>
+                <a
+                  href="/partner-restaurant"
+                  className="text-left font-bold text-sm hover:text-amber-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  PARTNER WITH US
+                </a>
                 <button
                   className="text-left font-bold text-sm hover:text-amber-700"
                   onClick={() => handleOpen("termsConditions")}

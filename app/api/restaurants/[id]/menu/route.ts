@@ -9,10 +9,10 @@ import { menuQuerySchema, createMenuItemSchema } from '@/lib/validation/schemas'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const restaurantId = params.id;
+    const { id: restaurantId } = await params;
     const { searchParams } = new URL(req.url);
 
     // Parse and validate query parameters
@@ -144,10 +144,10 @@ export async function GET(
  */
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const restaurantId = params.id;
+    const { id: restaurantId } = await params;
 
     // Validate authentication and ownership
     const user = await requireRestaurantOwnership(req, restaurantId);

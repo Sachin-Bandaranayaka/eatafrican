@@ -83,9 +83,9 @@ export const createMenuItemSchema = z.object({
 export const updateMenuItemSchema = createMenuItemSchema.partial();
 
 export const menuQuerySchema = z.object({
-  category: menuCategorySchema.optional(),
-  dietaryTag: z.string().optional(),
-  sortBy: z.enum(['price', 'name']).optional(),
+  category: menuCategorySchema.nullable().optional(),
+  dietaryTag: z.string().nullable().optional(),
+  sortBy: z.enum(['price', 'name']).nullable().optional(),
 });
 
 // Order Validation Schemas

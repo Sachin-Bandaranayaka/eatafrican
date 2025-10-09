@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { MainNavigation } from './components/MainNavigation';
-import { RestaurantManagementController } from './components/management/RestaurantManagementController';
+import { RestaurantManagementControllerConnected } from './components/management/RestaurantManagementController-connected';
 import { RestaurantSettingsController } from './components/settings/RestaurantSettingsController';
 
 export const SuperAdminRestaurant = () => {
@@ -15,7 +15,7 @@ export const SuperAdminRestaurant = () => {
                     <MainNavigation currentPage={activePage} onPageChange={setActivePage} />
                 </div>
                 <div className="flex-1">
-                    {activePage === 'management' ? <RestaurantManagementController /> : <RestaurantSettingsController />}
+                    {activePage === 'management' ? <RestaurantManagementControllerConnected /> : <RestaurantSettingsController />}
                 </div>
             </div>
         </div>

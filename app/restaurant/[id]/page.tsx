@@ -7,143 +7,147 @@ import { ArrowLeft, MapPin, Clock, DollarSign, Heart, Share } from "lucide-react
 import MenuItem from "@/components/menu-item";
 import SiteFooter from "@/components/site-footer";
 import ClientOnly from '@/components/client-only';
-
-// Mock data for a restaurant
-const mockRestaurant = {
-    id: "1",
-    name: "African Restaurant 1",
-    cuisineType: "Ethiopian, Eritrean, Zurich",
-    location: "Zurich",
-    rating: 4.7,
-    reviews: 168,
-    distance: 1.7,
-    minOrder: 25.00,
-    openingHours: "07:00 - 23:45 Uhr",
-    logo: "/images/placeholder.jpg",
-};
-
-// Mock menu data
-const mockMenuItems = [
-    {
-        id: "item1",
-        name: "Restaurant 1 Name",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy euismod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        price: 24.90,
-        image: "/images/placeholder.jpg",
-        category: "main",
-        location: "Olten",
-        cuisineType: "Ethiopian, Abbessinisch",
-        openingHours: "45 - 50 Min"
-    },
-    {
-        id: "item2",
-        name: "Restaurant 1 Name",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy euismod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        price: 24.90,
-        image: "/images/placeholder.jpg",
-        category: "main",
-        location: "Olten",
-        cuisineType: "Ethiopian, Abbessinisch",
-        openingHours: "45 - 50 Min"
-    },
-    {
-        id: "item3",
-        name: "Sambusa",
-        description: "Crispy pastry filled with spiced meat or vegetables, similar to a samosa.",
-        price: 8.50,
-        image: "/images/placeholder.jpg",
-        category: "snacks",
-        location: "Olten",
-        cuisineType: "Ethiopian, Abbessinisch",
-        openingHours: "45 - 50 Min"
-    },
-    {
-        id: "item4",
-        name: "Ethiopian Coffee",
-        description: "Traditional Ethiopian coffee, known for its rich, distinctive flavor.",
-        price: 4.50,
-        image: "/images/placeholder.jpg",
-        category: "drinks",
-        location: "Olten",
-        cuisineType: "Ethiopian, Abbessinisch",
-        openingHours: "45 - 50 Min"
-    },
-    {
-        id: "item5",
-        name: "Tej",
-        description: "Ethiopian honey wine with a sweet, mead-like taste.",
-        price: 7.90,
-        image: "/images/placeholder.jpg",
-        category: "drinks",
-        location: "Olten",
-        cuisineType: "Ethiopian, Abbessinisch",
-        openingHours: "45 - 50 Min"
-    }
-];
-
-// Mock reviews
-const mockReviews = [
-    {
-        id: "review1",
-        rating: 5,
-        text: "Authentic Ethiopian cuisine, reminded me of my trip to Addis Ababa!",
-        author: "Mark S.",
-        date: "12.03.2024"
-    },
-    {
-        id: "review2",
-        rating: 4,
-        text: "Great food, especially the Doro Wat. Delivery was on time and food was still hot.",
-        author: "Sarah L.",
-        date: "02.04.2024"
-    },
-    {
-        id: "review3",
-        rating: 5,
-        text: "Best Ethiopian food in Zurich! Highly recommend the coffee ceremony.",
-        author: "Thomas G.",
-        date: "28.03.2024"
-    }
-];
+import { useCart } from "@/lib/cart-context";
 
 type MenuCategory = "main" | "snacks" | "drinks" | "reviews";
 
+interface Restaurant {
+    id: string;
+    name: string;
+    cuisine: string;
+    city: string;
+    rating: number;
+    distance: string;
+    minPrice: number;
+    openingHours: any;
+    logoUrl: string | null;
+    coverImageUrl: string | null;
+}
+
+interface MenuItemType {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    imageUrl: string | null;
+    category: string;
+    isAvailable: boolean;
+    dietaryTags: string[];
+}
+
+interface Review {
+    id: string;
+    rating: number;
+    comment: string;
+    customerName: string;
+    createdAt: string;
+}
+
 export default function RestaurantPage({ params }: { params: { id: string } }) {
     const [activeCategory, setActiveCategory] = useState<MenuCategory>("main");
-    const [cartItems, setCartItems] = useState<{ id: string, quantity: number }[]>([]);
+    const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+    const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const { addItem } = useCart();
 
     const { id } = params;
-    const restaurant = mockRestaurant; // In a real app, fetch based on the id
 
-    // Filter menu items by category
-    const filteredItems = mockMenuItems.filter(item => {
-        if (activeCategory === "reviews") return false;
-        return item.category === activeCategory;
-    });
-
-    const handleAddToCart = (itemId: string, quantity: number) => {
-        setCartItems(prev => {
-            const exists = prev.find(item => item.id === itemId);
-            if (exists) {
-                return prev.map(item =>
-                    item.id === itemId ? { ...item, quantity: item.quantity + quantity } : item
-                );
-            } else {
-                return [...prev, { id: itemId, quantity }];
+    // Fetch restaurant details
+    useEffect(() => {
+        async function fetchRestaurant() {
+            try {
+                const response = await fetch(`/api/restaurants/${id}`);
+                if (!response.ok) throw new Error('Failed to fetch restaurant');
+                const data = await response.json();
+                setRestaurant(data.restaurant);
+            } catch (err: any) {
+                console.error('Error fetching restaurant:', err);
+                setError(err.message);
             }
+        }
+        fetchRestaurant();
+    }, [id]);
+
+    // Fetch menu items
+    useEffect(() => {
+        async function fetchMenu() {
+            try {
+                setLoading(true);
+                const params = new URLSearchParams();
+                if (activeCategory !== 'reviews') {
+                    params.append('category', activeCategory);
+                }
+                
+                const response = await fetch(`/api/restaurants/${id}/menu?${params.toString()}`);
+                if (!response.ok) throw new Error('Failed to fetch menu');
+                const data = await response.json();
+                setMenuItems(data.menuItems || []);
+            } catch (err: any) {
+                console.error('Error fetching menu:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        if (activeCategory !== 'reviews') {
+            fetchMenu();
+        } else {
+            setLoading(false);
+        }
+    }, [id, activeCategory]);
+
+    const handleAddToCart = (item: MenuItemType, quantity: number) => {
+        if (!restaurant) return;
+        
+        addItem({
+            id: `${item.id}-${Date.now()}`,
+            menuItemId: item.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            quantity,
+            image: item.imageUrl,
+            restaurantId: restaurant.id,
+            restaurantName: restaurant.name,
         });
     };
+
+    if (error) {
+        return (
+            <ClientOnly>
+                <main className="min-h-screen bg-black text-white flex items-center justify-center">
+                    <div className="text-center">
+                        <p className="text-red-400 mb-4">{error}</p>
+                        <Link href="/restaurants" className="text-amber-400 hover:underline">
+                            Back to Restaurants
+                        </Link>
+                    </div>
+                </main>
+            </ClientOnly>
+        );
+    }
+
+    if (!restaurant) {
+        return (
+            <ClientOnly>
+                <main className="min-h-screen bg-black text-white flex items-center justify-center">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                </main>
+            </ClientOnly>
+        );
+    }
 
     return (
         <ClientOnly>
             <main className="min-h-screen bg-black text-white overflow-x-hidden">
                 {/* Top Bar */}
                 <div className="flex justify-between items-center p-2 bg-white">
-                    <div className="w-8 h-8 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </div>
+                    <Link href="/restaurants" className="w-8 h-8 flex items-center justify-center">
+                        <ArrowLeft className="h-6 w-6 text-gray-800" />
+                    </Link>
 
                     <div className="flex-1 flex justify-center">
                         <Image src="/images/logo.png" alt="African Restaurant" width={60} height={40} className="h-8 object-contain" />
@@ -160,35 +164,36 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
                 <div className="p-3 relative">
                     <div className="flex items-start gap-3">
                         <div className="bg-gray-800 rounded-lg p-2 w-32 h-32 flex items-center justify-center">
-                            <div className="text-white text-center">
-                                <Image src="/images/logo.png" alt="Restaurant Logo" width={80} height={80} className="mx-auto mb-1" />
-                                <div className="text-xs">Misswissi</div>
-                                <div className="text-[10px]">Delicious Food</div>
-                            </div>
+                            {restaurant.logoUrl ? (
+                                <Image src={restaurant.logoUrl} alt="Restaurant Logo" width={80} height={80} className="rounded" />
+                            ) : (
+                                <div className="text-white text-center">
+                                    <div className="text-xs">{restaurant.name}</div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex-1">
-                            <h1 className="text-lg font-semibold">African Restaurant 1</h1>
-                            <p className="text-sm text-gray-300">Ethiopian, Eritrean, Zurich</p>
+                            <h1 className="text-lg font-semibold">{restaurant.name}</h1>
+                            <p className="text-sm text-gray-300">{restaurant.cuisine}</p>
                             <div className="flex items-center text-sm my-1">
                                 <span className="text-yellow-400">★★★★</span><span className="text-gray-400">★</span>
-                                <span className="text-gray-300 ml-1 text-xs">4.7 (168)</span>
+                                <span className="text-gray-300 ml-1 text-xs">{restaurant.rating || 4.7}</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs text-gray-300">
                                 <MapPin size={12} />
-                                <span>1.7 km, Olten, 20.50 CHF</span>
+                                <span>{restaurant.distance}, {restaurant.city}, {restaurant.minPrice.toFixed(2)} CHF</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs text-gray-300">
                                 <Clock size={12} />
-                                <span>Opening Hours: 07:00 - 23:45 Uhr</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
+                                <span>Opening Hours: {restaurant.openingHours?.monday || '07:00 - 23:45'}</span>
                             </div>
 
-                            <button className="bg-amber-700 rounded px-4 py-1 mt-2 text-white text-xs w-full">
-                                CHANGE COUNTRY SPECIALTY / LOCATION
-                            </button>
+                            <Link href="/restaurants">
+                                <button className="bg-amber-700 rounded px-4 py-1 mt-2 text-white text-xs w-full">
+                                    CHANGE COUNTRY SPECIALTY / LOCATION
+                                </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -233,47 +238,42 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
 
                 {/* Menu items or reviews */}
                 <div className="p-3">
-                    {activeCategory !== "reviews" ? (
+                    {loading ? (
+                        <div className="text-center py-10">
+                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                        </div>
+                    ) : activeCategory !== "reviews" ? (
                         <div className="space-y-3">
-                            {filteredItems.map((item) => (
-                                <MenuItem
-                                    key={item.id}
-                                    id={item.id}
-                                    name={item.name}
-                                    description={item.description}
-                                    price={item.price}
-                                    image={item.image}
-                                    location={item.location}
-                                    cuisineType={item.cuisineType}
-                                    openingHours={item.openingHours}
-                                    onAddToCart={handleAddToCart}
-                                />
-                            ))}
+                            {menuItems.length === 0 ? (
+                                <p className="text-center text-gray-400 py-10">No items in this category</p>
+                            ) : (
+                                menuItems.map((item) => (
+                                    <MenuItem
+                                        key={item.id}
+                                        id={item.id}
+                                        name={item.name}
+                                        description={item.description}
+                                        price={item.price}
+                                        image={item.imageUrl || "/images/placeholder.jpg"}
+                                        location={restaurant.city}
+                                        cuisineType={restaurant.cuisine}
+                                        openingHours={restaurant.openingHours?.monday || '07:00 - 23:45'}
+                                        onAddToCart={(id, quantity) => handleAddToCart(item, quantity)}
+                                        isAvailable={item.isAvailable}
+                                        dietaryTags={item.dietaryTags}
+                                    />
+                                ))
+                            )}
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            {mockReviews.map((review) => (
-                                <div key={review.id} className="bg-gray-800 rounded-lg p-3">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <div className="flex text-yellow-400">
-                                                {Array.from({ length: 5 }).map((_, index) => (
-                                                    <span key={index} className={index < review.rating ? "text-yellow-400" : "text-gray-500"}>★</span>
-                                                ))}
-                                            </div>
-                                            <div className="text-gray-300 text-xs mt-1">{review.author} | {review.date}</div>
-                                        </div>
-                                    </div>
-                                    <p className="text-sm mt-2">{review.text}</p>
-                                </div>
-                            ))}
+                            <p className="text-center text-gray-400 py-10">Reviews coming soon</p>
                         </div>
                     )}
                 </div>
 
-                {/* Using the SiteFooter component instead of the inline footer */}
-                <SiteFooter />
+                <SiteFooter onOpenComponent={() => {}} onCloseComponent={() => {}} />
             </main>
         </ClientOnly>
     );
-} 
+}

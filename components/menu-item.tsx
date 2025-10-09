@@ -14,6 +14,8 @@ interface MenuItemProps {
     cuisineType: string;
     openingHours: string;
     onAddToCart: (id: string, quantity: number) => void;
+    isAvailable?: boolean;
+    dietaryTags?: string[];
 }
 
 export default function MenuItem({
@@ -25,12 +27,21 @@ export default function MenuItem({
     location,
     cuisineType,
     openingHours,
-    onAddToCart
+    onAddToCart,
+    isAvailable = true,
+    dietaryTags = []
 }: MenuItemProps) {
     const [isFavorite, setIsFavorite] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const toggleFavorite = () => {
         setIsFavorite(prev => !prev);
+    };
+
+    const handleAddToCart = () => {
+        if (isAvailable) {
+            onAddToCart(id, quantity);
+        }
     };
 
     return (
@@ -59,16 +70,18 @@ export default function MenuItem({
 
             {/* Content with padding to accommodate the masks */}
             <div className="ml-12 mr-[170px] py-3 px-2">
-                <h3 className="font-bold text-gray-800">{name}</h3>
+                <div className="flex justify-between items-start">
+                    <h3 className="font-bold text-gray-800">{name}</h3>
+                    {dietaryTags.length > 0 && (
+                        <span className="text-xs bg-green-600 text-white px-2 py-1 rounded-full">
+                            {dietaryTags[0].toUpperCase()}
+                        </span>
+                    )}
+                </div>
 
                 <div className="flex flex-row gap-1 items-center text-gray-600 text-xs">
                     <MapPin size={12} />
                     <span>{location}, {cuisineType}</span>
-                </div>
-
-                <div className="flex flex-row gap-1 items-center text-gray-600 text-xs">
-                    <Clock size={12} />
-                    <span>Min Fr. {price.toFixed(2)}</span>
                 </div>
 
                 <div className="flex flex-row gap-1 items-center text-gray-600 text-xs mb-2">
@@ -76,13 +89,48 @@ export default function MenuItem({
                     <span>{openingHours}</span>
                 </div>
 
-                <button className="text-white text-xs bg-red-700 px-3 py-1 rounded-full">
-                    MENU ANSEHEN
-                </button>
-
-                <p className="text-gray-700 text-xs mt-2">
+                <p className="text-gray-700 text-xs mt-2 mb-3">
                     {description}
                 </p>
+
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <button 
+                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                            className="bg-gray-300 rounded px-2 py-1 text-xs"
+                        >
+                            -
+                        </button>
+                        <span className="text-sm font-bold">{quantity}</span>
+                        <button 
+                            onClick={() => setQuantity(quantity + 1)}
+                            className="bg-gray-300 rounded px-2 py-1 text-xs"
+                        >
+                            +
+                        </button>
+                    </div>
+                    
+                    <button 
+                        onClick={handleAddToCart}
+                        disabled={!isAvailable}
+                        className={`text-white text-xs px-3 py-1 rounded-full ${
+                            isAvailable ? 'bg-red-700 hover:bg-red-800' : 'bg-gray-400 cursor-not-allowed'
+                        }`}
+                    >
+                        {isAvailable ? 'ADD TO CART' : 'UNAVAILABLE'}
+                    </button>
+
+                    <span className="text-sm font-bold text-gray-800">
+                        Fr. {price.toFixed(2)}.-
+                    </span>
+
+                    <button onClick={toggleFavorite} className="ml-auto">
+                        <Heart 
+                            size={20} 
+                            className={isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"}
+                        />
+                    </button>
+                </div>
             </div>
 
             {/* Images section */}
