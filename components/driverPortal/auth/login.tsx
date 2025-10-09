@@ -94,17 +94,90 @@ interface LoginViewProps {
 }
 
 function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error?.message || 'Login failed');
+                setLoading(false);
+                return;
+            }
+
+            // Check if user is a driver
+            if (data.user.role !== 'driver') {
+                setError('Access denied. This portal is for drivers only.');
+                setLoading(false);
+                return;
+            }
+
+            // Store authentication data
+            localStorage.setItem('accessToken', data.token);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            // Call success callback
+            onLoginClick();
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('An error occurred during login. Please try again.');
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="w-full flex flex-col items-center">
             <h2 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-green-700 mb-2">LOGIN</h2>
-            <form className="w-full md:px-36">
+            
+            {error && (
+                <div className="w-full md:px-36 mb-3">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-xs">
+                        {error}
+                    </div>
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="w-full md:px-36">
                 <div className="space-y-1">
                     <label htmlFor="email" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Email</label>
-                    <input id="email" type="email" className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" />
+                    <input 
+                        id="email" 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={loading}
+                        className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" 
+                    />
                 </div>
                 <div className="space-y-1 mt-3">
                     <label htmlFor="password" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Password</label>
-                    <input id="password" type="password" className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" />
+                    <input 
+                        id="password" 
+                        type="password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        disabled={loading}
+                        className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" 
+                    />
                 </div>
                 <div className="text-center mt-3">
                     <a
@@ -120,11 +193,11 @@ function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
                 </div>
                 <div className="flex flex-row text-center justify-center mt-3">
                     <button
-                        type="button"
-                        onClick={onLoginClick}
-                        className="w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
+                        type="submit"
+                        disabled={loading}
+                        className="w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 hover:bg-amber-900 disabled:opacity-50 disabled:cursor-not-allowed text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
                     >
-                        LOGIN
+                        {loading ? 'LOGGING IN...' : 'LOGIN'}
                     </button>
                 </div>
             </form>

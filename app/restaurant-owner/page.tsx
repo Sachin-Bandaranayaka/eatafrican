@@ -8,7 +8,9 @@ export default function RestaurantOwnerDashboard() {
     const [user, setUser] = useState<any>(null);
     const [restaurant, setRestaurant] = useState<any>(null);
     const [menuItems, setMenuItems] = useState<any[]>([]);
+    const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [ordersLoading, setOrdersLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'overview' | 'menu' | 'orders'>('overview');
 
     useEffect(() => {
@@ -124,6 +126,63 @@ export default function RestaurantOwnerDashboard() {
             console.error('Error fetching menu items:', error);
         }
     };
+
+    const fetchOrders = async () => {
+        if (!restaurant?.id) return;
+        
+        setOrdersLoading(true);
+        try {
+            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const response = await fetch(`/api/restaurants/${restaurant.id}/orders`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setOrders(data.orders || []);
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        } finally {
+            setOrdersLoading(false);
+        }
+    };
+
+    const updateOrderStatus = async (orderId: string, newStatus: string) => {
+        try {
+            const token = localStorage.getItem('accessToken') || localStorage.getItem('auth_token');
+            const response = await fetch(`/api/orders/${orderId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            if (response.ok) {
+                // Refresh orders
+                await fetchOrders();
+                const statusMessage = newStatus === 'ready_for_pickup' 
+                    ? 'Order marked as ready! Drivers can now see and accept this order.'
+                    : 'Order status updated successfully';
+                alert(statusMessage);
+            } else {
+                alert('Failed to update order status');
+            }
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            alert('Error updating order status');
+        }
+    };
+
+    useEffect(() => {
+        if (activeTab === 'orders' && restaurant?.id) {
+            fetchOrders();
+        }
+    }, [activeTab, restaurant?.id]);
 
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
@@ -310,8 +369,121 @@ export default function RestaurantOwnerDashboard() {
                         )}
 
                         {activeTab === 'orders' && (
-                            <div className="text-center py-12">
-                                <p className="text-gray-500">Order management coming soon...</p>
+                            <div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-lg font-bold">Orders</h3>
+                                    <button
+                                        onClick={fetchOrders}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold"
+                                    >
+                                        Refresh
+                                    </button>
+                                </div>
+
+                                {ordersLoading ? (
+                                    <div className="text-center py-12">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-900 mx-auto mb-4"></div>
+                                        <p className="text-gray-500">Loading orders...</p>
+                                    </div>
+                                ) : orders.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <p className="text-gray-500">No orders yet</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {orders.map((order) => (
+                                            <div key={order.id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div>
+                                                        <h4 className="font-bold text-lg">Order #{order.orderNumber}</h4>
+                                                        <p className="text-sm text-gray-600">
+                                                            {new Date(order.createdAt).toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-lg font-bold text-red-900">CHF {order.totalAmount}</p>
+                                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                                                            order.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                                            order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                                                            order.status === 'preparing' ? 'bg-orange-100 text-orange-800' :
+                                                            order.status === 'ready_for_pickup' ? 'bg-purple-100 text-purple-800' :
+                                                            order.status === 'assigned' ? 'bg-cyan-100 text-cyan-800' :
+                                                            order.status === 'out_for_delivery' ? 'bg-indigo-100 text-indigo-800' :
+                                                            order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                                            'bg-red-100 text-red-800'
+                                                        }`}>
+                                                            {order.status.toUpperCase().replace('_', ' ')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-gray-700">Delivery Address:</p>
+                                                        <p className="text-sm text-gray-600">
+                                                            {order.deliveryAddress}<br />
+                                                            {order.deliveryCity}, {order.deliveryPostalCode}
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-bold text-gray-700">Scheduled Delivery:</p>
+                                                        <p className="text-sm text-gray-600">
+                                                            {new Date(order.scheduledDeliveryTime).toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {order.items && order.items.length > 0 && (
+                                                    <div className="mb-4">
+                                                        <p className="text-sm font-bold text-gray-700 mb-2">Items:</p>
+                                                        <div className="space-y-1">
+                                                            {order.items.map((item: any, idx: number) => (
+                                                                <p key={idx} className="text-sm text-gray-600">
+                                                                    {item.quantity}x {item.menuItem?.name || 'Item'} - CHF {item.price}
+                                                                </p>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className="flex gap-2 flex-wrap">
+                                                    {order.status === 'new' && (
+                                                        <button
+                                                            onClick={() => updateOrderStatus(order.id, 'confirmed')}
+                                                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-bold"
+                                                        >
+                                                            Confirm Order
+                                                        </button>
+                                                    )}
+                                                    {order.status === 'confirmed' && (
+                                                        <button
+                                                            onClick={() => updateOrderStatus(order.id, 'preparing')}
+                                                            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded text-sm font-bold"
+                                                        >
+                                                            Start Preparing
+                                                        </button>
+                                                    )}
+                                                    {order.status === 'preparing' && (
+                                                        <button
+                                                            onClick={() => updateOrderStatus(order.id, 'ready_for_pickup')}
+                                                            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm font-bold"
+                                                        >
+                                                            Mark as Ready
+                                                        </button>
+                                                    )}
+                                                    {(order.status === 'new' || order.status === 'confirmed') && (
+                                                        <button
+                                                            onClick={() => updateOrderStatus(order.id, 'cancelled')}
+                                                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-bold"
+                                                        >
+                                                            Cancel Order
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

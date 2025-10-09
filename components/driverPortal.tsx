@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Header from "./driverPortal/Header";
-import OrdersSection from "./driverPortal/OrdersSection";
+import OrdersSection from "./driverPortal/OrdersSection-connected";
 import OrderDetails from "./driverPortal/orderDetails";
 import PickupDelivery from "./driverPortal/pickupDelivery";
 import ConfirmPickup from "./driverPortal/confirmPickup";
@@ -19,6 +19,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
 
     // State management for the full delivery flow
     const [showOrderDetails, setShowOrderDetails] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const [showPickupDelivery, setShowPickupDelivery] = useState(false);
     const [showConfirmPickup, setShowConfirmPickup] = useState(false);
     const [showConfirmedPickup, setShowConfirmedPickup] = useState(false);
@@ -85,13 +86,13 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
 
         switch (currentView) {
             case 'ORDERS':
-                return <OrdersSection setShowOrderDetails={setShowOrderDetails} />;
+                return <OrdersSection setShowOrderDetails={setShowOrderDetails} setSelectedOrder={setSelectedOrder} />;
             case 'ACCOUNT': // Added case for Account
                 return <Account />;
             case 'EARNINGS': // Added case for Earnings
                 return <Earnings />;
             default:
-                return <OrdersSection setShowOrderDetails={setShowOrderDetails} />;
+                return <OrdersSection setShowOrderDetails={setShowOrderDetails} setSelectedOrder={setSelectedOrder} />;
         }
     };
 

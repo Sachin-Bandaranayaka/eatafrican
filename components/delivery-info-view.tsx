@@ -2,9 +2,28 @@
 
 interface DeliveryInfoViewProps {
   onPlaceOrder: () => void
+  loading?: boolean
+  subtotal?: number
+  deliveryFee?: number
+  discount?: number
+  deliveryTime?: string
+  onDeliveryTimeChange?: (value: string) => void
+  voucherCode?: string
+  onVoucherCodeChange?: (value: string) => void
 }
 
-export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
+export function DeliveryInfoView({ 
+  onPlaceOrder, 
+  loading = false,
+  subtotal = 0,
+  deliveryFee = 0,
+  discount = 0,
+  deliveryTime = '',
+  onDeliveryTimeChange = () => {},
+  voucherCode = '',
+  onVoucherCodeChange = () => {}
+}: DeliveryInfoViewProps) {
+  const total = subtotal + deliveryFee - discount;
   return (
     <div className="relative rounded-3xl p-10 md:px-20 py-4 shadow mt-10 md:-mt-16 mt-0">
 
@@ -28,42 +47,42 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
           <input
             placeholder="Firstname"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
           <input
             placeholder="Last Name"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
         </div>
         <div className="grid grid-cols-2 gap-2">
           <input
             placeholder="Email"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
           <input
             placeholder="Phone Number"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
         </div>
         <div className="grid grid-cols-2 gap-2">
           <input
             placeholder="Postal Code"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
           <input
             placeholder="Town"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+             p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
         </div>
         <input
           placeholder="Street and Housenumber"
           className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-           p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none"
+           p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
         />
       </div>
 
@@ -76,9 +95,11 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
         </div>
         <div className=" ">
           <input
-            placeholder="- - -"
+            type="datetime-local"
+            value={deliveryTime}
+            onChange={(e) => onDeliveryTimeChange(e.target.value)}
             className="relative p-1 md:p-2 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none
-            text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] "
+            text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] text-black"
           />
         </div>
       </div>
@@ -89,13 +110,15 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
           <div>
             <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]  ">Subtotal</div>
             <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]  ">Delivery Fee</div>
+            {discount > 0 && <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]  ">Discount</div>}
             <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold">Total</div>
             <div className="text-xs">Inkl. MwSt.</div>
           </div>
           <div className="text-center">
-            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">Fr. 45.00.-</div>
-            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]  ">-</div>
-            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold  ">-</div>
+            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">Fr. {subtotal.toFixed(2)}.-</div>
+            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]  ">Fr. {deliveryFee.toFixed(2)}.-</div>
+            {discount > 0 && <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] text-green-600">-Fr. {discount.toFixed(2)}.-</div>}
+            <div className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold  ">Fr. {total.toFixed(2)}.-</div>
             <div className="text-xs">-</div>
           </div>
         </div>
@@ -106,8 +129,10 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
             <div className="flex flex-col justify-end mt-4">
               <input
                 placeholder="VOUCHER CODE"
+                value={voucherCode}
+                onChange={(e) => onVoucherCodeChange(e.target.value)}
                 className="relative p-1 md:p-2 rounded border border-gray-300 w-full uppercase focus:ring-2 focus:ring-amber-500 focus:outline-none
-                text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] "
+                text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] text-black"
               />
             </div>
           </div>
@@ -123,23 +148,23 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
         <input
           placeholder="Name on Card"
           className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none"
+          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
         />
         <input
           placeholder="Card Number"
           className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none"
+          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
         />
         <div className="grid grid-cols-2 gap-2">
           <input
             placeholder="Expiry Date"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
           <input
             placeholder="CVV"
             className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
           />
         </div>
       </div>
@@ -147,11 +172,12 @@ export function DeliveryInfoView({ onPlaceOrder }: DeliveryInfoViewProps) {
       <div className="flex justify-center">
         <button
           onClick={onPlaceOrder}
-          className="relative bg-red-900 text-white rounded-full py-2 px-6 text-sm font-bold hover:bg-green-700 shadow-md"
+          disabled={loading}
+          className="relative bg-red-900 text-white rounded-full py-2 px-6 text-sm font-bold hover:bg-green-700 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="relative z-10
           text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">
-            PLACE YOUR ORDER
+            {loading ? 'PLACING ORDER...' : 'PLACE YOUR ORDER'}
           </span>
           <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
           <span

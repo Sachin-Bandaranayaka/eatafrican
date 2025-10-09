@@ -9,10 +9,10 @@ import { AuthError } from '@/lib/middleware/auth';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const driverId = params.id;
+    const { id: driverId } = await params;
 
     // Validate user has permission to view driver orders
     const user = await requireDriverAccess(req, driverId);

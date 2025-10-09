@@ -40,12 +40,95 @@ export default function Register({ onBackToLogin }: RegisterProps) {
         }));
     };
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     // Handler for form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Here you would typically handle form validation and API submission
-        console.log('Form submitted:', formData);
-        setIsSubmitted(true); // Switch to the "Thank You" view
+        setError('');
+
+        // Validation
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+            setError('Please fill in all required contact details');
+            return;
+        }
+
+        if (!formData.pickupLocation) {
+            setError('Please select a pickup location');
+            return;
+        }
+
+        if (!password || password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            // Step 1: Register user account
+            const registerResponse = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: password,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    phone: formData.phone,
+                    role: 'driver',
+                }),
+            });
+
+            const registerData = await registerResponse.json();
+
+            if (!registerResponse.ok) {
+                setError(registerData.error?.message || 'Registration failed');
+                setLoading(false);
+                return;
+            }
+
+            // Step 2: Create driver profile
+            const driverResponse = await fetch('/api/drivers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${registerData.token}`,
+                },
+                body: JSON.stringify({
+                    userId: registerData.user.id,
+                    licenseNumber: 'PENDING', // Will be updated after document verification
+                    vehicleType: 'Car', // Default, can be updated later
+                    vehiclePlate: 'PENDING', // Will be updated after document verification
+                    pickupZone: formData.pickupLocation,
+                }),
+            });
+
+            const driverData = await driverResponse.json();
+
+            if (!driverResponse.ok) {
+                setError(driverData.error?.message || 'Failed to create driver profile');
+                setLoading(false);
+                return;
+            }
+
+            // Success!
+            setIsSubmitted(true);
+        } catch (error) {
+            console.error('Registration error:', error);
+            setError('An error occurred during registration. Please try again.');
+            setLoading(false);
+        }
     };
 
     return (
@@ -86,28 +169,105 @@ export default function Register({ onBackToLogin }: RegisterProps) {
                         <form onSubmit={handleSubmit} className="w-full  px-24">
                             <h2 className="text-center text-[15px] font-bold text-green-700 mb-6">REGISTER DRIVER ACCOUNT</h2>
 
+                            {/* Error Message */}
+                            {error && (
+                                <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                    {error}
+                                </div>
+                            )}
+
                             {/* Contact Details */}
                             <fieldset className="mb-6">
                                 <legend className="text-[15px] font-bold text-black mb-2">CONTACT DETAILS</legend>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <div>
                                         <label htmlFor="firstName" className="block text-[15px] font-bold text-black">First Name*</label>
-                                        <input type="text" id="firstName" name="firstName" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
+                                        <input 
+                                            type="text" 
+                                            id="firstName" 
+                                            name="firstName" 
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                            required
+                                            disabled={loading}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
                                     </div>
                                     <div>
                                         <label htmlFor="lastName" className="block text-[15px] font-bold text-black">Last Name*</label>
-                                        <input type="text" id="lastName" name="lastName" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
+                                        <input 
+                                            type="text" 
+                                            id="lastName" 
+                                            name="lastName" 
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                            required
+                                            disabled={loading}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
                                     </div>
                                     <div>
                                         <label htmlFor="phone" className="block text-[15px] font-bold text-black">Phone Number*</label>
-                                        <input type="tel" id="phone" name="phone" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
+                                        <input 
+                                            type="tel" 
+                                            id="phone" 
+                                            name="phone" 
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            required
+                                            disabled={loading}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
                                     </div>
                                     <div>
                                         <label htmlFor="email" className="block text-[15px] font-bold text-black">Email Address*</label>
-                                        <input type="email" id="email" name="email" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
+                                        <input 
+                                            type="email" 
+                                            id="email" 
+                                            name="email" 
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            required
+                                            disabled={loading}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
                                     </div>
                                 </div>
                                 <p className="text-[13px] font-semibold text-black mt-2">We'll register your driver's account with this email. It will also serve as your login to access and manage your dashboard.</p>
+                            </fieldset>
+
+                            {/* Password Fields */}
+                            <fieldset className="mb-6">
+                                <legend className="text-[15px] font-bold text-black mb-2">CREATE PASSWORD</legend>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <label htmlFor="password" className="block text-[15px] font-bold text-black">Password*</label>
+                                        <input 
+                                            type="password" 
+                                            id="password" 
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            disabled={loading}
+                                            minLength={8}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="confirmPassword" className="block text-[15px] font-bold text-black">Confirm Password*</label>
+                                        <input 
+                                            type="password" 
+                                            id="confirmPassword" 
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            required
+                                            disabled={loading}
+                                            minLength={8}
+                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
+                                        />
+                                    </div>
+                                </div>
+                                <p className="text-[13px] font-semibold text-black mt-2">Password must be at least 8 characters long.</p>
                             </fieldset>
 
                             {/* Address */}
@@ -135,7 +295,7 @@ export default function Register({ onBackToLogin }: RegisterProps) {
                                 <p className="text-[13px] font-semibold text-black mb-4">Which location would you like to pick up orders from? You'll be delivering meals from there to nearby areas and other regions.</p>
                                 <h2 className='font-bold text-[13px] mb-2'>Choose Pickup Location</h2>
                                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 w-44">
-                                    {['Basel', 'Solothurn', 'Bern', 'Luzern', 'Olten', 'Zurich'].map(loc => (
+                                    {['Basel', 'Bern', 'Luzern', 'Zürich', 'Olten'].map(loc => (
                                         <div key={loc} className="flex items-center">
                                             <input id={loc} name="pickupLocation" type="radio" value={loc} onChange={handleChange} className="h-4 w-4 text-yellow-600 border-black focus:ring-yellow-500" />
                                             <label htmlFor={loc} className="ml-3 block text-[12px] font-bold text-black">{loc}</label>
@@ -188,8 +348,12 @@ export default function Register({ onBackToLogin }: RegisterProps) {
 
                             {/* Submit Button */}
                             <div className="text-start">
-                                <button type="submit" className="bg-red-900 text-white font-bold py-2 px-12 rounded-full border-4 border-amber-300 transition-colors">
-                                    SUBMIT
+                                <button 
+                                    type="submit" 
+                                    disabled={loading}
+                                    className="bg-red-900 text-white font-bold py-2 px-12 rounded-full border-4 border-amber-300 hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {loading ? 'SUBMITTING...' : 'SUBMIT'}
                                 </button>
                                 <p className="text-start font-semibold text-[13px] text-black mt-4">
                                     By clicking "Submit", you agree to our Terms and Conditions and acknowledge you have read the Privacy Notice.
