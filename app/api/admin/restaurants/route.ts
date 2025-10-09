@@ -27,16 +27,13 @@ export async function GET(req: NextRequest) {
     let query = db
       .from('restaurants')
       .select(`
-        id,
-        name,
-        region,
-        status,
-        created_at,
+        *,
         owner:users!restaurants_owner_id_fkey (
           id,
           first_name,
           last_name,
-          email
+          email,
+          phone
         )
       `, { count: 'exact' });
 
@@ -80,16 +77,25 @@ export async function GET(req: NextRequest) {
     const formattedRestaurants = (restaurants || []).map(restaurant => ({
       id: restaurant.id,
       name: restaurant.name,
+      email: restaurant.email,
+      phone: restaurant.phone,
+      address: restaurant.address,
+      city: restaurant.city,
+      postal_code: restaurant.postal_code,
+      region: restaurant.region,
+      cuisine_types: restaurant.cuisine_types,
+      logo_url: restaurant.logo_url,
+      cover_image_url: restaurant.cover_image_url,
       owner: {
         id: restaurant.owner.id,
-        firstName: restaurant.owner.first_name,
-        lastName: restaurant.owner.last_name,
+        first_name: restaurant.owner.first_name,
+        last_name: restaurant.owner.last_name,
         email: restaurant.owner.email,
+        phone: restaurant.owner.phone,
       },
-      region: restaurant.region,
       status: restaurant.status,
       totalOrders: orderCountMap[restaurant.id] || 0,
-      createdAt: restaurant.created_at,
+      created_at: restaurant.created_at,
     }));
 
     const response = createPaginatedResponse(

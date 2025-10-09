@@ -71,19 +71,21 @@ export async function GET() {
         cuisines,
       }));
 
-    // Count restaurants by location
+    // Count restaurants by location (keep original case from database)
     const locationCounts: { [key: string]: number } = {};
     restaurants.forEach((restaurant) => {
-      const city = restaurant.city?.toUpperCase();
+      const city = restaurant.city;
       if (city) {
-        locationCounts[city] = (locationCounts[city] || 0) + 1;
+        // Store with uppercase key for consistency, but keep original for display
+        const cityKey = city.toUpperCase();
+        locationCounts[cityKey] = (locationCounts[cityKey] || 0) + 1;
       }
     });
 
     // Format locations with counts
     const locations = Object.entries(locationCounts)
       .map(([city, count]) => ({
-        city,
+        city, // This will be uppercase
         count,
       }))
       .sort((a, b) => a.city.localeCompare(b.city));

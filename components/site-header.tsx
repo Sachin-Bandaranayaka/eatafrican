@@ -7,7 +7,7 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import LoginModal from "./login-modal";
 import LoginModalTest from "./login-modal-test";
-import { CartComponent } from "./cart";
+import { CartComponent } from "./cart-connected";
 import { useLocationContext } from "@/lib/location-context";
 import type { Language } from "@/lib/translations";
 

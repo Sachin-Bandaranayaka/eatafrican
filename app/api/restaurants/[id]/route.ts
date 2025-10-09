@@ -8,10 +8,10 @@ import { optionalAuth, requireRestaurantOwnership } from '@/lib/middleware/auth'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Optional authentication to determine if owner info should be included
     const user = await optionalAuth(req);
@@ -96,10 +96,10 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Validate authentication and ownership
     const user = await requireRestaurantOwnership(req, id);
@@ -186,10 +186,10 @@ export async function PATCH(
  */
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Only super admin can delete restaurants
     const user = await requireRestaurantOwnership(req, id);

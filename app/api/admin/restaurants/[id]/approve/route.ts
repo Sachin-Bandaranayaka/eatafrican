@@ -5,13 +5,13 @@ import { approveRestaurantSchema } from '@/lib/validation/schemas';
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate super admin role
     const user = await requireRole(['super_admin'])(req);
 
-    const restaurantId = params.id;
+    const { id: restaurantId } = await params;
 
     // Parse and validate request body
     const body = await req.json();

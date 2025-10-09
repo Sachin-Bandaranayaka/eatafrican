@@ -195,7 +195,7 @@ export default function LeftSideContent({
           {visibleComponent === "viewMenu" && (
             <>
               {console.log("Rendering ViewMenu")}
-              <ViewMenu />
+              <ViewMenu restaurantId={selectedRestaurant || undefined} />
             </>
           )}
           {visibleComponent === "aboutSpecialty" && aboutSpecialtyCuisineType && (
@@ -249,7 +249,7 @@ export default function LeftSideContent({
             {visibleComponent === "viewMenu" && (
               <>
                 {console.log("Rendering ViewMenu (Desktop)")}
-                <ViewMenu />
+                <ViewMenu restaurantId={selectedRestaurant || undefined} />
               </>
             )}
             {visibleComponent === "aboutSpecialty" && aboutSpecialtyCuisineType && (
