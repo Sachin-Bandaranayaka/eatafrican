@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
     const sortBy = searchParams.get('sortBy') || 'name';
     const latitude = searchParams.get('latitude');
     const longitude = searchParams.get('longitude');
+    const ownerId = searchParams.get('ownerId'); // For restaurant owners to get their own restaurant
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
@@ -30,8 +31,15 @@ export async function GET(req: NextRequest) {
     // Build query
     let query = db
       .from('restaurants')
-      .select('*', { count: 'exact' })
-      .eq('status', 'active'); // Only show active restaurants to customers
+      .select('*', { count: 'exact' });
+    
+    // If ownerId is provided, filter by owner (for restaurant owner dashboard)
+    if (ownerId) {
+      query = query.eq('owner_id', ownerId);
+    } else {
+      // Only show active restaurants to public
+      query = query.eq('status', 'active');
+    }
 
     // Apply filters
     if (city) {
