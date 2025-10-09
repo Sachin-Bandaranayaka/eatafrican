@@ -45,6 +45,12 @@ export default function PartnerRestaurantPage() {
             return;
         }
 
+        if (city === 'Select City...') {
+            setError('Please select a city');
+            setIsLoading(false);
+            return;
+        }
+
         if (password !== confirmPassword) {
             setError('Passwords do not match');
             setIsLoading(false);

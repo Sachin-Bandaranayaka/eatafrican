@@ -18,8 +18,23 @@ export default function OrdersSection({ setShowOrderDetails }: OrdersSectionProp
     // State to manage the selection within the modal
     const [selectedZone, setSelectedZone] = useState(pickupZone);
 
-    // List of available pickup zones
-    const zones = ["Basel", "Bern", "Luzern", "Olten"];
+    // List of available pickup zones - fetched dynamically
+    const [zones, setZones] = React.useState<string[]>(["Basel", "Bern", "Luzern", "Olten", "Zürich"]);
+
+    React.useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('/api/cities');
+            const data = await response.json();
+            const cityNames = data.map((city: any) => city.name);
+            setZones(cityNames);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+        }
+    };
 
     // Handler for saving the new pickup zone
     const handleSave = () => {

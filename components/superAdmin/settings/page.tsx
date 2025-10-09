@@ -7,12 +7,13 @@ import { CurrentLoginView } from './components/CurrentLoginView';
 import { AdministrationAccountsView } from './components/AdministrationAccountsView';
 import { CreateAccountView } from './components/CreateAccountView';
 import { ChangePasswordView } from './components/ChangePasswordView';
+import { CitiesManagementView } from './components/CitiesManagementView';
 
 const SettingsController = () => {
     const [mainView, setMainView] = useState('CURRENT LOGIN');
     const [subView, setSubView] = useState('main');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const mainViewOptions = ['CURRENT LOGIN', 'ADMINISTRATION ACCOUNTS'];
+    const mainViewOptions = ['CURRENT LOGIN', 'ADMINISTRATION ACCOUNTS', 'CITIES MANAGEMENT'];
 
     const renderContent = () => {
         // Views that take up the whole panel are rendered first
@@ -29,6 +30,9 @@ const SettingsController = () => {
         if (mainView === 'ADMINISTRATION ACCOUNTS') {
             title = 'User Accounts';
             content = <AdministrationAccountsView />;
+        } else if (mainView === 'CITIES MANAGEMENT') {
+            title = 'Delivery Cities';
+            content = <CitiesManagementView />;
         } else {
             // Default is CurrentLoginView, which doesn't have a title
             content = <CurrentLoginView />;
@@ -44,7 +48,7 @@ const SettingsController = () => {
                             CHANGE PASSWORD
                         </button>
                     )}
-                    {mainView === 'ADMINISTRATION ACCOUNTS' && subView !== 'change_password' && (
+                    {mainView === 'ADMINISTRATION ACCOUNTS' && subView !== 'change_password' && subView !== 'create_account' && (
                         <button
                             onClick={() => setSubView('create_account')}
                             className="bg-orange-500 text-white font-bold py-1 px-4 rounded-lg text-[7px] md:text-[12px]"

@@ -1,7 +1,7 @@
 // components/forms/RegistrationForm.tsx
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import Checkbox from './Checkbox';
@@ -12,6 +12,22 @@ interface RegistrationFormProps {
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
+    const [cities, setCities] = useState<string[]>(['Select City...']);
+
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('/api/cities');
+            const data = await response.json();
+            const cityNames = data.map((city: any) => city.name);
+            setCities(['Select City...', ...cityNames]);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+        }
+    };
     return (
         <form onSubmit={onSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-28">
@@ -42,7 +58,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                         <h2 className="text-sm font-extrabold text-gray-800 mb-2 mt-4">RESTAURANT INFORMATION</h2>
                         <FormInput label="Restaurant name" name="restaurantName" placeholder="" required fullWidth />
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                            <FormInput label="City" name="city" placeholder="" />
+                            <FormSelect label="City" name="city" options={cities} required />
                             <FormInput label="Postal Code" name="postalCode" placeholder="" />
                         </div>
                         <FormInput label="Street Name & Number" name="street" placeholder="" fullWidth />

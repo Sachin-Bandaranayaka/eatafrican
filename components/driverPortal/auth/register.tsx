@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // A simple icon component for the list items
 const CheckCircleIcon = () => (
@@ -18,6 +18,7 @@ interface RegisterProps {
 export default function Register({ onBackToLogin }: RegisterProps) {
     // State to track if the form has been submitted
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [cities, setCities] = useState<string[]>([]);
 
     // State for all form fields
     const [formData, setFormData] = useState({
@@ -30,6 +31,23 @@ export default function Register({ onBackToLogin }: RegisterProps) {
         street: '',
         pickupLocation: '',
     });
+
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('/api/cities');
+            const data = await response.json();
+            const cityNames = data.map((city: any) => city.name);
+            setCities(cityNames);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+            // Fallback to hardcoded cities if API fails
+            setCities(['Basel', 'Bern', 'Luzern', 'Olten', 'Zürich']);
+        }
+    };
 
     // Handler to update state on input change
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,7 +313,7 @@ export default function Register({ onBackToLogin }: RegisterProps) {
                                 <p className="text-[13px] font-semibold text-black mb-4">Which location would you like to pick up orders from? You'll be delivering meals from there to nearby areas and other regions.</p>
                                 <h2 className='font-bold text-[13px] mb-2'>Choose Pickup Location</h2>
                                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 w-44">
-                                    {['Basel', 'Bern', 'Luzern', 'Zürich', 'Olten'].map(loc => (
+                                    {cities.map(loc => (
                                         <div key={loc} className="flex items-center">
                                             <input id={loc} name="pickupLocation" type="radio" value={loc} onChange={handleChange} className="h-4 w-4 text-yellow-600 border-black focus:ring-yellow-500" />
                                             <label htmlFor={loc} className="ml-3 block text-[12px] font-bold text-black">{loc}</label>
