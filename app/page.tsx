@@ -21,10 +21,11 @@ import SuperAdminHeader from "../components/superAdmin/header";
 // Import all the components for the Super Admin dashboard views.
 // If an error occurs, it's likely one of these files is not exporting
 // the component with the correct name.
-import { SuperAdminDashboard } from "../components/superAdmin/dashboard";
-import { SuperAdminOrders } from "../components/superAdmin/orders/page";
-import { SuperAdminEarnings } from "../components/superAdmin/earnings/page";
-import { SuperAdminPayouts } from "../components/superAdmin/payouts/page";
+import { SuperAdminDashboardConnected } from "../components/superAdmin/dashboard-connected";
+import { OrdersManagementConnected } from "../components/superAdmin/orders/OrdersManagement-connected";
+import { EarningsManagementConnected } from "../components/superAdmin/earnings/EarningsManagement-connected";
+import { DriversManagementConnected } from "../components/superAdmin/delivery-drivers/DriversManagement-connected";
+import { CustomersManagementConnected } from "../components/superAdmin/customer-accounts/CustomersManagement-connected";
 import { SuperAdminRestaurant } from "../components/superAdmin/restaurant";
 import { SuperAdminDeliveryDrivers } from "../components/superAdmin/delivery-drivers/page";
 import { SuperAdminCustomerAccount } from "../components/superAdmin/customer-accounts/page";
@@ -90,26 +91,26 @@ export default function Home() {
 
             switch (superAdminView) {
                 case 'DASHBOARD':
-                    return SuperAdminDashboard ? <SuperAdminDashboard /> : <ErrorDisplay name="SuperAdminDashboard" />;
+                    return SuperAdminDashboardConnected ? <SuperAdminDashboardConnected /> : <ErrorDisplay name="SuperAdminDashboardConnected" />;
                 case 'ORDERS':
-                    return SuperAdminOrders ? <SuperAdminOrders /> : <ErrorDisplay name="SuperAdminOrders" />;
+                    return OrdersManagementConnected ? <OrdersManagementConnected /> : <ErrorDisplay name="OrdersManagementConnected" />;
                 case 'EARNINGS':
-                    return SuperAdminEarnings ? <SuperAdminEarnings /> : <ErrorDisplay name="SuperAdminEarnings" />;
+                    return EarningsManagementConnected ? <EarningsManagementConnected /> : <ErrorDisplay name="EarningsManagementConnected" />;
                 case 'PAYOUTS':
-                    return SuperAdminPayouts ? <SuperAdminPayouts /> : <ErrorDisplay name="SuperAdminPayouts" />;
+                    return EarningsManagementConnected ? <EarningsManagementConnected /> : <ErrorDisplay name="EarningsManagementConnected" />;
                 case 'RESTAURANT':
                     return SuperAdminRestaurant ? <SuperAdminRestaurant /> : <ErrorDisplay name="SuperAdminRestaurant" />;
                 case 'DELIVERY BACKEND':
                     return SuperAdminDeliveryBackend ? <SuperAdminDeliveryBackend /> : <ErrorDisplay name="SuperAdminDeliveryDrivers" />;
                 case 'DELIVERY DRIVERS':
-                    return SuperAdminDeliveryDrivers ? <SuperAdminDeliveryDrivers /> : <ErrorDisplay name="SuperAdminDeliveryDrivers" />;
+                    return DriversManagementConnected ? <DriversManagementConnected /> : <ErrorDisplay name="DriversManagementConnected" />;
                 case 'CUSTOMER ACCOUNT':
-                    return SuperAdminCustomerAccount ? <SuperAdminCustomerAccount /> : <ErrorDisplay name="SuperAdminCustomerAccount" />;
+                    return CustomersManagementConnected ? <CustomersManagementConnected /> : <ErrorDisplay name="CustomersManagementConnected" />;
                 case 'SETTINGS':
                     return SuperAdminSettings ? <SuperAdminSettings /> : <ErrorDisplay name="SuperAdminSettings" />;
                 default:
                     // Fallback to the dashboard
-                    return SuperAdminDashboard ? <SuperAdminDashboard /> : <ErrorDisplay name="SuperAdminDashboard" />;
+                    return SuperAdminDashboardConnected ? <SuperAdminDashboardConnected /> : <ErrorDisplay name="SuperAdminDashboardConnected" />;
             }
         };
 

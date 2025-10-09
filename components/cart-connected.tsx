@@ -31,7 +31,33 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
   // Calculate delivery fee when address changes
   useEffect(() => {
     if (deliveryAddress.postalCode && deliveryAddress.city) {
-      // Simple calculation - you can make this more sophisticated
+      // Calculate delivery fee based on postal code
+      const postalCode = parseInt(deliveryAddress.postalCode);
+      
+      if (isNaN(postalCode)) {
+        setDeliveryFee(6.00);
+        return;
+      }
+      
+      // Swiss postal code based delivery fee calculation
+      // Basel area (4000-4999): Fr. 6.00
+      // Zurich area (8000-8999): Fr. 8.00
+      // Bern area (3000-3999): Fr. 7.00
+      // Geneva area (1200-1299): Fr. 9.00
+      // Other areas: Fr. 10.00
+      
+      if (postalCode >= 4000 && postalCode <= 4999) {
+        setDeliveryFee(6.00);
+      } else if (postalCode >= 8000 && postalCode <= 8999) {
+        setDeliveryFee(8.00);
+      } else if (postalCode >= 3000 && postalCode <= 3999) {
+        setDeliveryFee(7.00);
+      } else if (postalCode >= 1200 && postalCode <= 1299) {
+        setDeliveryFee(9.00);
+      } else {
+        setDeliveryFee(10.00);
+      }
+    } else {
       setDeliveryFee(6.00);
     }
   }, [deliveryAddress]);
@@ -73,6 +99,10 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
     
     try {
       const token = localStorage.getItem('accessToken');
+      
+      // Convert datetime-local format to ISO 8601
+      const scheduledTime = new Date(deliveryTime).toISOString();
+      
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 
@@ -84,16 +114,13 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           items: items.map(item => ({
             menuItemId: item.menuItemId,
             quantity: item.quantity,
-            price: item.price
+            specialInstructions: ''
           })),
-          deliveryAddress: {
-            street: deliveryAddress.street,
-            city: deliveryAddress.city,
-            postalCode: deliveryAddress.postalCode
-          },
-          deliveryTime: deliveryTime,
-          voucherCode: voucherCode || undefined,
-          paymentMethod: 'card'
+          deliveryAddress: deliveryAddress.street,
+          deliveryCity: deliveryAddress.city,
+          deliveryPostalCode: deliveryAddress.postalCode,
+          scheduledDeliveryTime: scheduledTime,
+          voucherCode: voucherCode || undefined
         })
       });
       
@@ -244,20 +271,20 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                             placeholder="Postal Code"
                             value={deliveryAddress.postalCode}
                             onChange={(e) => setDeliveryAddress({...deliveryAddress, postalCode: e.target.value})}
-                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                           />
                           <input
                             placeholder="Town"
                             value={deliveryAddress.city}
                             onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
-                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                           />
                         </div>
                         <input
                           placeholder="Street and Housenumber"
                           value={deliveryAddress.street}
                           onChange={(e) => setDeliveryAddress({...deliveryAddress, street: e.target.value})}
-                          className="text-xs p-2 rounded border border-gray-300 w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                          className="text-xs p-2 rounded border border-gray-300 w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                         />
                       </div>
                     ) : (
@@ -298,7 +325,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                         type="datetime-local"
                         value={deliveryTime}
                         onChange={(e) => setDeliveryTime(e.target.value)}
-                        className="relative text-xs p-2 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="relative text-xs p-2 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                       />
                     </div>
                     <div className="flex flex-col justify-end">
@@ -307,7 +334,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                         value={voucherCode}
                         onChange={(e) => setVoucherCode(e.target.value)}
                         onBlur={validateVoucher}
-                        className="relative text-xs p-2 rounded border border-gray-300 w-full uppercase focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="relative text-xs p-2 rounded border border-gray-300 w-full uppercase focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                       />
                     </div>
                   </div>
@@ -444,7 +471,19 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           {/* Delivery/Payment Views - Desktop */}
           {currentView !== "login" && (
             <div className="hidden md:block w-full md:w-[40%] p-4 absolute top-20 left-[40%] md:left-[42%] z-10">
-              {currentView === "delivery" && <DeliveryInfoView onPlaceOrder={handlePlaceOrder} />}
+              {currentView === "delivery" && (
+                <DeliveryInfoView 
+                  onPlaceOrder={handlePlaceOrder} 
+                  loading={loading}
+                  subtotal={subtotal}
+                  deliveryFee={deliveryFee}
+                  discount={discount}
+                  deliveryTime={deliveryTime}
+                  onDeliveryTimeChange={setDeliveryTime}
+                  voucherCode={voucherCode}
+                  onVoucherCodeChange={setVoucherCode}
+                />
+              )}
               {currentView === "payment-error" && <PaymentErrorView onPlaceOrder={handleRetryPayment} />}
               {currentView === "payment-success" && <PaymentSuccessView />}
             </div>
@@ -453,7 +492,19 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           {/* Delivery/Payment Views - Mobile */}
           {currentView !== "login" && !showCartItems && (
             <div className="md:hidden w-full p-4" style={{ marginTop: "-64px" }}>
-              {currentView === "delivery" && <DeliveryInfoView onPlaceOrder={handlePlaceOrder} />}
+              {currentView === "delivery" && (
+                <DeliveryInfoView 
+                  onPlaceOrder={handlePlaceOrder} 
+                  loading={loading}
+                  subtotal={subtotal}
+                  deliveryFee={deliveryFee}
+                  discount={discount}
+                  deliveryTime={deliveryTime}
+                  onDeliveryTimeChange={setDeliveryTime}
+                  voucherCode={voucherCode}
+                  onVoucherCodeChange={setVoucherCode}
+                />
+              )}
               {currentView === "payment-error" && <PaymentErrorView onPlaceOrder={handleRetryPayment} />}
               {currentView === "payment-success" && <PaymentSuccessView />}
             </div>

@@ -28,7 +28,8 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
         if (userStr) {
             const user = JSON.parse(userStr);
             if (user.role === 'driver') {
-                setDriverId(user.id);
+                // Use driverId from user object if available, otherwise use user.id
+                setDriverId(user.driverId || user.id);
             }
         }
     }, []);
