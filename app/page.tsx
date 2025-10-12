@@ -73,6 +73,16 @@ export default function Home() {
         console.log("visibleComponent changed to:", visibleComponent);
     }, [visibleComponent]);
 
+    // Check for dashboard query parameter on mount
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('dashboard') === 'orders') {
+            openDashboard();
+            // Clean up the URL
+            window.history.replaceState({}, '', '/');
+        }
+    }, []);
+
     // --- START OF CONDITIONAL RENDERING ---
 
     if (adminView === 'superAdminDashboard') {

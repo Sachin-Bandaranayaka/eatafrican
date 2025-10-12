@@ -20,6 +20,7 @@ export async function validateAuth(req: NextRequest): Promise<AuthUser | null> {
     const authHeader = req.headers.get('authorization');
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('[Auth] No authorization header or invalid format');
       return null;
     }
 
@@ -30,6 +31,7 @@ export async function validateAuth(req: NextRequest): Promise<AuthUser | null> {
     const { data: { user }, error } = await supabase.auth.getUser(token);
 
     if (error || !user) {
+      console.log('[Auth] Token validation failed:', error?.message || 'No user');
       return null;
     }
 

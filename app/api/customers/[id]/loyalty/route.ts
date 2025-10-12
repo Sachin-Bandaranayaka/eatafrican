@@ -8,10 +8,10 @@ import { requireCustomerAccess } from '@/lib/middleware/auth';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const customerId = params.id;
+    const { id: customerId } = await params;
 
     // Validate customer access
     await requireCustomerAccess(req, customerId);

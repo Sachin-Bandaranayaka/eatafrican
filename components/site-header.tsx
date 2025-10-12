@@ -129,13 +129,13 @@ export default function SiteHeader({
         <div className="flex items-center gap-4 md:gap-2">
           {/* Dashboard btn */}
           <div className="md:mr-12">
-            <Link
-              href="/customer-dashboard"
+            <button
+              onClick={onOpenDashboard}
               className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap inline-block"
               aria-label="Dashboard"
             >
               DASHBOARD
-            </Link>
+            </button>
           </div>
           
           {/* User Menu or Login Button */}

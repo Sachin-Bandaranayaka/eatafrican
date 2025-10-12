@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
 // Define the types for the props
@@ -13,6 +13,17 @@ interface HeaderProps {
 
 export default function Header({ currentView, setCurrentView, isDropdownOpen, setIsDropdownOpen }: HeaderProps) {
     const views = ['ORDERS', 'ACCOUNT', 'EARNINGS'];
+    const [driverName, setDriverName] = useState('Driver');
+
+    useEffect(() => {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            if (user.firstName) {
+                setDriverName(user.firstName);
+            }
+        }
+    }, []);
 
     return (
         <header className="flex flex-row justify-center z-50">
@@ -36,7 +47,7 @@ export default function Header({ currentView, setCurrentView, isDropdownOpen, se
                         <div className="pt-[1%] pb-[1%] pl-0 flex flex-col justify-center space-y-0 w-full">
                             <div className="relative z-10 ml-2">
                                 <h1 className="text-black text-[8px] md:text-[13px] font-bold">
-                                    hello, [Driver's Name]
+                                    hello, {driverName}
                                 </h1>
                                 <h1 className="text-black text-[8px] md:text-[13px] font-bold">
                                     Have a nice day!

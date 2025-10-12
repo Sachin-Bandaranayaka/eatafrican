@@ -38,7 +38,8 @@ export default function CheckoutSuccessPage() {
 
     // Fetch order details
     fetchOrderDetails(orderId);
-  }, [orderId, clearCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const fetchOrderDetails = async (id: string) => {
     try {
@@ -50,13 +51,13 @@ export default function CheckoutSuccessPage() {
 
       const data = await response.json();
       setOrderDetails({
-        id: data.order.id,
-        orderNumber: data.order.order_number || data.order.id.slice(0, 8).toUpperCase(),
-        status: data.order.status,
-        paymentStatus: data.order.payment_status,
-        totalAmount: data.order.total_amount,
-        createdAt: data.order.created_at,
-        restaurantName: data.order.restaurant?.name,
+        id: data.id,
+        orderNumber: data.orderNumber || data.id.slice(0, 8).toUpperCase(),
+        status: data.status,
+        paymentStatus: data.paymentStatus,
+        totalAmount: data.totalAmount,
+        createdAt: data.createdAt,
+        restaurantName: data.restaurant?.name,
       });
     } catch (err: any) {
       console.error('Error fetching order details:', err);
@@ -68,7 +69,7 @@ export default function CheckoutSuccessPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center relative z-10">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading order details...</p>
@@ -79,7 +80,7 @@ export default function CheckoutSuccessPage() {
 
   if (error || !orderDetails) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 relative z-10">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Unable to Load Order</h1>
@@ -96,8 +97,8 @@ export default function CheckoutSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-3xl mx-auto relative">
         {/* Success Header */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6 text-center">
           <div className="text-green-500 text-6xl mb-4">✓</div>
@@ -229,7 +230,7 @@ export default function CheckoutSuccessPage() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
-            href={`/api/orders/${orderDetails.id}`}
+            href="/?dashboard=orders"
             className="flex-1 bg-green-600 text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
           >
             View Order Details

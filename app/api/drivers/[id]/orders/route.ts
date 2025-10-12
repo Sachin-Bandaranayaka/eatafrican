@@ -56,7 +56,13 @@ export async function GET(
 
     // Apply filters
     if (status) {
-      query = query.eq('status', status);
+      // Handle multiple statuses separated by comma
+      const statuses = status.split(',').map(s => s.trim());
+      if (statuses.length === 1) {
+        query = query.eq('status', statuses[0]);
+      } else {
+        query = query.in('status', statuses);
+      }
     }
 
     if (startDate) {

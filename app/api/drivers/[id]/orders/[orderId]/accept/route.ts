@@ -9,11 +9,10 @@ import { AuthError } from '@/lib/middleware/auth';
  */
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string; orderId: string } }
+  { params }: { params: Promise<{ id: string; orderId: string }> }
 ) {
   try {
-    const driverId = params.id;
-    const orderId = params.orderId;
+    const { id: driverId, orderId } = await params;
 
     // Validate user has permission to accept orders as this driver
     const user = await requireDriverAccess(req, driverId);

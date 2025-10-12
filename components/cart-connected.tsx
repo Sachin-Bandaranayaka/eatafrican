@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { ChevronRight } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { DeliveryInfoView } from "./delivery-info-view"
+import { getCurrentUser, isAuthenticated } from "@/lib/auth/client"
 
 type ViewState = "login" | "delivery"
 
@@ -13,6 +14,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
   
   const [currentView, setCurrentView] = useState<ViewState>("login")
   const [showCartItems, setShowCartItems] = useState(true)
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false)
   
   // Form states
   const [deliveryAddress, setDeliveryAddress] = useState({
@@ -24,39 +26,100 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
   const [voucherCode, setVoucherCode] = useState('');
   const [deliveryFee, setDeliveryFee] = useState(6.00);
   const [discount, setDiscount] = useState(0);
+  const [addressValidationError, setAddressValidationError] = useState<string>('');
+  const [isValidatingAddress, setIsValidatingAddress] = useState(false);
 
-  // Calculate delivery fee when address changes
+  // Check authentication status on mount
   useEffect(() => {
-    if (deliveryAddress.postalCode && deliveryAddress.city) {
-      // Calculate delivery fee based on postal code
-      const postalCode = parseInt(deliveryAddress.postalCode);
-      
-      if (isNaN(postalCode)) {
+    const checkAuth = () => {
+      const authenticated = isAuthenticated();
+      setIsUserAuthenticated(authenticated);
+      // If user is authenticated, skip login view
+      if (authenticated) {
+        setCurrentView("delivery");
+      }
+    };
+
+    checkAuth();
+
+    // Listen for auth changes
+    window.addEventListener('auth-change', checkAuth);
+    return () => {
+      window.removeEventListener('auth-change', checkAuth);
+    };
+  }, []);
+
+  // Validate address and calculate delivery fee
+  useEffect(() => {
+    const validateAndCalculateFee = async () => {
+      if (!deliveryAddress.postalCode || !deliveryAddress.city || !deliveryAddress.street) {
         setDeliveryFee(6.00);
+        setAddressValidationError('');
         return;
       }
-      
-      // Swiss postal code based delivery fee calculation
-      // Basel area (4000-4999): Fr. 6.00
-      // Zurich area (8000-8999): Fr. 8.00
-      // Bern area (3000-3999): Fr. 7.00
-      // Geneva area (1200-1299): Fr. 9.00
-      // Other areas: Fr. 10.00
-      
-      if (postalCode >= 4000 && postalCode <= 4999) {
-        setDeliveryFee(6.00);
-      } else if (postalCode >= 8000 && postalCode <= 8999) {
-        setDeliveryFee(8.00);
-      } else if (postalCode >= 3000 && postalCode <= 3999) {
-        setDeliveryFee(7.00);
-      } else if (postalCode >= 1200 && postalCode <= 1299) {
-        setDeliveryFee(9.00);
-      } else {
-        setDeliveryFee(10.00);
+
+      setIsValidatingAddress(true);
+      setAddressValidationError('');
+
+      try {
+        // Validate Swiss postal code format (4 digits)
+        const postalCode = deliveryAddress.postalCode.trim();
+        if (!/^\d{4}$/.test(postalCode)) {
+          setAddressValidationError('Invalid postal code format. Swiss postal codes are 4 digits.');
+          setDeliveryFee(6.00);
+          setIsValidatingAddress(false);
+          return;
+        }
+
+        // Call address validation API
+        const response = await fetch('/api/validate-address', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            postalCode: deliveryAddress.postalCode,
+            city: deliveryAddress.city,
+            street: deliveryAddress.street,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.valid) {
+          setAddressValidationError(data.message || 'Address could not be validated. Please check your input.');
+          setDeliveryFee(6.00);
+        } else {
+          // Address is valid, calculate delivery fee
+          setAddressValidationError('');
+          setDeliveryFee(data.deliveryFee || 6.00);
+        }
+      } catch (error) {
+        console.error('Address validation error:', error);
+        // Fallback to basic postal code validation
+        const postalCodeNum = parseInt(deliveryAddress.postalCode);
+        
+        if (isNaN(postalCodeNum)) {
+          setDeliveryFee(6.00);
+        } else if (postalCodeNum >= 4000 && postalCodeNum <= 4999) {
+          setDeliveryFee(6.00);
+        } else if (postalCodeNum >= 8000 && postalCodeNum <= 8999) {
+          setDeliveryFee(8.00);
+        } else if (postalCodeNum >= 3000 && postalCodeNum <= 3999) {
+          setDeliveryFee(7.00);
+        } else if (postalCodeNum >= 1200 && postalCodeNum <= 1299) {
+          setDeliveryFee(9.00);
+        } else {
+          setDeliveryFee(10.00);
+        }
+      } finally {
+        setIsValidatingAddress(false);
       }
-    } else {
-      setDeliveryFee(6.00);
-    }
+    };
+
+    // Debounce validation
+    const timeoutId = setTimeout(validateAndCalculateFee, 800);
+    return () => clearTimeout(timeoutId);
   }, [deliveryAddress]);
 
   const handleLogin = () => {
@@ -84,7 +147,13 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
     
     // Validate delivery address
     if (!deliveryAddress.street || !deliveryAddress.city || !deliveryAddress.postalCode) {
-      alert('Please provide delivery address');
+      alert('Please provide complete delivery address');
+      return;
+    }
+    
+    // Check for address validation errors
+    if (addressValidationError) {
+      alert('Please correct the address errors before proceeding');
       return;
     }
     
@@ -231,21 +300,27 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                           placeholder="Postal Code"
                           value={deliveryAddress.postalCode}
                           onChange={(e) => setDeliveryAddress({...deliveryAddress, postalCode: e.target.value})}
-                          className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                          className={`text-xs p-2 rounded border ${addressValidationError ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-amber-500 focus:outline-none text-black`}
                         />
                         <input
                           placeholder="Town"
                           value={deliveryAddress.city}
                           onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
-                          className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                          className={`text-xs p-2 rounded border ${addressValidationError ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-amber-500 focus:outline-none text-black`}
                         />
                       </div>
                       <input
                         placeholder="Street and Housenumber"
                         value={deliveryAddress.street}
                         onChange={(e) => setDeliveryAddress({...deliveryAddress, street: e.target.value})}
-                        className="text-xs p-2 rounded border border-gray-300 w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                        className={`text-xs p-2 rounded border ${addressValidationError ? 'border-red-500' : 'border-gray-300'} w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black`}
                       />
+                      {addressValidationError && (
+                        <p className="text-xs text-red-400 mt-1">{addressValidationError}</p>
+                      )}
+                      {isValidatingAddress && (
+                        <p className="text-xs text-yellow-300 mt-1">Validating address...</p>
+                      )}
                     </div>
                   </div>
 
@@ -310,7 +385,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
               CHECKOUT
             </div>
 
-            {currentView === "login" && (
+            {currentView === "login" && !isUserAuthenticated && (
               <div className="rounded-2xl p-4 relative shadow">
                 <div
                   className="absolute inset-0 border border-[#f1c232]"
@@ -379,7 +454,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                 </button>
               </div>
               <div className="relative">
-                {currentView === "login" && (
+                {currentView === "login" && !isUserAuthenticated && (
                   <div className="relative mt-24 p-4 w-[60%] rounded-2xl z-50">
                     <div
                       className="absolute inset-0 border border-[#f1c232]"

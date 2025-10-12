@@ -10,10 +10,10 @@ import type { OrderStatus } from '@/lib/types';
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const orderId = params.id;
+    const { id: orderId } = await params;
 
     // Parse and validate request body
     const body = await req.json();

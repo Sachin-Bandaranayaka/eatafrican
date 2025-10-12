@@ -150,10 +150,10 @@ export default function CheckoutPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center bg-white/90 backdrop-blur-sm p-8 rounded-lg shadow-lg">
           <Loader2 className="h-12 w-12 animate-spin text-green-600 mx-auto mb-4" />
-          <p className="text-gray-600 text-lg">Preparing your checkout...</p>
+          <p className="text-gray-800 text-lg font-semibold">Preparing your checkout...</p>
         </div>
       </div>
     );
@@ -162,7 +162,7 @@ export default function CheckoutPage() {
   // Error state - order creation failed
   if (orderCreationError) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="min-h-screen py-12 px-4">
         <div className="container mx-auto max-w-2xl">
           <Alert variant="destructive" className="mb-6">
             <AlertDescription className="text-base">
@@ -192,24 +192,24 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-lg border-2 border-amber-200">
           <Link 
             href="/restaurants" 
-            className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-amber-800 hover:text-amber-900 mb-4 font-semibold"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Restaurants
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <p className="text-gray-600 mt-2">Complete your order and payment</p>
+          <h1 className="text-3xl font-bold text-amber-900">Checkout</h1>
+          <p className="text-gray-700 mt-2">Complete your order and payment</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <Alert variant="destructive" className="mb-6">
+          <Alert variant="destructive" className="mb-6 bg-red-50/95 backdrop-blur-sm border-2 border-red-300">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -217,9 +217,9 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Order Summary - Left Side */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-2 border-amber-200">
+              <CardHeader className="bg-gradient-to-r from-amber-50 to-orange-50 border-b-2 border-amber-200">
+                <CardTitle className="flex items-center gap-2 text-amber-900">
                   <ShoppingCart className="h-5 w-5" />
                   Order Summary
                 </CardTitle>
@@ -298,9 +298,9 @@ export default function CheckoutPage() {
 
           {/* Payment Form - Right Side */}
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment Details</CardTitle>
+            <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-2 border-amber-200">
+              <CardHeader className="bg-gradient-to-r from-amber-50 to-orange-50 border-b-2 border-amber-200">
+                <CardTitle className="text-amber-900">Payment Details</CardTitle>
               </CardHeader>
               <CardContent>
                 {clientSecret ? (

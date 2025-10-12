@@ -139,37 +139,7 @@ export function DeliveryInfoView({
         </div>
       </div>
 
-      <h2 className="relative font-bold mb-4 mt-4 md:text-start text-[#ebeb48]
-      text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">
-        PAYMENT METHOD
-      </h2>
-
-      <div className="relative space-y-3 mb-4">
-        <input
-          placeholder="Name on Card"
-          className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-        />
-        <input
-          placeholder="Card Number"
-          className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-          p-1 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-        />
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            placeholder="Expiry Date"
-            className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-          />
-          <input
-            placeholder="CVV"
-            className="text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] 
-            p-1 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-6">
         <button
           onClick={onPlaceOrder}
           disabled={loading}
