@@ -4,10 +4,16 @@ import { optionalAuth } from '@/lib/middleware/auth';
 import { createOrderSchema } from '@/lib/validation/schemas';
 import { calculateDeliveryFee, calculateDistance } from '@/lib/utils/distance';
 import { applyVoucherToOrder } from '@/lib/utils/voucher';
+import { stripe } from '@/lib/stripe/client';
 
 /**
  * POST /api/orders
  * Create a new order
+ * 
+ * Payment Integration:
+ * - Orders are created with payment_status='pending' by default
+ * - Pass paymentIntentId to link order with Stripe payment
+ * - Webhook handler updates payment_status to 'completed' after successful payment
  */
 export async function POST(req: NextRequest) {
   try {
@@ -203,33 +209,43 @@ export async function POST(req: NextRequest) {
     // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
+    // Prepare order data
+    const orderData: any = {
+      order_number: orderNumber,
+      customer_id: customerId,
+      restaurant_id: validatedData.restaurantId,
+      status: 'new',
+      customer_email: validatedData.customerEmail,
+      customer_phone: validatedData.customerPhone,
+      customer_first_name: validatedData.customerFirstName,
+      customer_last_name: validatedData.customerLastName,
+      delivery_address: validatedData.deliveryAddress,
+      delivery_city: validatedData.deliveryCity,
+      delivery_postal_code: validatedData.deliveryPostalCode,
+      delivery_latitude: validatedData.deliveryLatitude,
+      delivery_longitude: validatedData.deliveryLongitude,
+      delivery_instructions: validatedData.deliveryInstructions,
+      scheduled_delivery_time: validatedData.scheduledDeliveryTime,
+      subtotal,
+      delivery_fee: deliveryFee,
+      discount_amount: discountAmount,
+      tax_amount: taxAmount,
+      total_amount: totalAmount,
+      payment_status: 'pending',
+      voucher_code: validatedData.voucherCode,
+    };
+
+    // If paymentIntentId is provided, store it as payment reference
+    // This links the order to the Stripe payment intent
+    if (validatedData.paymentIntentId) {
+      orderData.payment_reference = validatedData.paymentIntentId;
+      orderData.payment_method = 'stripe';
+    }
+
     // Create order
     const { data: order, error: orderError } = await db
       .from('orders')
-      .insert({
-        order_number: orderNumber,
-        customer_id: customerId,
-        restaurant_id: validatedData.restaurantId,
-        status: 'new',
-        customer_email: validatedData.customerEmail,
-        customer_phone: validatedData.customerPhone,
-        customer_first_name: validatedData.customerFirstName,
-        customer_last_name: validatedData.customerLastName,
-        delivery_address: validatedData.deliveryAddress,
-        delivery_city: validatedData.deliveryCity,
-        delivery_postal_code: validatedData.deliveryPostalCode,
-        delivery_latitude: validatedData.deliveryLatitude,
-        delivery_longitude: validatedData.deliveryLongitude,
-        delivery_instructions: validatedData.deliveryInstructions,
-        scheduled_delivery_time: validatedData.scheduledDeliveryTime,
-        subtotal,
-        delivery_fee: deliveryFee,
-        discount_amount: discountAmount,
-        tax_amount: taxAmount,
-        total_amount: totalAmount,
-        payment_status: 'pending',
-        voucher_code: validatedData.voucherCode,
-      })
+      .insert(orderData)
       .select()
       .single();
 
@@ -244,6 +260,24 @@ export async function POST(req: NextRequest) {
         },
         { status: 500 }
       );
+    }
+
+    // Update payment intent metadata with orderId
+    // This ensures the webhook can link the payment to the order
+    if (validatedData.paymentIntentId) {
+      try {
+        await stripe.paymentIntents.update(validatedData.paymentIntentId, {
+          metadata: {
+            orderId: order.id,
+            orderNumber: order.order_number,
+            customerId: customerId || 'guest',
+          },
+        });
+        console.log(`✓ Updated payment intent ${validatedData.paymentIntentId} with orderId: ${order.id}`);
+      } catch (stripeError: any) {
+        console.error('Failed to update payment intent metadata:', stripeError);
+        // Don't fail the order creation, but log for monitoring
+      }
     }
 
     // Create order items
@@ -374,6 +408,112 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    return NextResponse.json(
+      {
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: 'An unexpected error occurred',
+        },
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PATCH /api/orders
+ * Update order payment status after payment confirmation
+ * This is typically called by the webhook handler or after successful payment
+ */
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { orderId, paymentIntentId, paymentStatus } = body;
+
+    if (!orderId) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Order ID is required',
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    // Verify order exists
+    const { data: existingOrder, error: fetchError } = await db
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
+
+    if (fetchError || !existingOrder) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'RESOURCE_NOT_FOUND',
+            message: 'Order not found',
+          },
+        },
+        { status: 404 }
+      );
+    }
+
+    // Prepare update data
+    const updateData: any = {
+      updated_at: new Date().toISOString(),
+    };
+
+    // Update payment reference if provided
+    if (paymentIntentId) {
+      updateData.payment_reference = paymentIntentId;
+      updateData.payment_method = 'stripe';
+    }
+
+    // Update payment status if provided
+    if (paymentStatus) {
+      updateData.payment_status = paymentStatus;
+
+      // If payment is completed, update order status to confirmed
+      if (paymentStatus === 'completed' && existingOrder.status === 'new') {
+        updateData.status = 'confirmed';
+      }
+    }
+
+    // Update order
+    const { data: updatedOrder, error: updateError } = await db
+      .from('orders')
+      .update(updateData)
+      .eq('id', orderId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Order update error:', updateError);
+      return NextResponse.json(
+        {
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to update order',
+          },
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      order: {
+        id: updatedOrder.id,
+        orderNumber: updatedOrder.order_number,
+        status: updatedOrder.status,
+        paymentStatus: updatedOrder.payment_status,
+        paymentReference: updatedOrder.payment_reference,
+      },
+    });
+  } catch (error: any) {
+    console.error('Order update error:', error);
     return NextResponse.json(
       {
         error: {

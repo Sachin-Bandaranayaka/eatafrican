@@ -1,20 +1,18 @@
 "use client"
 import { useState, useEffect } from "react"
-import Image from "next/image"
-import { X, ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ChevronRight } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { DeliveryInfoView } from "./delivery-info-view"
-import { PaymentErrorView } from "./payment-error-view"
-import { PaymentSuccessView } from "./payment-success-view"
 
-type ViewState = "login" | "delivery" | "payment-error" | "payment-success"
+type ViewState = "login" | "delivery"
 
 export function CartComponent({ onClose }: { onClose: () => void }) {
-  const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
+  const router = useRouter();
+  const { items, removeItem, updateQuantity, getTotalPrice, setDeliveryInfo } = useCart();
   
   const [currentView, setCurrentView] = useState<ViewState>("login")
   const [showCartItems, setShowCartItems] = useState(true)
-  const [showCheckout, setShowCheckout] = useState(false)
   
   // Form states
   const [deliveryAddress, setDeliveryAddress] = useState({
@@ -26,7 +24,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
   const [voucherCode, setVoucherCode] = useState('');
   const [deliveryFee, setDeliveryFee] = useState(6.00);
   const [discount, setDiscount] = useState(0);
-  const [loading, setLoading] = useState(false);
 
   // Calculate delivery fee when address changes
   useEffect(() => {
@@ -64,7 +61,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
   const handleLogin = () => {
     setCurrentView("delivery")
-    setShowCheckout(false)
   }
 
   const validateVoucher = async () => {
@@ -79,70 +75,36 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = () => {
+    // Validate cart is not empty
     if (items.length === 0) {
       alert('Your cart is empty');
       return;
     }
     
+    // Validate delivery address
     if (!deliveryAddress.street || !deliveryAddress.city || !deliveryAddress.postalCode) {
       alert('Please provide delivery address');
       return;
     }
     
+    // Validate delivery time
     if (!deliveryTime) {
       alert('Please select delivery time');
       return;
     }
     
-    setLoading(true);
+    // Save delivery information to context
+    setDeliveryInfo({
+      street: deliveryAddress.street,
+      city: deliveryAddress.city,
+      postalCode: deliveryAddress.postalCode,
+      deliveryTime: deliveryTime,
+      voucherCode: voucherCode || undefined
+    });
     
-    try {
-      const token = localStorage.getItem('accessToken');
-      
-      // Convert datetime-local format to ISO 8601
-      const scheduledTime = new Date(deliveryTime).toISOString();
-      
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` })
-        },
-        body: JSON.stringify({
-          restaurantId: items[0].restaurantId,
-          items: items.map(item => ({
-            menuItemId: item.menuItemId,
-            quantity: item.quantity,
-            specialInstructions: ''
-          })),
-          deliveryAddress: deliveryAddress.street,
-          deliveryCity: deliveryAddress.city,
-          deliveryPostalCode: deliveryAddress.postalCode,
-          scheduledDeliveryTime: scheduledTime,
-          voucherCode: voucherCode || undefined
-        })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        clearCart();
-        setCurrentView('payment-success');
-      } else {
-        const error = await response.json();
-        console.error('Order error:', error);
-        setCurrentView('payment-error');
-      }
-    } catch (error) {
-      console.error('Error placing order:', error);
-      setCurrentView('payment-error');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handleRetryPayment = () => {
-    handlePlaceOrder();
+    // Redirect to checkout page
+    router.push('/checkout');
   }
 
   const toggleCartItems = () => {
@@ -151,7 +113,6 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
 
   const handleCheckoutClick = () => {
     setShowCartItems(false)
-    setShowCheckout(true)
   }
 
   const subtotal = getTotalPrice();
@@ -198,7 +159,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
             onClick={toggleCartItems}
             className="flex items-center bg-[#4a8c3f] text-white p-2 px-4 font-bold rounded-r-2xl border-l-4 border-[#e68a3e] mb-4 min-w-40 w-auto"
           >
-            <span>{currentView === "payment-success" ? "ORDER SUMMARY" : "YOUR CART"}</span>
+            <span>YOUR CART</span>
             <ChevronRight size={16} className="ml-1" />
           </button>
         </div>
@@ -261,40 +222,31 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                 <div className="mt-4 flex flex-row justify-between gap-4">
                   {/* Delivery Address */}
                   <div className="relative w-1/2">
-                    {currentView !== "payment-error" && currentView !== "payment-success" ? (
-                      <div>
-                        <p className="text-xs mb-2 text-white">
-                          Provide Address for us to calculate Delivery Fees
-                        </p>
-                        <div className="grid grid-cols-2 gap-2 mb-2">
-                          <input
-                            placeholder="Postal Code"
-                            value={deliveryAddress.postalCode}
-                            onChange={(e) => setDeliveryAddress({...deliveryAddress, postalCode: e.target.value})}
-                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-                          />
-                          <input
-                            placeholder="Town"
-                            value={deliveryAddress.city}
-                            onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
-                            className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-                          />
-                        </div>
+                    <div>
+                      <p className="text-xs mb-2 text-white">
+                        Provide Address for us to calculate Delivery Fees
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
                         <input
-                          placeholder="Street and Housenumber"
-                          value={deliveryAddress.street}
-                          onChange={(e) => setDeliveryAddress({...deliveryAddress, street: e.target.value})}
-                          className="text-xs p-2 rounded border border-gray-300 w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                          placeholder="Postal Code"
+                          value={deliveryAddress.postalCode}
+                          onChange={(e) => setDeliveryAddress({...deliveryAddress, postalCode: e.target.value})}
+                          className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                        />
+                        <input
+                          placeholder="Town"
+                          value={deliveryAddress.city}
+                          onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
+                          className="text-xs p-2 rounded border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
                         />
                       </div>
-                    ) : (
-                      <div className="flex flex-col items-center mb-4 w-full">
-                        <div className="flex justify-between w-full">
-                          <p className="text-sm text-white">Delivery at:</p>
-                          <p className="text-sm text-white">{deliveryTime}</p>
-                        </div>
-                      </div>
-                    )}
+                      <input
+                        placeholder="Street and Housenumber"
+                        value={deliveryAddress.street}
+                        onChange={(e) => setDeliveryAddress({...deliveryAddress, street: e.target.value})}
+                        className="text-xs p-2 rounded border border-gray-300 w-full mb-2 focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                      />
+                    </div>
                   </div>
 
                   {/* Order Summary */}
@@ -317,28 +269,26 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
                 </div>
 
                 {/* Voucher and Delivery Time */}
-                {currentView !== "payment-error" && currentView !== "payment-success" && (
-                  <div className="flex flex-row mt-4 justify-between">
-                    <div className="flex flex-col">
-                      <label className="text-xs mb-1 text-white relative">Select Delivery Time</label>
-                      <input
-                        type="datetime-local"
-                        value={deliveryTime}
-                        onChange={(e) => setDeliveryTime(e.target.value)}
-                        className="relative text-xs p-2 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-                      />
-                    </div>
-                    <div className="flex flex-col justify-end">
-                      <input
-                        placeholder="VOUCHER CODE"
-                        value={voucherCode}
-                        onChange={(e) => setVoucherCode(e.target.value)}
-                        onBlur={validateVoucher}
-                        className="relative text-xs p-2 rounded border border-gray-300 w-full uppercase focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
-                      />
-                    </div>
+                <div className="flex flex-row mt-4 justify-between">
+                  <div className="flex flex-col">
+                    <label className="text-xs mb-1 text-white relative">Select Delivery Time</label>
+                    <input
+                      type="datetime-local"
+                      value={deliveryTime}
+                      onChange={(e) => setDeliveryTime(e.target.value)}
+                      className="relative text-xs p-2 rounded border border-gray-300 w-full focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                    />
                   </div>
-                )}
+                  <div className="flex flex-col justify-end">
+                    <input
+                      placeholder="VOUCHER CODE"
+                      value={voucherCode}
+                      onChange={(e) => setVoucherCode(e.target.value)}
+                      onBlur={validateVoucher}
+                      className="relative text-xs p-2 rounded border border-gray-300 w-full uppercase focus:ring-2 focus:ring-amber-500 focus:outline-none text-black"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -349,7 +299,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
               onClick={handleCheckoutClick}
               className="flex items-center bg-[#6b2c0c] text-white p-2 px-4 font-bold rounded-r-2xl border-l-4 border-[#e68a3e] min-w-40 w-auto"
             >
-              <span>{currentView === "payment-success" ? "ORDER SUCCESSFUL" : "CHECKOUT"}</span>
+              <span>CHECKOUT</span>
               <ChevronRight size={16} className="ml-1" />
             </button>
           </div>
@@ -357,7 +307,7 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           {/* Login/Checkout Section - Desktop */}
           <div className="hidden md:block md:w-[25%] p-10 flex flex-col">
             <div className="bg-[url('/images/Content_Title_Background.png')] bg-contain border border-[2px] border-[#fff2ccff] w-full text-black p-2 rounded-r-full px-6 font-bold mb-20 -mt-20 uppercase text-center">
-              {currentView === "payment-success" ? "ORDER SUMMARY" : "CHECKOUT"}
+              CHECKOUT
             </div>
 
             {currentView === "login" && (
@@ -469,44 +419,34 @@ export function CartComponent({ onClose }: { onClose: () => void }) {
           </div>
 
           {/* Delivery/Payment Views - Desktop */}
-          {currentView !== "login" && (
+          {currentView === "delivery" && (
             <div className="hidden md:block w-full md:w-[40%] p-4 absolute top-20 left-[40%] md:left-[42%] z-10">
-              {currentView === "delivery" && (
-                <DeliveryInfoView 
-                  onPlaceOrder={handlePlaceOrder} 
-                  loading={loading}
-                  subtotal={subtotal}
-                  deliveryFee={deliveryFee}
-                  discount={discount}
-                  deliveryTime={deliveryTime}
-                  onDeliveryTimeChange={setDeliveryTime}
-                  voucherCode={voucherCode}
-                  onVoucherCodeChange={setVoucherCode}
-                />
-              )}
-              {currentView === "payment-error" && <PaymentErrorView onPlaceOrder={handleRetryPayment} />}
-              {currentView === "payment-success" && <PaymentSuccessView />}
+              <DeliveryInfoView 
+                onPlaceOrder={handlePlaceOrder}
+                subtotal={subtotal}
+                deliveryFee={deliveryFee}
+                discount={discount}
+                deliveryTime={deliveryTime}
+                onDeliveryTimeChange={setDeliveryTime}
+                voucherCode={voucherCode}
+                onVoucherCodeChange={setVoucherCode}
+              />
             </div>
           )}
 
           {/* Delivery/Payment Views - Mobile */}
-          {currentView !== "login" && !showCartItems && (
+          {currentView === "delivery" && !showCartItems && (
             <div className="md:hidden w-full p-4" style={{ marginTop: "-64px" }}>
-              {currentView === "delivery" && (
-                <DeliveryInfoView 
-                  onPlaceOrder={handlePlaceOrder} 
-                  loading={loading}
-                  subtotal={subtotal}
-                  deliveryFee={deliveryFee}
-                  discount={discount}
-                  deliveryTime={deliveryTime}
-                  onDeliveryTimeChange={setDeliveryTime}
-                  voucherCode={voucherCode}
-                  onVoucherCodeChange={setVoucherCode}
-                />
-              )}
-              {currentView === "payment-error" && <PaymentErrorView onPlaceOrder={handleRetryPayment} />}
-              {currentView === "payment-success" && <PaymentSuccessView />}
+              <DeliveryInfoView 
+                onPlaceOrder={handlePlaceOrder}
+                subtotal={subtotal}
+                deliveryFee={deliveryFee}
+                discount={discount}
+                deliveryTime={deliveryTime}
+                onDeliveryTimeChange={setDeliveryTime}
+                voucherCode={voucherCode}
+                onVoucherCodeChange={setVoucherCode}
+              />
             </div>
           )}
         </div>

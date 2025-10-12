@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Heart, Search, ChevronDown, Plus, Minus, Share, Share2, X } from "lucide-react";
 import RestaurantList from "./restaurant-list";
+import { OrderCardWithPayment } from "./order-card-with-payment";
+import { PaymentStatus } from "./payment-status-badge";
 
 function ItemQuantitySelector({ quantity, setQuantity }) {
     return (
@@ -87,6 +89,9 @@ export default function UserDashboardComponent({ onClose }) {
             order: "1x Doro Wat, 2X Injera +more",
             price: 45.0,
             qty: 5,
+            paymentStatus: "completed" as PaymentStatus,
+            paymentMethod: "stripe",
+            paymentReference: "pi_3QRxyz123456789",
         },
         {
             id: "ORD-5401",
@@ -98,6 +103,9 @@ export default function UserDashboardComponent({ onClose }) {
             order: "1x Kitfo, 1x Veggie Combo",
             price: 55.0,
             qty: 2,
+            paymentStatus: "completed" as PaymentStatus,
+            paymentMethod: "stripe",
+            paymentReference: "pi_3QRabc987654321",
         },
         {
             id: "ORD-5402",
@@ -109,6 +117,9 @@ export default function UserDashboardComponent({ onClose }) {
             order: "2x Spicy Chicken, 1x Fufu",
             price: 65.0,
             qty: 3,
+            paymentStatus: "pending" as PaymentStatus,
+            paymentMethod: "stripe",
+            paymentReference: "pi_3QRdef456789012",
         },
     ];
 
@@ -286,76 +297,24 @@ export default function UserDashboardComponent({ onClose }) {
                             {currentView === 'orders' && (
                                 <section className="flex flex-col w-[102%] space-y-3 z-10">
                                     {order.map((order) => (
-                                        <div
+                                        <OrderCardWithPayment
                                             key={order.id}
-                                            className="flex flex-col shadow-md overflow-hidden border-2 border-[#f1c232] relative -mt-2"
-                                            style={{
-                                                backgroundImage: 'url("/images/Box_Restaurant_BckgImg01.png")',
-                                                backgroundSize: "contain",
-                                                backgroundPosition: "center",
-                                                borderRadius: "10px",
-                                            }}
-                                        >
-                                            {/* Overlay */}
-                                            <div
-                                                className="absolute inset-0"
-                                                style={{
-                                                    backgroundColor: "#783f04ff",
-                                                    opacity: '70%',
-                                                    zIndex: 1,
-                                                    borderRadius: "8px"
-                                                }}
-                                            ></div>
-                                            <div className="relative z-10 w-auto">
-                                                <div className="flex flex-row w-auto">
-                                                    {/* details */}
-                                                    <div className="m-[1%] p-2 w-3/4 h-auto flex flex-col justify-between text-gray-500 text-[10px] xs:text-sm rounded-[10px] xs:mr-4">
-                                                        <div className="flex flex-row mb-2 items-baseline">
-                                                            <h3 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-white">
-                                                                {order.id}
-                                                            </h3>
-                                                            <h3 className="text-[7px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[14px] text-white ml-4">
-                                                                {order.status}
-                                                            </h3>
-                                                        </div>
-                                                        <p className="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-base text-white ">
-                                                            {order.title}
-                                                        </p>
-                                                        <p className="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] text-white ">
-                                                            {order.adress}
-                                                        </p>
-                                                        <p className="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] text-white ">
-                                                            {order.date},{order.time}
-                                                        </p>
-                                                        <p className="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] text-white ">
-                                                            {order.order}
-                                                        </p>
-                                                    </div>
-                                                    {/* price & view more btn */}
-                                                    <div className="p-[1%] flex flex-col justify-between items-end w-1/4">
-                                                        <div className="flex items-end mb-1">
-                                                            <span className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] xs:text-sm sm:text-lg font-bold text-white">
-                                                                Fr. {order.price.toFixed(2)}.-
-                                                            </span>
-                                                        </div>
-                                                        {/* Button section */}
-                                                        <div className="flex flex-col items-end justify-end md:mt-[1%] space-y-2">
-                                                            <button
-                                                                onClick={() => setCurrentView('orderDetails')}
-                                                                className="relative p-0 font-bold text-red-900 hover:text-white transition rounded-lg text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]"
-                                                            >
-                                                                View Details -&gt;
-                                                            </button>
-                                                            <button
-                                                                className="relative p-0 font-bold text-amber-400 hover:text-white transition rounded-lg text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px]"
-                                                            >
-                                                                View More -&gt;
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            orderId={order.id}
+                                            orderNumber={order.id}
+                                            status={order.status}
+                                            title={order.title}
+                                            address={order.adress}
+                                            date={order.date}
+                                            time={order.time}
+                                            orderItems={order.order}
+                                            price={order.price}
+                                            paymentStatus={order.paymentStatus}
+                                            paymentMethod={order.paymentMethod}
+                                            paymentReference={order.paymentReference}
+                                            onViewDetails={() => setCurrentView('orderDetails')}
+                                            onViewMore={() => {}}
+                                            showPaymentDetails={false}
+                                        />
                                     ))}
                                 </section>
                             )}

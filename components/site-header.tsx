@@ -2,17 +2,21 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { ChevronDown, LogOut, User } from "lucide-react";
 import LoginModal from "./login-modal";
 import LoginModalTest from "./login-modal-test";
 import { CartComponent } from "./cart-connected";
 import { useLocationContext } from "@/lib/location-context";
+import { useCart } from "@/lib/cart-context";
 import type { Language } from "@/lib/translations";
+import { getCurrentUser, logout } from "@/lib/auth/client";
+import { getUserDisplayName, type User as AuthUser } from "@/lib/auth/utils";
 
 interface SiteHeaderProps {
-  onOpenDashboard: () => void;
+  onOpenDashboard?: () => void;
 }
 
 // Language mapping
@@ -27,10 +31,43 @@ export default function SiteHeader({
   onOpenDashboard,
 }: SiteHeaderProps) {
   const { locationInfo, setLanguage } = useLocationContext();
+  const { getTotalItems } = useCart();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginModalTestOpen, setLoginModalTestOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  
+  const cartItemCount = getTotalItems();
+
+  // Check for logged-in user on mount and when localStorage changes
+  useEffect(() => {
+    const checkUser = () => {
+      const user = getCurrentUser();
+      setCurrentUser(user);
+    };
+
+    checkUser();
+
+    // Listen for storage changes (e.g., login in another tab)
+    window.addEventListener('storage', checkUser);
+    
+    // Custom event for login/logout
+    window.addEventListener('auth-change', checkUser);
+
+    return () => {
+      window.removeEventListener('storage', checkUser);
+      window.removeEventListener('auth-change', checkUser);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    setCurrentUser(null);
+    setUserMenuOpen(false);
+    window.location.href = '/';
+  };
 
   const iconButtonStyle =
     "bg-white p-2 text-amber-800 hover:bg-gray-100 transition duration-200 border-2 border-transparent rounded-lg";
@@ -55,7 +92,7 @@ export default function SiteHeader({
         {/* Left section with Logo and Language Selector */}
         <div className="flex items-center gap-4 md:gap-6">
           {/* Logo */}
-          <div className="relative w-14 h-14 md:w-20 md:h-20 mt-1 -left-2">
+          <Link href="/" className="relative w-14 h-14 md:w-20 md:h-20 mt-1 -left-2 cursor-pointer">
             <div className="absolute inset-0 z-10 animate-heartbeat">
               <Image
                 src="/images/EATAFRICANLOGO.png"
@@ -65,7 +102,7 @@ export default function SiteHeader({
                 priority
               />
             </div>
-          </div>
+          </Link>
           {/* Language Selector */}
           <div className="relative">
             <button onClick={() => setLanguageOpen(!languageOpen)} className={languageButtonStyle}>
@@ -92,37 +129,73 @@ export default function SiteHeader({
         <div className="flex items-center gap-4 md:gap-2">
           {/* Dashboard btn */}
           <div className="md:mr-12">
-            <button
-              onClick={() => {
-                onOpenDashboard();
-              }}
-              className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+            <Link
+              href="/customer-dashboard"
+              className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap inline-block"
               aria-label="Dashboard"
             >
               DASHBOARD
-            </button>
+            </Link>
           </div>
-          {/* Login btn */}
-          <div className="md:mr-12">
-            <button
-              onClick={() => {
-                setLoginModalOpen(true);
-              }}
-              className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
-              aria-label="Login"
-            >
-              LOGIN
-            </button>
-          </div>
+          
+          {/* User Menu or Login Button */}
+          {currentUser ? (
+            <div className="relative md:mr-12">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap flex items-center gap-1"
+                aria-label="User Menu"
+              >
+                <User size={12} />
+                <span className="hidden md:inline">{getUserDisplayName(currentUser)}</span>
+                <ChevronDown size={12} />
+              </button>
+              
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-1 bg-white rounded-lg shadow-lg py-2 w-48 z-40 border border-amber-400">
+                  <div className="px-4 py-2 border-b border-gray-200">
+                    <p className="text-xs text-gray-500">Signed in as</p>
+                    <p className="text-sm font-semibold text-gray-800 truncate">{currentUser.email}</p>
+                    <p className="text-xs text-amber-600 capitalize">{currentUser.role.replace('_', ' ')}</p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                  >
+                    <LogOut size={14} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="md:mr-12">
+              <button
+                onClick={() => {
+                  setLoginModalOpen(true);
+                }}
+                className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                aria-label="Login"
+              >
+                LOGIN
+              </button>
+            </div>
+          )}
+          
           {/* Shopping Cart */}
           <button
             onClick={() => {
               setCartOpen(true);
             }}
-            className={iconButtonStyle}
+            className={`${iconButtonStyle} relative`}
             aria-label="Shopping Cart"
           >
             <img src="/images/cartButton.png" alt="Shopping Basket" style={{ width: 20, height: 20 }} />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
+                {cartItemCount}
+              </span>
+            )}
           </button>
         </div>
       </header>

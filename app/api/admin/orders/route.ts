@@ -35,6 +35,9 @@ export async function GET(req: NextRequest) {
         delivery_city,
         total_amount,
         scheduled_delivery_time,
+        payment_status,
+        payment_method,
+        payment_reference,
         created_at,
         restaurant:restaurants!orders_restaurant_id_fkey (
           id,
@@ -112,6 +115,9 @@ export async function GET(req: NextRequest) {
       deliveryCity: order.delivery_city,
       totalAmount: order.total_amount,
       scheduledDeliveryTime: order.scheduled_delivery_time,
+      paymentStatus: order.payment_status,
+      paymentMethod: order.payment_method,
+      paymentReference: order.payment_reference,
       createdAt: order.created_at,
     }));
 

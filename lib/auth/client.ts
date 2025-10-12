@@ -61,6 +61,9 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('refresh_token', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // Dispatch custom event to notify components of auth change
+      window.dispatchEvent(new Event('auth-change'));
     }
 
     return data;
@@ -101,6 +104,16 @@ export async function register(userData: RegisterData): Promise<AuthResponse> {
       };
     }
 
+    // Store token in localStorage if registration returns tokens
+    if (data.token) {
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('refresh_token', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // Dispatch custom event to notify components of auth change
+      window.dispatchEvent(new Event('auth-change'));
+    }
+
     return data;
   } catch (error) {
     console.error('Registration error:', error);
@@ -130,6 +143,11 @@ export async function logout(): Promise<void> {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
+    
+    // Dispatch custom event to notify components of auth change
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('auth-change'));
+    }
   }
 }
 

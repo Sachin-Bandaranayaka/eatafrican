@@ -8,13 +8,19 @@ import { requireAuth } from '@/lib/middleware/auth';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const orderId = params.id;
+    // Await params in Next.js 15
+    const { id: orderId } = await params;
 
-    // Require authentication
-    const user = await requireAuth()(req);
+    // Optional authentication - allow guest orders
+    let user = null;
+    try {
+      user = await requireAuth()(req);
+    } catch (error) {
+      // Continue without auth for guest orders
+    }
 
     // Fetch order with related data
     const { data: order, error: orderError } = await db
@@ -36,22 +42,37 @@ export async function GET(
     }
 
     // Validate user has permission to view order
-    const canView = 
-      user.role === 'super_admin' ||
-      (user.role === 'customer' && order.customer_id === user.id) ||
-      (user.role === 'restaurant_owner' && user.restaurantId === order.restaurant_id) ||
-      (user.role === 'driver' && user.driverId && order.driver_id === user.driverId);
+    if (user) {
+      const canView = 
+        user.role === 'super_admin' ||
+        (user.role === 'customer' && order.customer_id === user.id) ||
+        (user.role === 'restaurant_owner' && user.restaurantId === order.restaurant_id) ||
+        (user.role === 'driver' && user.driverId && order.driver_id === user.driverId);
 
-    if (!canView) {
-      return NextResponse.json(
-        {
-          error: {
-            code: 'AUTH_UNAUTHORIZED',
-            message: 'You do not have permission to view this order',
+      if (!canView) {
+        return NextResponse.json(
+          {
+            error: {
+              code: 'AUTH_UNAUTHORIZED',
+              message: 'You do not have permission to view this order',
+            },
           },
-        },
-        { status: 403 }
-      );
+          { status: 403 }
+        );
+      }
+    } else {
+      // For guest orders, only allow if no customer_id (guest order)
+      if (order.customer_id) {
+        return NextResponse.json(
+          {
+            error: {
+              code: 'AUTH_REQUIRED',
+              message: 'Authentication required to view this order',
+            },
+          },
+          { status: 401 }
+        );
+      }
     }
 
     // Fetch restaurant details
@@ -160,6 +181,7 @@ export async function GET(
       totalAmount: order.total_amount,
       paymentStatus: order.payment_status,
       paymentMethod: order.payment_method,
+      paymentReference: order.payment_reference,
       voucherCode: order.voucher_code,
       createdAt: order.created_at,
       updatedAt: order.updated_at,

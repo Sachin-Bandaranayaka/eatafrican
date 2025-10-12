@@ -70,6 +70,8 @@ export async function GET(
       scheduledDeliveryTime: order.scheduled_delivery_time,
       actualDeliveryTime: order.actual_delivery_time,
       paymentStatus: order.payment_status,
+      paymentMethod: order.payment_method,
+      paymentReference: order.payment_reference,
       createdAt: order.created_at,
     })) || [];
 

@@ -120,6 +120,7 @@ export const createOrderSchema = z.object({
   deliveryInstructions: z.string().optional(),
   scheduledDeliveryTime: z.string().datetime(),
   voucherCode: z.string().optional(),
+  paymentIntentId: z.string().optional(), // Stripe Payment Intent ID for payment integration
 });
 
 export const updateOrderStatusSchema = z.object({

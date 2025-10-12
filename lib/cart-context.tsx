@@ -14,8 +14,17 @@ export interface CartItem {
   restaurantName: string;
 }
 
+export interface DeliveryInfo {
+  street: string;
+  city: string;
+  postalCode: string;
+  deliveryTime: string;
+  voucherCode?: string;
+}
+
 interface CartContextType {
   items: CartItem[];
+  deliveryInfo: DeliveryInfo | null;
   addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
   removeItem: (menuItemId: string) => void;
   updateQuantity: (menuItemId: string, quantity: number) => void;
@@ -23,12 +32,15 @@ interface CartContextType {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getRestaurantId: () => string | null;
+  setDeliveryInfo: (info: DeliveryInfo) => void;
+  clearDeliveryInfo: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [deliveryInfo, setDeliveryInfoState] = useState<DeliveryInfo | null>(null);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -40,12 +52,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error('Failed to load cart from localStorage:', error);
       }
     }
+
+    const savedDeliveryInfo = localStorage.getItem('deliveryInfo');
+    if (savedDeliveryInfo) {
+      try {
+        setDeliveryInfoState(JSON.parse(savedDeliveryInfo));
+      } catch (error) {
+        console.error('Failed to load delivery info from localStorage:', error);
+      }
+    }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
+
+  // Save delivery info to localStorage whenever it changes
+  useEffect(() => {
+    if (deliveryInfo) {
+      localStorage.setItem('deliveryInfo', JSON.stringify(deliveryInfo));
+    } else {
+      localStorage.removeItem('deliveryInfo');
+    }
+  }, [deliveryInfo]);
 
   const addItem = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
     setItems(prevItems => {
@@ -99,10 +129,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return items.length > 0 ? items[0].restaurantId : null;
   };
 
+  const setDeliveryInfo = (info: DeliveryInfo) => {
+    setDeliveryInfoState(info);
+  };
+
+  const clearDeliveryInfo = () => {
+    setDeliveryInfoState(null);
+  };
+
   return (
     <CartContext.Provider
       value={{
         items,
+        deliveryInfo,
         addItem,
         removeItem,
         updateQuantity,
@@ -110,6 +149,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         getTotalItems,
         getTotalPrice,
         getRestaurantId,
+        setDeliveryInfo,
+        clearDeliveryInfo,
       }}
     >
       {children}

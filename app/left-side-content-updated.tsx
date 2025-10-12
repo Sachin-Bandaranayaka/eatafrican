@@ -11,7 +11,7 @@ import HowItWorksMobile from "../components/how-it-works-mobile";
 import HowItWorks from "../components/how-it-works";
 import RestaurantListing from "../components/restaurant-list";
 import ViewMenu from "../components/view-menu";
-import UserDashboardComponent from "../components/userDashboard";
+import UserDashboardComponent from "../components/userDashboard-connected";
 import TribalButton from "../components/tribal-button";
 import AboutSpecialty from "../components/about-specialty";
 import AboutUs from "../components/aboutUs";

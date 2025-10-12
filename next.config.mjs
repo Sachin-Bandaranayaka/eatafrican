@@ -23,6 +23,9 @@ const nextConfig = {
   },
   // Disable React strict mode to prevent double-rendering during development
   reactStrictMode: false,
+  env: {
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+  },
 }
 
 mergeConfig(nextConfig, userConfig)

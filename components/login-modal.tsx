@@ -5,6 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import { login, register, requestPasswordReset } from "@/lib/auth/client"
+import { getRoleBasedRedirectUrl } from "@/lib/auth/utils"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -113,9 +114,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
       setView("loginSuccess")
       
-      // Redirect after 2 seconds
+      // Redirect based on user role after 2 seconds
       setTimeout(() => {
-        window.location.href = "/restaurants"
+        const redirectUrl = result.user ? getRoleBasedRedirectUrl(result.user.role as any) : "/restaurants"
+        window.location.href = redirectUrl
       }, 2000)
     } catch (err) {
       setError("An unexpected error occurred. Please try again.")
@@ -159,9 +161,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       // Account created successfully - automatically log in since backend returns tokens
       setView("loginSuccess")
       
-      // Redirect after 2 seconds
+      // Redirect based on user role after 2 seconds (new customers go to restaurants page)
       setTimeout(() => {
-        window.location.href = "/restaurants"
+        const redirectUrl = result.user ? getRoleBasedRedirectUrl(result.user.role as any) : "/restaurants"
+        window.location.href = redirectUrl
       }, 2000)
     } catch (err) {
       setError("An unexpected error occurred. Please try again.")
@@ -275,12 +278,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   
                 </p> */}
                 <div className="p-2 relative">
-                  <p className="text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm leading-relaxed text-start">
-                    <span className="font-bold ">Your password must include</span> <br />
-                    <ul>- an uppercase letter</ul>
-                    <ul>- a number</ul>
-                    <ul>- a special character</ul>
-                  </p>
+                  <div className="text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm leading-relaxed text-start">
+                    <span className="font-bold ">Your password must include</span>
+                    <ul className="list-none mt-1">
+                      <li>- an uppercase letter</li>
+                      <li>- a number</li>
+                      <li>- a special character</li>
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="md:pt-1 pt-0 flex justify-center md:gap-3 gap-1">
