@@ -66,6 +66,7 @@ export async function PATCH(
       dietaryTags,
       imageUrl,
       quantity,
+      status,
       translations,
     } = validationResult.data;
 
@@ -78,6 +79,7 @@ export async function PATCH(
     if (dietaryTags !== undefined) updateData.dietary_tags = dietaryTags;
     if (imageUrl !== undefined) updateData.image_url = imageUrl;
     if (quantity !== undefined) updateData.quantity = quantity;
+    if (status !== undefined) updateData.status = status;
     if (translations !== undefined) updateData.translations = translations;
 
     // Update menu item

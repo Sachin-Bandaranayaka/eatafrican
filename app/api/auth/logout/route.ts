@@ -6,53 +6,25 @@ export async function POST(req: NextRequest) {
     // Get the access token from the Authorization header
     const authHeader = req.headers.get('authorization');
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        {
-          error: {
-            code: 'AUTH_UNAUTHORIZED',
-            message: 'No authentication token provided',
-          },
-        },
-        { status: 401 }
-      );
+    // Try to sign out if we have a valid token, but don't fail if token is invalid
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+
+      // Try to get user from token and sign them out
+      try {
+        const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
+
+        if (!userError && userData.user) {
+          // Sign out the user (invalidates all sessions)
+          await supabaseAdmin.auth.admin.signOut(userData.user.id);
+        }
+      } catch (tokenError) {
+        // Token is invalid/expired, but that's okay for logout
+        console.log('Token validation failed during logout (expected if token expired):', tokenError);
+      }
     }
 
-    const token = authHeader.substring(7);
-
-    // Get user from token
-    const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
-
-    if (userError || !userData.user) {
-      return NextResponse.json(
-        {
-          error: {
-            code: 'AUTH_INVALID_TOKEN',
-            message: 'Invalid authentication token',
-          },
-        },
-        { status: 401 }
-      );
-    }
-
-    // Sign out the user (invalidates all sessions)
-    const { error: signOutError } = await supabaseAdmin.auth.admin.signOut(userData.user.id);
-
-    if (signOutError) {
-      console.error('Logout error:', signOutError);
-      return NextResponse.json(
-        {
-          error: {
-            code: 'LOGOUT_FAILED',
-            message: 'Failed to logout',
-            details: signOutError.message,
-          },
-        },
-        { status: 500 }
-      );
-    }
-
-    // Create response with cleared cookies
+    // Always clear cookies and return success, even if token was invalid
     const response = NextResponse.json(
       {
         message: 'Successfully logged out',
@@ -80,14 +52,31 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     console.error('Logout error:', error);
-    return NextResponse.json(
+    
+    // Even on error, try to clear cookies
+    const response = NextResponse.json(
       {
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'An unexpected error occurred',
-        },
+        message: 'Logged out (with errors)',
       },
-      { status: 500 }
+      { status: 200 }
     );
+
+    response.cookies.set('sb-access-token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
+      path: '/',
+    });
+
+    response.cookies.set('sb-refresh-token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
+      path: '/',
+    });
+
+    return response;
   }
 }

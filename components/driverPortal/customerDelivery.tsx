@@ -3,15 +3,24 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface CustomerDeliveryProps {
+    order: any;
     setShowCustomerDelivery: Dispatch<SetStateAction<boolean>>;
     setShowConfirmDelivery: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function CustomerDelivery({ setShowCustomerDelivery, setShowConfirmDelivery }: CustomerDeliveryProps) {
-    
+export default function CustomerDelivery({ order, setShowCustomerDelivery, setShowConfirmDelivery }: CustomerDeliveryProps) {
+
+    if (!order) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-600">No order selected</p>
+            </div>
+        );
+    }
+
     const handleCompleteDelivery = () => {
-        setShowCustomerDelivery(false); // Hide this component
-        setShowConfirmDelivery(true);   // Show the final confirmation screen
+        setShowCustomerDelivery(false);
+        setShowConfirmDelivery(true);
     };
 
     return (
@@ -32,13 +41,13 @@ export default function CustomerDelivery({ setShowCustomerDelivery, setShowConfi
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <h2 className="font-bold text-[15px] text-black">Customer's Address</h2>
-                                <p className="text-[13px] font-semibold">Nicolas Ruedie,</p>
-                                <p className="text-[13px] font-semibold">Neuerstrasse 75, Basel</p>
+                                <p className="text-[13px] font-semibold">{order.deliveryAddress?.name || order.customer?.name || 'N/A'},</p>
+                                <p className="text-[13px] font-semibold">{order.deliveryAddress?.street || 'N/A'}, {order.deliveryAddress?.city || 'N/A'}</p>
                             </div>
                         </div>
                         <div className="text-left">
-                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold text-[15px]">#427935</span></h2>
-                            <h2 className="font-bold text-[15px] text-black">Status <span className="font-semibold text-[15px]">In Transit</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold text-[15px]">#{order.orderNumber || order.id?.slice(0, 6)}</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Status <span className="font-semibold text-[15px] capitalize">{order.status?.replace('_', ' ') || 'In Transit'}</span></h2>
                         </div>
                         <div>
                             {/* the map shows inside this div */}

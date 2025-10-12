@@ -27,6 +27,27 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
     const [showConfirmDelivery, setShowConfirmDelivery] = useState(false);
     const [showConfirmedDeliveryMsg, setShowConfirmedDeliveryMsg] = useState(false);
 
+    // Function to refresh selected order data
+    const refreshSelectedOrder = async () => {
+        if (!selectedOrder?.id) return;
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`/api/orders/${selectedOrder.id}`, {
+                headers: {
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setSelectedOrder(data.order);
+            }
+        } catch (error) {
+            console.error('Error refreshing order:', error);
+        }
+    };
+
     const dashboardRef = useRef<HTMLDivElement>(null);
 
     // Function to reset all flow states and return to the main orders view
@@ -38,6 +59,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
         setShowConfirmPickup(false);
         setShowPickupDelivery(false);
         setShowOrderDetails(false);
+        setSelectedOrder(null);
         setCurrentView('ORDERS');
     };
 
@@ -49,38 +71,48 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
         }
         if (showConfirmDelivery) {
             return <ConfirmDelivery
+                order={selectedOrder}
                 setShowConfirmDelivery={setShowConfirmDelivery}
                 setShowConfirmedDeliveryMsg={setShowConfirmedDeliveryMsg}
+                refreshOrder={refreshSelectedOrder}
             />;
         }
         if (showCustomerDelivery) {
             return <CustomerDelivery
+                order={selectedOrder}
                 setShowCustomerDelivery={setShowCustomerDelivery}
                 setShowConfirmDelivery={setShowConfirmDelivery}
             />;
         }
         if (showConfirmedPickup) {
             return <ConfirmedPickupMsg
+                order={selectedOrder}
                 setShowConfirmedPickup={setShowConfirmedPickup}
                 setShowCustomerDelivery={setShowCustomerDelivery}
             />;
         }
         if (showConfirmPickup) {
             return <ConfirmPickup
+                order={selectedOrder}
                 setShowConfirmPickup={setShowConfirmPickup}
                 setShowConfirmedPickup={setShowConfirmedPickup}
+                refreshOrder={refreshSelectedOrder}
             />;
         }
         if (showPickupDelivery) {
             return <PickupDelivery
+                order={selectedOrder}
                 setShowPickupDelivery={setShowPickupDelivery}
                 setShowConfirmPickup={setShowConfirmPickup}
+                refreshOrder={refreshSelectedOrder}
             />;
         }
         if (showOrderDetails) {
             return <OrderDetails
+                order={selectedOrder}
                 setShowOrderDetails={setShowOrderDetails}
                 setShowPickupDelivery={setShowPickupDelivery}
+                refreshOrder={refreshSelectedOrder}
             />;
         }
 

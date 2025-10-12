@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface ConfirmedPickupMsgProps {
+    order: any;
     setShowConfirmedPickup: Dispatch<SetStateAction<boolean>>;
     setShowCustomerDelivery: Dispatch<SetStateAction<boolean>>;
 }
@@ -19,16 +20,18 @@ const CheckIcon = () => (
     </svg>
 );
 
-export default function ConfirmedPickupMsg({ setShowConfirmedPickup, setShowCustomerDelivery }: ConfirmedPickupMsgProps) {
-    const orderedItems = [
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 1 },
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 2 },
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 2 },
-    ];
+export default function ConfirmedPickupMsg({ order, setShowConfirmedPickup, setShowCustomerDelivery }: ConfirmedPickupMsgProps) {
+    if (!order) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-600">No order selected</p>
+            </div>
+        );
+    }
 
     const handleContinue = () => {
-        setShowConfirmedPickup(false); // Hide this component
-        setShowCustomerDelivery(true);  // Show the customer delivery component
+        setShowConfirmedPickup(false);
+        setShowCustomerDelivery(true);
     };
 
     return (
@@ -53,35 +56,39 @@ export default function ConfirmedPickupMsg({ setShowConfirmedPickup, setShowCust
                     <div className="flex flex-col space-y-6">
                         <div>
                             <h2 className="text-[15px] font-bold text-green-800">Customer's Address</h2>
-                            <p className="text-[13px] font-semibold">Nicolas Ruedie,</p>
-                            <p className="text-[13px] font-semibold">Neuerstrasse 75, Basel</p>
+                            <p className="text-[13px] font-semibold">{order.deliveryAddress?.name || order.customer?.name || 'N/A'},</p>
+                            <p className="text-[13px] font-semibold">{order.deliveryAddress?.street || 'N/A'}, {order.deliveryAddress?.city || 'N/A'}</p>
                         </div>
                         <div>
                             <h2 className="text-[15px] font-bold text-green-800">Picked Up On</h2>
-                            <p className="text-[13px] font-semibold">10.07.2025, 11:45</p>
+                            <p className="text-[13px] font-semibold">{order.pickupConfirmedAt ? new Date(order.pickupConfirmedAt).toLocaleString() : 'Just now'}</p>
                         </div>
                         <div>
                             <h2 className="text-[15px] font-bold text-green-800 mb-2">Ordered Items</h2>
                             <div className="space-y-1 text-sm">
-                                {orderedItems.map((item, index) => (
-                                    <div key={index} className="flex justify-between items-center font-semibold w-full max-w-sm">
-                                        <span>{item.name}</span>
-                                        <span><TimesIcon /> {item.quantity}</span>
-                                    </div>
-                                ))}
+                                {order.items && order.items.length > 0 ? (
+                                    order.items.map((item: any, index: number) => (
+                                        <div key={index} className="flex justify-between items-center font-semibold w-full max-w-sm">
+                                            <span>{item.menuItem?.name || item.name || 'Item'}</span>
+                                            <span><TimesIcon /> {item.quantity}</span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-[13px]">No items available</p>
+                                )}
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col space-y-6">
                         <div>
-                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold">#427935</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold">#{order.orderNumber || order.id?.slice(0, 6)}</span></h2>
                         </div>
                         <div>
-                            <h2 className="font-bold text-[15px] text-black">Status: <span className="font-semibold">In Transit</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Status: <span className="font-semibold capitalize">{order.status?.replace('_', ' ') || 'In Transit'}</span></h2>
                         </div>
                         <div>
                             <h3 className="font-bold text-green-800 text-[15px]">Delivery Schedule</h3>
-                            <p className="text-[13px] font-semibold">10.07.2025, 12:30</p>
+                            <p className="text-[13px] font-semibold">{order.deliveryTime ? new Date(order.deliveryTime).toLocaleString() : 'N/A'}</p>
                         </div>
                     </div>
                 </div>

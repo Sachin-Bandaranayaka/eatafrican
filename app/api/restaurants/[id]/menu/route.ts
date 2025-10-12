@@ -117,6 +117,9 @@ export async function GET(
         galleryUrls: item.gallery_urls || [],
         quantity: item.quantity,
         status: item.status,
+        isAvailable: item.status === 'active',
+        isVegan: item.dietary_tags?.includes('vegan') || false,
+        isVegetarian: item.dietary_tags?.includes('vegetarian') || false,
       };
     });
 

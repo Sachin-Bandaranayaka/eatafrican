@@ -6,9 +6,10 @@ interface HeaderProps {
     setCurrentView: (view: string) => void;
     isDropdownOpen: boolean;
     setIsDropdownOpen: (isOpen: boolean) => void;
+    onLogout?: () => void;
 }
 
-const Header = ({ currentView, setCurrentView, isDropdownOpen, setIsDropdownOpen }: HeaderProps) => {
+const Header = ({ currentView, setCurrentView, isDropdownOpen, setIsDropdownOpen, onLogout }: HeaderProps) => {
     return (
         <header className="flex flex-row justify-between z-50">
             {/* Left side content */}
@@ -76,6 +77,14 @@ const Header = ({ currentView, setCurrentView, isDropdownOpen, setIsDropdownOpen
                             </div>
                         )}
                     </div>
+                    {onLogout && (
+                        <button
+                            onClick={onLogout}
+                            className="bg-red-900 text-white rounded-[9px] py-1.5 px-3 text-[12px] font-semibold hover:bg-red-800 transition duration-200"
+                        >
+                            Logout
+                        </button>
+                    )}
                 </div>
             </div>
         </header>

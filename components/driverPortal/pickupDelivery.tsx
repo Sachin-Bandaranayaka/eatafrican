@@ -3,11 +3,21 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface PickupDeliveryProps {
+    order: any;
     setShowPickupDelivery: Dispatch<SetStateAction<boolean>>;
     setShowConfirmPickup: Dispatch<SetStateAction<boolean>>;
+    refreshOrder: () => Promise<void>;
 }
 
-export default function PickupDelivery({ setShowPickupDelivery, setShowConfirmPickup }: PickupDeliveryProps) {
+export default function PickupDelivery({ order, setShowPickupDelivery, setShowConfirmPickup, refreshOrder }: PickupDeliveryProps) {
+
+    if (!order) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-600">No order selected</p>
+            </div>
+        );
+    }
 
     const handleCompletePickup = () => {
         setShowPickupDelivery(false);
@@ -32,13 +42,13 @@ export default function PickupDelivery({ setShowPickupDelivery, setShowConfirmPi
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <h2 className="font-bold text-[15px] text-black">Restaurant's Address</h2>
-                                <p className="text-[13px] font-semibold">Restaurant African 2,</p>
-                                <p className="text-[13px] font-semibold">8500, Zürich</p>
+                                <p className="text-[13px] font-semibold">{order.restaurant?.name || 'N/A'},</p>
+                                <p className="text-[13px] font-semibold">{order.restaurant?.address || 'N/A'}, {order.restaurant?.city || 'N/A'}</p>
                             </div>
                         </div>
                         <div className="text-left">
-                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold text-[15px]">#427935</span></h2>
-                            <h2 className="font-bold text-[15px] text-black">Status <span className="font-semibold text-[15px]">Processing</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold text-[15px]">#{order.orderNumber || order.id?.slice(0, 6)}</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Status <span className="font-semibold text-[15px] capitalize">{order.status?.replace('_', ' ') || 'Processing'}</span></h2>
                         </div>
                         <div>
                             {/* the map shows inside this div */}

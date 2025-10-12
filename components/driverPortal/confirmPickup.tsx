@@ -1,10 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface ConfirmPickupProps {
+    order: any;
     setShowConfirmPickup: Dispatch<SetStateAction<boolean>>;
     setShowConfirmedPickup: Dispatch<SetStateAction<boolean>>;
+    refreshOrder: () => Promise<void>;
 }
 
 const TimesIcon = () => (
@@ -13,16 +15,54 @@ const TimesIcon = () => (
     </svg>
 );
 
-export default function ConfirmPickup({ setShowConfirmPickup, setShowConfirmedPickup }: ConfirmPickupProps) {
-    const orderedItems = [
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 1 },
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 2 },
-        { name: "Meal Name lorem ipsum dolor sit", quantity: 2 },
-    ];
+export default function ConfirmPickup({ order, setShowConfirmPickup, setShowConfirmedPickup, refreshOrder }: ConfirmPickupProps) {
+    const [pickupCode, setPickupCode] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleConfirm = () => {
-        setShowConfirmPickup(false); // Hide the current component
-        setShowConfirmedPickup(true); // Show the confirmation message
+    if (!order) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-600">No order selected</p>
+            </div>
+        );
+    }
+
+    const handleConfirm = async () => {
+        if (!pickupCode.trim()) {
+            setError("Please enter the pickup code");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`/api/orders/${order.id}/confirm-pickup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
+                body: JSON.stringify({ pickupCode: pickupCode.trim() })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                await refreshOrder();
+                setShowConfirmPickup(false);
+                setShowConfirmedPickup(true);
+            } else {
+                setError(data.error || 'Invalid pickup code');
+            }
+        } catch (error) {
+            console.error('Error confirming pickup:', error);
+            setError('Failed to confirm pickup. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -31,7 +71,7 @@ export default function ConfirmPickup({ setShowConfirmPickup, setShowConfirmedPi
                 className="absolute inset-0"
                 style={{
                     backgroundColor: "white",
-                    opacity: '70%', 
+                    opacity: '70%',
                     zIndex: 1,
                     borderRadius: "8px"
                 }}
@@ -50,51 +90,64 @@ export default function ConfirmPickup({ setShowConfirmPickup, setShowConfirmedPi
                                 <input
                                     id="deliveryCode"
                                     type="text"
-                                    className="w-full max-w-[200px] border border-gray-400 rounded-md focus:ring-red-800 focus:border-red-800"
+                                    value={pickupCode}
+                                    onChange={(e) => setPickupCode(e.target.value)}
+                                    disabled={loading}
+                                    className="w-full max-w-[200px] border border-gray-400 rounded-md focus:ring-red-800 focus:border-red-800 px-2 py-1"
+                                    placeholder="Enter code"
                                 />
+                                {error && (
+                                    <p className="text-red-600 text-xs mt-1">{error}</p>
+                                )}
                                 <div className="mt-2">
-                                    <button 
+                                    <button
                                         onClick={handleConfirm}
-                                        className="bg-[#6b240c] text-[12px] text-white font-bold py-1 px-4 rounded-md shadow-md hover:bg-[#8a3c1a] transition-colors duration-300">
-                                        CONFIRM
+                                        disabled={loading}
+                                        className="bg-[#6b240c] text-[12px] text-white font-bold py-1 px-4 rounded-md shadow-md hover:bg-[#8a3c1a] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        {loading ? 'CONFIRMING...' : 'CONFIRM'}
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <h2 className="font-bold text-[15px] text-green-900">Restaurant's Address</h2>
-                            <p className="text-[13px] font-semibold">Restaurant Ruedie,</p>
-                            <p className="text-[13px] font-semibold">Neuerstrasse 75, Basel</p>
+                            <p className="text-[13px] font-semibold">{order.restaurant?.name || 'N/A'},</p>
+                            <p className="text-[13px] font-semibold">{order.restaurant?.address || 'N/A'}, {order.restaurant?.city || 'N/A'}</p>
                         </div>
                         <div>
                             <h2 className="text-[15px] font-bold text-green-900 mb-2">Ordered Items</h2>
                             <div className="space-y-1 text-sm">
-                                {orderedItems.map((item, index) => (
-                                    <div key={index} className="flex justify-between items-center font-semibold w-full max-w-sm">
-                                        <span>{item.name}</span>
-                                        <span><TimesIcon /> {item.quantity}</span>
-                                    </div>
-                                ))}
+                                {order.items && order.items.length > 0 ? (
+                                    order.items.map((item: any, index: number) => (
+                                        <div key={index} className="flex justify-between items-center font-semibold w-full max-w-sm">
+                                            <span>{item.menuItem?.name || item.name || 'Item'}</span>
+                                            <span><TimesIcon /> {item.quantity}</span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-[13px]">No items available</p>
+                                )}
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col space-y-6 md:pt-10 mr-32 mt-3">
                         <div>
-                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold">#427935</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Order Nr. <span className="font-semibold">#{order.orderNumber || order.id?.slice(0, 6)}</span></h2>
                         </div>
                         <div>
-                            <h2 className="font-bold text-[15px] text-black">Status: <span className="font-semibold">In Transit.</span></h2>
+                            <h2 className="font-bold text-[15px] text-black">Status: <span className="font-semibold capitalize">{order.status?.replace('_', ' ') || 'In Transit'}</span></h2>
                         </div>
                         <div>
                             <h3 className="font-bold text-black text-[15px] mt-24">Delivery Schedule</h3>
-                            <p className="text-[13px] font-semibold">10.07.2025, 12:30</p>
+                            <p className="text-[13px] font-semibold">{order.deliveryTime ? new Date(order.deliveryTime).toLocaleString() : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
                 <div className="mt-40 flex justify-center">
                     <button
                         onClick={() => setShowConfirmPickup(false)}
-                        className="bg-[#6b240c] text-[12px] text-white font-bold py-1 px-4 rounded-md shadow-md hover:bg-[#8a3c1a] transition-colors duration-300"
+                        disabled={loading}
+                        className="bg-[#6b240c] text-[12px] text-white font-bold py-1 px-4 rounded-md shadow-md hover:bg-[#8a3c1a] transition-colors duration-300 disabled:opacity-50"
                     >
                         BACK TO DELIVERY
                     </button>

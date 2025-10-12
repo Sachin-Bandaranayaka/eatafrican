@@ -74,6 +74,7 @@ export const createMenuItemSchema = z.object({
   dietaryTags: z.array(z.string()).default([]),
   imageUrl: z.string().url().optional(),
   quantity: z.number().min(0).default(0),
+  status: z.enum(['active', 'inactive']).optional(),
   translations: z.record(z.object({
     name: z.string(),
     description: z.string(),

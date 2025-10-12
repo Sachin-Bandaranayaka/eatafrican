@@ -154,6 +154,16 @@ export async function GET(
       specialInstructions: item.special_instructions,
     })) || [];
 
+    // Parse delivery address if it's a JSON string
+    let deliveryAddressObj = order.delivery_address;
+    if (typeof deliveryAddressObj === 'string') {
+      try {
+        deliveryAddressObj = JSON.parse(deliveryAddressObj);
+      } catch (e) {
+        deliveryAddressObj = { street: order.delivery_address };
+      }
+    }
+
     // Build response
     const response = {
       id: order.id,
@@ -164,16 +174,24 @@ export async function GET(
         name: restaurant.name,
         address: restaurant.address,
         phone: restaurant.phone,
+        city: restaurant.city,
       } : null,
       customer,
       driver,
       items,
-      deliveryAddress: order.delivery_address,
-      deliveryCity: order.delivery_city,
-      deliveryPostalCode: order.delivery_postal_code,
+      deliveryAddress: deliveryAddressObj || {
+        street: order.delivery_address,
+        city: order.delivery_city,
+        postalCode: order.delivery_postal_code,
+        name: customer?.firstName ? `${customer.firstName} ${customer.lastName}` : null,
+      },
       deliveryInstructions: order.delivery_instructions,
+      deliveryTime: order.scheduled_delivery_time,
       scheduledDeliveryTime: order.scheduled_delivery_time,
       actualDeliveryTime: order.actual_delivery_time,
+      pickupConfirmedAt: order.pickup_confirmed_at,
+      pickupCode: order.pickup_code,
+      deliveryCode: order.delivery_code,
       subtotal: order.subtotal,
       deliveryFee: order.delivery_fee,
       discountAmount: order.discount_amount,
