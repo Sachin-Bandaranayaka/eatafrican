@@ -91,65 +91,74 @@ export default function RestaurantListing() {
       <div ref={mainDivRef} className="z-50 w-[100%] min-h-screen bg-transparent xs:p-6 flex flex-col space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[185%] md:mt-0">
 
         {/* Header */}
-        <div className="p-4 pl-4 space-y-4">
-          <div className="flex items-center justify-between">
-            {/* Title and Close Button */}
-            <div className="flex items-start">
-              <div className="relative bg-[url('/images/titlebck.png')] bg-no-repeat bg-cover bg-center rounded-r-full rounded-l-sm pl-2 pr-4 py-2 ml-2 ">
-                <div
-                  className="absolute inset-0 rounded-r-full rounded-l-sm"
-                  style={{
-                    backgroundColor: '#f1c232ff',
-                    opacity: '80%',
-                    zIndex: 1
-                  }}
-                ></div>
-                <div className="relative z-10 md:pr-10">
-                  <h2 className="relative text-black font-bold uppercase whitespace-nowrap 
-                  text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">
-                    AFRICAN RESTAURANTS IN ZURICH
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex flex-row gap-1 md:gap-5 md:-mr-4">
-              {/* filter & sort btn */}
-              <div className="flex flex-row gap-2">
-                {/* filer by */}
-                <button className="text-white flex items-center bg-amber-900 
-                      text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
-                      rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2  font-bold p-1 pl-2 transition">
-                  <span>FILTER BY</span>
-                  <div className="ml-1">
-                    <ChevronDown style={{ strokeWidth: 6 }} size={12} />
-                  </div>
-                </button>
-                {/* sort by */}
-                <button className="text-white 
-                      text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
-                      flex items-center rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2 bg-amber-900 font-bold pl-2 transition">
-                  <span>SORT BY</span>
-                  <div className="ml-1">
-                    <ChevronDown style={{ strokeWidth: 6 }} size={12} />
-                  </div>
-                </button>
-              </div>
-
-              {/* search & share btn */}
-              <div className="flex flex-row items-center gap-1 md:gap-4 rounded-lg">
-                {/* share btn */}
-                <div className=" ">
-                  <Share2 style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6" />
-                </div>
-                {/* <button className="bg-white p-1 rounded-lg shadow-md hover:shadow-lg transition">
-                  <img src="/images/shareButton.png" alt="Shopping Basket" className="text-gray-900 size-1 md:size-5" />
-                </button> */}
-              </div>
-            </div>
-          </div>
+<div className="p-4 pl-4 space-y-4">
+  <div className="flex items-center justify-center">
+    {/* Title and Close Button */}
+    <div className="flex items-center">
+      <div className="relative bg-[url('/images/titlebck.png')] bg-no-repeat bg-cover bg-center rounded-lg pl-2 pr-4 py-2 ml-2 ">
+        <div
+          className="absolute inset-0 rounded-lg"
+          style={{
+            backgroundColor: '#f1c232ff',
+            opacity: '80%',
+            zIndex: 1
+          }}
+        ></div>
+        <div className="relative z-10 ">
+          <h2 className="relative text-black font-bold uppercase whitespace-nowrap 
+          text-[10px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] ">
+            AFRICAN RESTAURANTS IN ZURICH
+          </h2>
         </div>
+      </div>
+    </div>
+  </div>
+
+  {/* START OF MODIFIED SECTION */}
+  {/* This div now handles the centering of filter/sort and right-alignment of share */}
+  <div className="flex items-center"> {/* Removed justify-center from this parent */}
+
+    {/* Left spacer to push filter/sort towards center */}
+    <div className="flex-1"></div>
+
+    {/* Filter & Sort Buttons Group - these will be centered */}
+    {/* Simplified the wrapper divs around the buttons */}
+    <div className="flex flex-row gap-1 md:gap-5"> {/* Removed original md:-mr-4 as it might interfere with centering */}
+      <div className="flex flex-row gap-2">
+
+        {/* filer by */}
+        <button className="text-white flex items-center bg-amber-900 
+            text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
+            rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2  font-bold p-1 pl-2 transition">
+          <span>FILTER BY</span>
+          <div className="ml-1">
+            <ChevronDown style={{ strokeWidth: 6 }} size={12} />
+          </div>
+        </button>
+
+        {/* sort by */}
+        <button className="text-white 
+            text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
+            flex items-center rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2 bg-amber-900 font-bold pl-2 transition">
+          <span>SORT BY</span>
+          <div className="ml-1">
+            <ChevronDown style={{ strokeWidth: 6 }} size={12} />
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    {/* Right spacer with Share button - pushes Share to the far right */}
+    <div className="flex-1 flex justify-end items-center"> {/* Added items-center for vertical alignment of Share icon */}
+      {/* The Share2 component itself (simplified its wrapper) */}
+      <Share2 style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6" />
+    </div>
+
+  </div>
+  {/* END OF MODIFIED SECTION */}
+
+</div>
 
         {/* card section */}
         <div className="flex flex-col mx-auto w-[95%] ml-6">
@@ -203,8 +212,8 @@ export default function RestaurantListing() {
                     <button className="bg-[#670402] text-white py-[6%] md:py-[3%] px-3 border border-amber-400 rounded-[10px] font-semibold transition duration-200 whitespace-nowrap 
                               text-[8px] md:text-[10px] lg:text-[10px] xl:text-[10px] 2xl:text-[10px] 
                               ">
-                                VIEW RESTAURANT
-                              </button>
+                      VIEW RESTAURANT
+                    </button>
                   </div>
                 </div>
                 <div className="w-[50%]">
@@ -216,21 +225,23 @@ export default function RestaurantListing() {
             </div>
           ))}
         </div>
-      </div>
+      </div >
 
       {/* Arrow Indicator */}
-      {showArrow && (
-        <div className="fixed bottom-4 left-[40%] bg-transparent p-2 z-10">
-          <img
-            src="/images/scrollArrow.png"
-            alt=""
-            className="w-14 h-40 object-contain animate-bounce"
-            style={{
-              animation: 'bounce 2s infinite',
-            }}
-          />
-        </div>
-      )}
+      {
+        showArrow && (
+          <div className="fixed bottom-4 left-[40%] bg-transparent p-2 z-10">
+            <img
+              src="/images/scrollArrow.png"
+              alt=""
+              className="w-14 h-40 object-contain animate-bounce"
+              style={{
+                animation: 'bounce 2s infinite',
+              }}
+            />
+          </div>
+        )
+      }
 
       {/* Arrow Animation */}
       <style>{`

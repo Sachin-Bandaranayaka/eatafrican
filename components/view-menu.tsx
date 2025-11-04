@@ -169,10 +169,10 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
           ) : (
             <main className="  md:w-[95%] p-2 md:p-0 flex flex-col space-y-4 xs:space-y-6">
               {/* site header */}
-              <header className="flex flex-row justify-between items-center mr-2">
+              <header className="w-full flex flex-row justify-center items-center mr-2">
 
-                {/* left side content */}
-                <div className="flex items-start">
+                {/* info section */}
+                <div className="w-[120%]  ">
                   <div
                     className="relative rounded-xl"
                     style={{
@@ -195,19 +195,6 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
 
                     {/* Content (Menu Icon and Restaurant Info) */}
                     <div className="relative z-10 flex flex-row">
-                      {/* Menu Icon */}
-                      <div className="p-[1%] mt-1 
-                      w-[70%] md:w-auto lg:w-auto xl:w-auto 2xl:w-auto h-[70%] md:h-auto lg:h-auto xl:h-auto 2xl:h-auto 
-                      ">
-                        <Image
-                          src="/images/menuIcon.png"
-                          alt="Restaurant Logo"
-                          width={130}
-                          height={130}
-                          className="object-cover    "
-                        />
-                      </div>
-
                       {/* Restaurant Info */}
                       <div className="pt-2 md:pt-[1%] pb-[1%] pl-0 text-white flex flex-col space-y-0 w-full">
                         <div className="relative z-10 ml-1 md:ml-2">
@@ -217,6 +204,29 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                           <p className="text-[#980000] text-[6px] md:text-[11px] lg:text-[11px] xl:text-[11px] 2xl:text-[11px]">
                             {restaurant.cuisineTypes?.join(", ") || "African"}, {restaurant.city}
                           </p>
+                          <p className="text-[#980000] text-[6px] md:text-[11px] lg:text-[11px] xl:text-[11px] 2xl:text-[11px]">
+                            {restaurant.rating?.toFixed(1) || "N/A"} ({restaurant.totalRatings || 0})
+                          </p>
+                         
+                        </div>
+                      </div>
+
+                      {/* Menu Icon */}
+                      <div className="-mt-1 
+                      w-[70%] md:w-fulll lg:w-auto xl:w-auto 2xl:w-auto h-[70%] md:h-auto lg:h-auto xl:h-auto 2xl:h-auto 
+                      ">
+                        <Image
+                          src="/images/menuIcon.png"
+                          alt="Restaurant Logo"
+                          width={220}
+                          height={220}
+                          className="object-cover    "
+                        />
+                      </div>
+
+                      {/* Restaurant Info */}
+                      <div className="flex items-center pt-2 md:pt-[1%] pb-[1%] pl-0 text-white flex flex-col space-y-0 w-full">
+                        <div className="relative z-10 ml-1 md:ml-2">
                           <p className="text-[#980000] text-[6px] md:text-[11px] lg:text-[11px] xl:text-[11px] 2xl:text-[11px]">
                             {restaurant.rating?.toFixed(1) || "N/A"} ({restaurant.totalRatings || 0})
                           </p>
@@ -257,60 +267,58 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                     </div>
                   </div>
                 </div>
+              </header>
 
-                {/* right side content */}
-                <div className="flex flex-col items-end justify-start -mr-4 md:-mr-10 md:items-end space-y-3">
-                  <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                    <button 
-                      onClick={() => setSelectedCategory(null)}
-                      className={`${!selectedCategory ? 'bg-amber-700' : 'bg-amber-900'} text-white rounded-[9px] w-12 md:w-20 border-2 border-white py-1.5 px-1 md:px-3 text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] font-semibold hover:bg-amber-700 transition duration-200 whitespace-nowrap`}>
-                      ALL
+              {/* button section */}
+              <div className="flex flex-col items-end justify-start -mr-4 md:items-end md:space-y-3">
+                <div className="flex flex-wrap justify-center md:justify-end gap-2">
+                  <button
+                    onClick={() => setSelectedCategory(null)}
+                    className={`${!selectedCategory ? 'bg-amber-700' : 'bg-amber-900'} text-white rounded-[9px] w-12 md:w-20 border-2 border-white py-1.5 px-1 md:px-3 text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] font-semibold hover:bg-amber-700 transition duration-200 whitespace-nowrap`}>
+                    ALL
+                  </button>
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`${selectedCategory === category ? 'bg-amber-700' : 'bg-amber-900'} text-white rounded-[9px] w-12 md:w-20 border-2 border-white py-1.5 px-1 md:px-3 text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] font-semibold hover:bg-amber-700 transition duration-200 whitespace-nowrap`}>
+                      {category.toUpperCase()}
                     </button>
-                    {categories.map((category) => (
-                      <button 
-                        key={category}
-                        onClick={() => setSelectedCategory(category)}
-                        className={`${selectedCategory === category ? 'bg-amber-700' : 'bg-amber-900'} text-white rounded-[9px] w-12 md:w-20 border-2 border-white py-1.5 px-1 md:px-3 text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] font-semibold hover:bg-amber-700 transition duration-200 whitespace-nowrap`}>
-                        {category.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex flex-row gap-1 md:gap-5">
-                    {/* filter & sort btn */}
-                    <div className="flex flex-row md:gap-2">
-                      {/* filer by */}
-                      <button className="text-white flex items-center bg-amber-900 py-1 md:py-1.5
+                  ))}
+                
+                  <div className="flex flex-row md:gap-2">
+                    {/* filer by */}
+                    <button className="text-white flex items-center bg-amber-900 py-1 md:py-1.5
                       text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
                       rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2  font-bold p-1 pl-2 transition md:mr-0.5">
-                        <span>FILTER BY</span>
-                        <div className="ml-1">
-                          <ChevronDown style={{ strokeWidth: 6 }} size={12} />
-                        </div>
-                      </button>
-                      {/* sort by */}
-                      <button className="text-white  py-1 md:py-1.5
+                      <span>FILTER BY</span>
+                      <div className="ml-1">
+                        <ChevronDown style={{ strokeWidth: 6 }} size={12} />
+                      </div>
+                    </button>
+                    {/* sort by */}
+                    <button className="text-white  py-1 md:py-1.5
                       text-[5px] md:text-[9px] lg:text-[9px] xl:text-[9px] 2xl:text-[9px] 
                       flex items-center rounded-[5px] rounded-[9px] w-14 md:w-20 border-2 rounded:space-x-2 bg-amber-900 font-bold pl-2 transition md:mr-0.5">
-                        <span>SORT BY</span>
-                        <div className="ml-1">
-                          <ChevronDown style={{ strokeWidth: 6 }} size={12} />
-                        </div>
-                      </button>
-                    </div>
+                      <span>SORT BY</span>
+                      <div className="ml-1">
+                        <ChevronDown style={{ strokeWidth: 6 }} size={12} />
+                      </div>
+                    </button>
+                  </div>
 
-                    {/* search & share btn */}
-                    <div className="flex flex-row gap-1 md:gap-4 items-center">
-                      <div className=" ">
-                        <Search style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6 p-1 " />
-                      </div>
-                      {/* share btn */}
-                      <div className=" ">
-                        <Share2 style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6 p-1" />
-                      </div>
+                  {/* search & share btn */}
+                  <div className="flex flex-row gap-1 md:gap-4 items-center">
+                    <div className=" ">
+                      <Search style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6 p-1 " />
+                    </div>
+                    {/* share btn */}
+                    <div className=" ">
+                      <Share2 style={{ strokeWidth: 1, background: 'white', color: 'black' }} className="rounded-sm size-5 md:size-6 p-1" />
                     </div>
                   </div>
                 </div>
-              </header>
+              </div>
 
               {/* card section */}
               <section className="flex flex-col w-[102%] space-y-3 z-10">
@@ -375,15 +383,15 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                             {/* btn section */}
                             <div className="flex items-center justify-between md:mt-[1%] space-x-4">
                               <div className="flex items-center space-x-6 xs:space-x-4 ">
-                                <button 
+                                <button
                                   onClick={() => {
                                     if (!restaurant || !restaurantId) {
                                       alert('Restaurant information not available');
                                       return;
                                     }
-                                    
+
                                     const quantity = mealQuantities[item.id] || 1;
-                                    
+
                                     // Add item to cart using the cart context
                                     addItem({
                                       id: `${item.id}-${Date.now()}`, // Unique cart item ID
@@ -396,13 +404,13 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                                       restaurantId: restaurantId,
                                       restaurantName: restaurant.name,
                                     });
-                                    
+
                                     // Reset quantity to 1 after adding
                                     setMealQuantities((prev) => ({
                                       ...prev,
                                       [item.id]: 1,
                                     }));
-                                    
+
                                     // Show success feedback
                                     console.log('Added to cart:', { item: item.name, quantity, price: item.price });
                                   }}
@@ -411,7 +419,7 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                                 ">
                                   ADD TO CART
                                 </button>
-                                
+
                                 {/* Quantity selector with +/- buttons */}
                                 <div className="flex items-center gap-1 bg-white rounded-md px-1 border-2 border-amber-400">
                                   <button
@@ -440,7 +448,7 @@ export default function ViewMenu({ restaurantId }: ViewMenuProps) {
                                     +
                                   </button>
                                 </div>
-                                
+
                                 <span className="text-[8px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] xs:text-sm sm:text-lg text-white">
                                   Fr. {item.price.toFixed(2)}.-
                                 </span>
