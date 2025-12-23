@@ -7,6 +7,7 @@ import SiteFooter from '../components/site-footer';
 import SiteHeader from '../components/site-header';
 import ClientOnly from '../components/client-only';
 import LeftSideContent from './left-side-content-updated';
+import NewHomepage from '../components/new-homepage';
 import React from "react";
 import { useIsMobile } from '../hooks/use-mobile';
 import AdminDashboard from "../components/admin/dashboard/page";
@@ -38,7 +39,7 @@ export default function Home() {
     const [isViewingMenu, setIsViewingMenu] = useState(false);
     const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
     const [adminView, setAdminView] = useState<'none' | 'dashboard' | 'login' | 'partner' | 'driver' | 'driverPortal' | 'superAdmin' | 'superAdminDashboard'>('none');
-    
+
     // Add state to manage the view within the Super Admin Dashboard
     const [superAdminView, setSuperAdminView] = useState('DASHBOARD');
 
@@ -128,9 +129,9 @@ export default function Home() {
             <ClientOnly>
                 <main className="relative w-full min-h-screen">
                     {/* Pass the state and the updater function to the header */}
-                    <SuperAdminHeader 
-                        currentView={superAdminView} 
-                        onViewChange={setSuperAdminView} 
+                    <SuperAdminHeader
+                        currentView={superAdminView}
+                        onViewChange={setSuperAdminView}
                     />
                     {/* Render the selected component or an error message */}
                     <div className="mt-4 px-4">
@@ -240,33 +241,8 @@ export default function Home() {
     // --- DEFAULT USER VIEW ---
     return (
         <ClientOnly>
-            <main className={`relative w-full ${isMobile ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`}>
-                <div className={`relative z-10 flex flex-col ${isMobile ? 'min-h-screen' : 'h-screen'}`}>
-                    <div className=" ">
-                        <SiteHeader
-                            onOpenDashboard={openDashboard}
-                        />
-                    </div>
-                    <div className={`flex-1 flex ${isMobile ? 'flex-col' : 'flex-row'} items-start justify-between px-4 sm:px-6 md:px-8 pb-4 md:pb-6 mt`}>
-                        <div className="w-full md:w-1/2 max-w-2xl flex flex-col">
-                            <LeftSideContent
-                                visibleComponent={visibleComponent}
-                                setVisibleComponent={setVisibleComponent}
-                                onViewMenu={handleViewMenu}
-                                isViewingMenu={isViewingMenu}
-                                selectedRestaurant={selectedRestaurant}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        {!isMobile && (
-                            <div className="w-1/2 max-w-auto"></div>
-                        )}
-                    </div>
-                    <SiteFooter
-                        onOpenComponent={setVisibleComponent}
-                        onCloseComponent={() => setVisibleComponent(null)}
-                    />
-                </div>
+            <main className="relative w-full min-h-screen">
+                <NewHomepage />
             </main>
         </ClientOnly>
     );

@@ -12,6 +12,8 @@ import { CustomersManagementConnected } from '@/components/superAdmin/customer-a
 import { SuperAdminRestaurant } from '@/components/superAdmin/restaurant';
 import { SuperAdminSettings } from '@/components/superAdmin/settings/page';
 import { SuperAdminDeliveryBackend } from '@/components/superAdmin/delivery-backend/page';
+import { AnalyticsDashboard } from '@/components/superAdmin/analytics/AnalyticsDashboard';
+import { VoucherManagement } from '@/components/superAdmin/vouchers/VoucherManagement';
 
 export default function AdminPortalPage() {
     const router = useRouter();
@@ -83,6 +85,10 @@ export default function AdminPortalPage() {
                 return CustomersManagementConnected ? <CustomersManagementConnected /> : <ErrorDisplay name="CustomersManagementConnected" />;
             case 'SETTINGS':
                 return SuperAdminSettings ? <SuperAdminSettings /> : <ErrorDisplay name="SuperAdminSettings" />;
+            case 'ANALYTICS':
+                return AnalyticsDashboard ? <AnalyticsDashboard /> : <ErrorDisplay name="AnalyticsDashboard" />;
+            case 'VOUCHERS':
+                return VoucherManagement ? <VoucherManagement /> : <ErrorDisplay name="VoucherManagement" />;
             default:
                 return SuperAdminDashboardConnected ? <SuperAdminDashboardConnected /> : <ErrorDisplay name="SuperAdminDashboardConnected" />;
         }

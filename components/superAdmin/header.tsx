@@ -16,7 +16,7 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // The list of available views.
-    const views = ['DASHBOARD', 'ORDERS', 'EARNINGS', 'PAYOUTS', 'RESTAURANT', 'DELIVERY BACKEND' , 'DELIVERY DRIVERS', 'CUSTOMER ACCOUNT', 'SETTINGS'];
+    const views = ['DASHBOARD', 'ORDERS', 'EARNINGS', 'PAYOUTS', 'RESTAURANT', 'DELIVERY BACKEND' , 'DELIVERY DRIVERS', 'CUSTOMER ACCOUNT', 'ANALYTICS', 'VOUCHERS', 'SETTINGS'];
 
     return (
         <header className="flex flex-row justify-center z-50 mt-20 px-12">

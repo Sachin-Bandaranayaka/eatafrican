@@ -1,32 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireRole } from '@/lib/middleware/auth';
-import { db } from '@/lib/supabase/database';
-import { analyticsQuerySchema } from '@/lib/validation/schemas';
+import { supabaseAdmin } from '@/lib/supabase/config';
 
 export async function GET(req: NextRequest) {
   try {
-    // Validate super admin role
-    await requireRole(['super_admin'])(req);
-
-    // Parse and validate query parameters
     const { searchParams } = new URL(req.url);
-    const queryParams = {
-      startDate: searchParams.get('startDate'),
-      endDate: searchParams.get('endDate'),
-      region: searchParams.get('region') || undefined,
-    };
+    const days = parseInt(searchParams.get('days') || '30');
+    
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    const endDate = new Date();
+    
+    const previousStartDate = new Date(startDate);
+    previousStartDate.setDate(previousStartDate.getDate() - days);
 
-    if (!queryParams.startDate || !queryParams.endDate) {
-      return NextResponse.json(
-        { error: { code: 'VALIDATION_ERROR', message: 'startDate and endDate are required' } },
-        { status: 400 }
-      );
-    }
+    const db = supabaseAdmin;
 
-    const validatedParams = analyticsQuerySchema.parse(queryParams);
-
-    // Build base query for orders in date range
-    let ordersQuery = db
+    // Fetch current period orders
+    const { data: orders, error: ordersError } = await db
       .from('orders')
       .select(`
         id,
@@ -34,77 +24,31 @@ export async function GET(req: NextRequest) {
         total_amount,
         delivery_fee,
         created_at,
-        actual_delivery_time,
-        scheduled_delivery_time,
-        restaurant:restaurants!orders_restaurant_id_fkey (
-          region
-        )
+        restaurant_id
       `)
-      .gte('created_at', validatedParams.startDate)
-      .lte('created_at', validatedParams.endDate);
-
-    if (validatedParams.region) {
-      ordersQuery = ordersQuery.eq('restaurants.region', validatedParams.region);
-    }
-
-    const { data: orders, error: ordersError } = await ordersQuery;
+      .gte('created_at', startDate.toISOString())
+      .lte('created_at', endDate.toISOString());
 
     if (ordersError) {
-      console.error('Error fetching orders for analytics:', ordersError);
-      return NextResponse.json(
-        { error: { code: 'DATABASE_ERROR', message: 'Failed to fetch analytics data' } },
-        { status: 500 }
-      );
+      console.error('Error fetching orders:', ordersError);
     }
 
-    // Calculate total orders and revenue
+    // Fetch previous period orders for comparison
+    const { data: previousOrders } = await db
+      .from('orders')
+      .select('total_amount')
+      .gte('created_at', previousStartDate.toISOString())
+      .lt('created_at', startDate.toISOString());
+
+    // Calculate revenue
+    const totalRevenue = orders?.reduce((sum, order) => sum + parseFloat(order.total_amount || '0'), 0) || 0;
+    const previousRevenue = previousOrders?.reduce((sum, order) => sum + parseFloat(order.total_amount || '0'), 0) || 0;
+    const revenueChange = previousRevenue > 0 ? Math.round(((totalRevenue - previousRevenue) / previousRevenue) * 100) : 0;
+
+    // Calculate orders
     const totalOrders = orders?.length || 0;
-    const totalRevenue = orders?.reduce((sum, order) => sum + parseFloat(order.total_amount), 0) || 0;
-    const totalDeliveryFees = orders?.reduce((sum, order) => sum + parseFloat(order.delivery_fee), 0) || 0;
-
-    // Calculate platform revenue (assuming 15% commission + delivery fees)
-    const platformCommissionRate = 0.15;
-    const restaurantRevenue = totalRevenue - totalDeliveryFees;
-    const platformRevenue = (restaurantRevenue * platformCommissionRate) + totalDeliveryFees;
-    const restaurantEarnings = restaurantRevenue * (1 - platformCommissionRate);
-
-    // Calculate driver earnings (80% of delivery fees)
-    const driverEarnings = totalDeliveryFees * 0.8;
-
-    // Get active users count
-    const { count: activeCustomers } = await db
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .eq('role', 'customer')
-      .eq('status', 'active');
-
-    const { count: activeRestaurants } = await db
-      .from('restaurants')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active');
-
-    const { count: activeDrivers } = await db
-      .from('drivers')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active');
-
-    // Calculate average order value
-    const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-    // Calculate average delivery time (for delivered orders)
-    const deliveredOrders = orders?.filter(
-      order => order.status === 'delivered' && order.actual_delivery_time && order.scheduled_delivery_time
-    ) || [];
-
-    const totalDeliveryTime = deliveredOrders.reduce((sum, order) => {
-      const scheduled = new Date(order.scheduled_delivery_time).getTime();
-      const actual = new Date(order.actual_delivery_time!).getTime();
-      return sum + (actual - scheduled);
-    }, 0);
-
-    const averageDeliveryTime = deliveredOrders.length > 0
-      ? Math.round(totalDeliveryTime / deliveredOrders.length / 60000) // Convert to minutes
-      : 0;
+    const previousOrderCount = previousOrders?.length || 0;
+    const ordersChange = previousOrderCount > 0 ? Math.round(((totalOrders - previousOrderCount) / previousOrderCount) * 100) : 0;
 
     // Group orders by status
     const ordersByStatus = orders?.reduce((acc, order) => {
@@ -112,26 +56,136 @@ export async function GET(req: NextRequest) {
       return acc;
     }, {} as Record<string, number>) || {};
 
-    // Group orders by region
-    const ordersByRegion = orders?.reduce((acc, order) => {
-      const region = order.restaurant?.region || 'Unknown';
-      acc[region] = (acc[region] || 0) + 1;
+    // Revenue by day
+    const revenueByDay = orders?.reduce((acc, order) => {
+      const date = order.created_at.split('T')[0];
+      acc[date] = (acc[date] || 0) + parseFloat(order.total_amount || '0');
       return acc;
     }, {} as Record<string, number>) || {};
 
+    // Orders by day
+    const ordersByDay = orders?.reduce((acc, order) => {
+      const date = order.created_at.split('T')[0];
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>) || {};
+
+    // Get customer stats
+    const { count: totalCustomers } = await db
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'customer');
+
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    const { count: newCustomers } = await db
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'customer')
+      .gte('created_at', monthStart.toISOString());
+
+    // Get restaurant stats
+    const { count: totalRestaurants } = await db
+      .from('restaurants')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: activeRestaurants } = await db
+      .from('restaurants')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'active');
+
+    const { count: pendingRestaurants } = await db
+      .from('restaurants')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending');
+
+    // Top restaurants
+    const restaurantOrders = orders?.reduce((acc, order) => {
+      if (!order.restaurant_id) return acc;
+      if (!acc[order.restaurant_id]) {
+        acc[order.restaurant_id] = { orders: 0, revenue: 0 };
+      }
+      acc[order.restaurant_id].orders++;
+      acc[order.restaurant_id].revenue += parseFloat(order.total_amount || '0');
+      return acc;
+    }, {} as Record<string, { orders: number; revenue: number }>) || {};
+
+    const topRestaurantIds = Object.entries(restaurantOrders)
+      .sort((a, b) => b[1].revenue - a[1].revenue)
+      .slice(0, 5)
+      .map(([id]) => id);
+
+    const { data: topRestaurantsData } = await db
+      .from('restaurants')
+      .select('id, name')
+      .in('id', topRestaurantIds.length > 0 ? topRestaurantIds : ['none']);
+
+    const topRestaurants = topRestaurantsData?.map(r => ({
+      id: r.id,
+      name: r.name,
+      orders: restaurantOrders[r.id]?.orders || 0,
+      revenue: restaurantOrders[r.id]?.revenue || 0
+    })).sort((a, b) => b.revenue - a.revenue) || [];
+
+    // Top items (from order_items)
+    const { data: topItemsData } = await db
+      .from('order_items')
+      .select(`
+        menu_item_id,
+        name,
+        order:orders!inner(created_at, restaurant:restaurants(name))
+      `)
+      .gte('order.created_at', startDate.toISOString());
+
+    const itemCounts = topItemsData?.reduce((acc, item) => {
+      const key = item.menu_item_id || item.name;
+      if (!acc[key]) {
+        acc[key] = { name: item.name, restaurant: (item.order as any)?.restaurant?.name || 'Unknown', count: 0 };
+      }
+      acc[key].count++;
+      return acc;
+    }, {} as Record<string, { name: string; restaurant: string; count: number }>) || {};
+
+    const topItems = Object.entries(itemCounts)
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 5)
+      .map(([id, data]) => ({
+        id,
+        name: data.name,
+        restaurant: data.restaurant,
+        orders: data.count
+      }));
+
+    // Generate date range for charts
+    const dateRange: string[] = [];
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      dateRange.push(d.toISOString().split('T')[0]);
+    }
+
     return NextResponse.json({
-      totalOrders,
-      totalRevenue: parseFloat(totalRevenue.toFixed(2)),
-      platformRevenue: parseFloat(platformRevenue.toFixed(2)),
-      restaurantRevenue: parseFloat(restaurantEarnings.toFixed(2)),
-      driverEarnings: parseFloat(driverEarnings.toFixed(2)),
-      activeCustomers: activeCustomers || 0,
-      activeRestaurants: activeRestaurants || 0,
-      activeDrivers: activeDrivers || 0,
-      averageOrderValue: parseFloat(averageOrderValue.toFixed(2)),
-      averageDeliveryTime, // in minutes
-      ordersByStatus,
-      ordersByRegion,
+      revenue: {
+        total: totalRevenue,
+        change: revenueChange,
+        byDay: dateRange.map(date => ({ date, amount: revenueByDay[date] || 0 }))
+      },
+      orders: {
+        total: totalOrders,
+        change: ordersChange,
+        byStatus: ordersByStatus,
+        byDay: dateRange.map(date => ({ date, count: ordersByDay[date] || 0 }))
+      },
+      customers: {
+        total: totalCustomers || 0,
+        newThisMonth: newCustomers || 0,
+        returning: Math.max(0, (totalCustomers || 0) - (newCustomers || 0))
+      },
+      restaurants: {
+        total: totalRestaurants || 0,
+        active: activeRestaurants || 0,
+        pending: pendingRestaurants || 0
+      },
+      topRestaurants,
+      topItems
     });
   } catch (error: any) {
     console.error('Analytics error:', error);
