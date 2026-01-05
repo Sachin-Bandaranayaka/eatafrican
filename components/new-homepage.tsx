@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
+import LoginModal from './login-modal';
 
 export default function NewHomepage() {
     const [isCuisineOpen, setIsCuisineOpen] = useState(false);
     const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
     const [view, setView] = useState<'HOME' | 'CUISINE' | 'RESTAURANTS'>('HOME');
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const toggleCuisineDropdown = () => {
         setIsCuisineOpen(!isCuisineOpen);
@@ -135,7 +137,10 @@ export default function NewHomepage() {
 
                     {/* Right Side Icons */}
                     <div className="flex items-center space-x-6">
-                        <button className="flex items-center space-x-2 hover:text-yellow-500 transition group">
+                        <button 
+                            onClick={() => setIsLoginModalOpen(true)}
+                            className="flex items-center space-x-2 hover:text-yellow-500 transition group"
+                        >
                             <span className="text-xs font-bold group-hover:text-yellow-500">LOGIN</span>
                             <div className="relative w-8 h-8">
                                 <Image
@@ -210,6 +215,9 @@ export default function NewHomepage() {
                 </div>
 
             </div>
+
+            {/* Login Modal */}
+            <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
         </div>
     );
 }

@@ -4,10 +4,11 @@
       "command": "npx",
       "args": [
         "-y",
-        "@supabase/mcp-server-supabase@0.1.2",
+        "@supabase/mcp-server-supabase@latest",
         "--access-token",
-        "sbp_ce8c842b968f196cce3f78a133e11b20e2d91e20"
-      ]
+        "sbp_bb1d0316c3044be5869083cc13c8b3e0b6a24b26"
+      ],
+      "disabledTools": []
     }
   }
 }
