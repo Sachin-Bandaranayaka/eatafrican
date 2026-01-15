@@ -18,7 +18,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, value, name = "cuisineTypes"
             value={value || label}
             className="h-4 w-4 text-amber-600 border-gray-400 rounded focus:ring-amber-500" 
         />
-        <label htmlFor={label} className="ml-2 text-sm text-gray-800">{label}</label>
+        <label htmlFor={label} className="ml-2 text-sm text-white">{label}</label>
     </div>
 );
 

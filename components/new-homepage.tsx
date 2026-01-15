@@ -137,20 +137,31 @@ export default function NewHomepage() {
 
                     {/* Right Side Icons */}
                     <div className="flex items-center space-x-6">
-                        <button 
-                            onClick={() => setIsLoginModalOpen(true)}
-                            className="flex items-center space-x-2 hover:text-yellow-500 transition group"
-                        >
-                            <span className="text-xs font-bold group-hover:text-yellow-500">LOGIN</span>
-                            <div className="relative w-8 h-8">
-                                <Image
-                                    src="/images/folk_link.png"
-                                    alt="Login"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                        </button>
+                      <button
+  onClick={() => setIsLoginModalOpen(true)}
+  className="group flex items-center"
+>
+  <span className="relative text-xs font-bold text-yellow-500 pr-4 pb-1">
+    LOGIN
+    <span
+      className="absolute bottom-0 h-[1.5px] bg-white transition-all
+                 group-hover:bg-yellow-500"
+      style={{ left: '-1rem', width: 'calc(100% + 2rem)' }}
+    />
+  </span>
+
+  <span className="relative w-10 h-10 -ml-3">
+    <Image
+      src="/images/UserIcon (1).png"
+      alt="Profile"
+      fill
+      className="object-contain"
+    />
+  </span>
+</button>
+
+
+
                         <button className="relative w-8 h-8 hover:scale-110 transition">
                             <Image
                                 src="/images/cart_icon.png"

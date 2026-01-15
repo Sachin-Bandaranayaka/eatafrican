@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import Image from "next/image"
 
 interface LoginViewProps {
   onLogin: () => void
@@ -24,8 +25,9 @@ export function LoginView({ onLogin, onContinueAsGuest }: LoginViewProps) {
             </a>
           </div>
 
-          <Button onClick={onLogin} className="w-full bg-[#6b2c0c] hover:bg-[#5a2509] text-white">
-            LOGIN
+          <Button onClick={onLogin} className="w-full bg-[#6b2c0c] hover:bg-[#5a2509] text-white flex items-center gap-1">
+            <Image src="/images/folk_link.png" alt="Folk Link" width={20} height={20} />
+            <span style={{color: '#F2C94C'}}>LOGIN</span>
           </Button>
 
           <div className="text-center text-sm">
