@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
+import { ChevronDown } from 'lucide-react';
 import RegistrationForm from '@/components/restaurantRegistration/RegistrationForm';
 import SuccessMessage from '@/components/restaurantRegistration/SuccessMessage';
 
@@ -51,11 +53,6 @@ export default function PartnerRestaurantPage() {
             return;
         }
 
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            setIsLoading(false);
-            return;
-        }
 
         if (password.length < 8) {
             setError('Password must be at least 8 characters long');
@@ -141,28 +138,72 @@ export default function PartnerRestaurantPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center p-4">
-            <div 
-                className={`w-full max-w-5xl bg-white bg-opacity-90 backdrop-blur-sm rounded-lg shadow-lg p-8 md:p-16 ${
-                    isSubmitted ? 'flex flex-col items-center justify-start text-center' : ''
-                }`}
-                style={{ minHeight: '720px' }}
-            >
+        <div className="relative w-full min-h-screen bg-black text-white overflow-hidden font-sans p-8">
+            {/* Language Selector */}
+            <div className="absolute top-3 left-0 z-20 ml-10">
+                <div className="flex items-center">
+                    <select className="bg-black text-white font-bold px-1 py-4 pl-8 rounded text-xs appearance-none">
+                        <option value="en">EN</option>
+                        <option value="fr">FR</option>
+                        <option value="es">ES</option>
+                    </select>
+                    <ChevronDown size={18} strokeWidth={4} className="text-white ml-1" />
+                </div>
+            </div>
+            {/* Portal and Login Information Only*/}
+             <div className="absolute top-2 left-0.5 z-20 ">
+                <div className="text-white text-sm font-bold mt-20 px-4 py-2 border" style={{backgroundColor: '#2F6B2F', borderColor: '#2F6B2F'}}>EAT AFRICAN RESTAURANTS PORTAL</div>
+                <div className="flex items-center gap-1 font-bold text-xs mt-8 ml-10 pl-4">
+                  <Image src="/images/folk_link.png" alt="Folk Link" width={30} height={30} />
+                  <span style={{color: '#F2C94C'}}>Login</span>
+                </div>
+            </div>
+            {/* Top Right Buttons */}
+            <div className="absolute top-4 right-12 z-20 w-fit flex items-center space-x-6">
+                <button className="flex items-center space-x-2 hover:text-yellow-500 transition group">
+                    <span className="text-xs font-bold group-hover:text-yellow-500" style={{color: '#F2C94C'}}>LOGIN</span>
+                    <div className="relative w-8 h-8">
+                        <Image src="/images/folk_link.png" alt="Login" fill className="object-contain" />
+                    </div>
+                </button>
+                <button className="relative w-8 h-8 hover:scale-110 transition">
+                    <Image src="/images/cart_icon.png" alt="Cart" fill className="object-contain" />
+                </button>
+            </div>
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/images/eatafricanbck1 (1).png"
+                    alt="Background"
+                    fill
+                    className="object-cover opacity-60 transition-opacity duration-500"
+                    priority
+                />
+                {/* Overlay gradient for better text visibility */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
+                <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+                    <div
+                        className={`w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64 ${
+                            isSubmitted ? 'flex flex-col items-center justify-center text-center' : ''
+                        }`}
+                        style={{ minHeight: '600px' }}
+                    >
                 {isSubmitted ? (
                     <SuccessMessage />
                 ) : (
                     <>
-                        <div className="text-center mb-8">
-                            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                                Partner with Eat African
+                        <div className="text-left mb-8">
+                            <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">
+                                REGISTER RESTAURANT
                             </h1>
-                            <p className="text-gray-600">
-                                Register your restaurant and reach more customers
-                            </p>
                         </div>
                         
                         {error && (
-                            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                            <div className="mb-4 p-2 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                                 {error}
                             </div>
                         )}
@@ -179,7 +220,28 @@ export default function PartnerRestaurantPage() {
                         )}
                     </>
                 )}
+                </div>
+            </div>
+            <div className="hidden md:flex items-center justify-center p-4 md:p-8">
+                <div className="bg-white text-black p-6 rounded-lg shadow-lg w-full max-w-sm">
+                    <Image
+                        src="/Terminal.png"
+                        alt="Terminal"
+                        width={400}
+                        height={300}
+                        className="w-full h-auto rounded mb-4"
+                    />
+                    <h3 className="text-lg font-semibold mb-2">Get a Free Payment Terminal for the First 2 Months</h3>
+                    <p className="text-gray-700 mb-4">
+                        Instead of using many systems to track your income, you can monitor your whole restaurant cash flow in one simple dashboard — both what you earn through our platform and what you earn directly at your restaurant.
+                    </p>
+                    <label className="flex items-center">
+                        <input type="checkbox" className="mr-2" />
+                        <span>Get Payment Terminal</span>
+                    </label>
+                </div>
             </div>
         </div>
+    </div>
     );
 }

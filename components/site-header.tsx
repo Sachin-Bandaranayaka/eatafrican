@@ -106,7 +106,7 @@ export default function SiteHeader({
           {/* Language Selector */}
           <div className="relative">
             <button onClick={() => setLanguageOpen(!languageOpen)} className={languageButtonStyle}>
-              {getLanguageCode(locationInfo.language)} <ChevronDown size={18} strokeWidth={3} />
+              {getLanguageCode(locationInfo.language)} <ChevronDown size={18} strokeWidth={4} />
             </button>
             {languageOpen && (
               <div className="absolute left-0 mt-1 bg-black/80 backdrop-blur-sm rounded shadow-lg py-1 w-auto md:w-36 z-40">
@@ -174,10 +174,11 @@ export default function SiteHeader({
                 onClick={() => {
                   setLoginModalOpen(true);
                 }}
-                className="bg-amber-900 text-white border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap"
+                className="bg-amber-900 border border-amber-400 rounded-[8px] py-1 px-3 text-[8px] font-semibold hover:bg-red-800 transition duration-200 whitespace-nowrap flex items-center gap-1"
                 aria-label="Login"
               >
-                LOGIN
+                <Image src="/images/folk_link.png" alt="Folk Link" width={20} height={20} />
+                <span style={{color: '#F2C94C'}}>LOGIN</span>
               </button>
             </div>
           )}
