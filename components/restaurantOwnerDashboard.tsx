@@ -11,11 +11,16 @@ import AccountView from "./admin/dashboard/components/views/AccountView";
 interface RestaurantOwnerDashboardProps {
     restaurantId: string;
     onLogout: () => void;
+    currentView: string;
+    setCurrentView: (view: string) => void;
+    myRestaurantTab: string;
+    setMyRestaurantTab: (tab: string) => void;
+    menuTab: string;
+    setMenuTab: (tab: string) => void;
 }
 
-export default function RestaurantOwnerDashboard({ restaurantId, onLogout }: RestaurantOwnerDashboardProps) {
+export default function RestaurantOwnerDashboard({ restaurantId, onLogout, currentView, setCurrentView, myRestaurantTab, setMyRestaurantTab, menuTab, setMenuTab }: RestaurantOwnerDashboardProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [currentView, setCurrentView] = useState('ORDERS');
     const dashboardRef = useRef<HTMLDivElement>(null);
 
     return (
@@ -25,16 +30,9 @@ export default function RestaurantOwnerDashboard({ restaurantId, onLogout }: Res
                 className="z-0 w-full max-w-6xl h-[85vh] bg-transparent p-6 flex flex-col font-sans text-gray-900"
             >
                 <main className="w-full h-[90vh] flex flex-col space-y-6">
-                    <Header
-                        currentView={currentView}
-                        setCurrentView={setCurrentView}
-                        isDropdownOpen={isDropdownOpen}
-                        setIsDropdownOpen={setIsDropdownOpen}
-                        onLogout={onLogout}
-                    />
                     <section className="flex flex-col space-y-3 z-10">
-                        <div className="flex flex-col w-full h-[80vh] mb-12 shadow-md overflow-hidden border-2 border-[#f1c232] relative rounded-[8px]">
-                            <div
+                        <div className="flex flex-col w-full h-[80vh] mb-12 shadow-md overflow-hidden relative rounded-[8px]">
+                            {/* <div
                                 className="absolute inset-0"
                                 style={{
                                     backgroundColor: "white",
@@ -42,12 +40,12 @@ export default function RestaurantOwnerDashboard({ restaurantId, onLogout }: Res
                                     zIndex: 1,
                                     borderRadius: "8px"
                                 }}
-                            ></div>
+                            ></div> */}
                             <div className="z-10 relative p-4">
                                 {currentView === 'ORDERS' && <OrdersViewConnected restaurantId={restaurantId} />}
-                                {currentView === 'MENU' && <MenuViewConnected restaurantId={restaurantId} />}
+                                {currentView === 'MENU' && <MenuViewConnected restaurantId={restaurantId} activeTab={menuTab} setActiveTab={setMenuTab} />}
                                 {currentView === 'EARNINGS' && <EarningsViewConnected restaurantId={restaurantId} />}
-                                {currentView === 'MY RESTAURANT' && <MyRestaurantViewConnected restaurantId={restaurantId} />}
+                                {currentView === 'MY RESTAURANT' && <MyRestaurantViewConnected restaurantId={restaurantId} myRestaurantTab={myRestaurantTab} setMyRestaurantTab={setMyRestaurantTab} />}
                                 {currentView === 'TEAM MANAGEMENT' && <TeamManagementView />}
                                 {currentView === 'ACCOUNT' && <AccountView />}
                             </div>

@@ -31,11 +31,9 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
   <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4 z-50 mt-10 md:mt-0 ">
     {/* Outer container for positioning chef */}
     <div className="relative max-w-4xl w-[85%]  md:w-[35%] h-full -right-6 md:-mr-[950px] mt-10 md:mt-40">
-      {/* Main Modal Box - Lighter background with scrolling */}
-      <div className="relative border bg-amber-600 rounded-2xl w-full h-[50vh] md:h-[80vh] lg:h-[80vh] xl:h-[80vh] 2xl:h-[80vh] overflow-y-auto hide-scrollbar shadow-xl " style={{
-        backgroundImage: `url('/images/login.png')`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
+      {/* Main Modal Box - Transparent background with yellow overlay */}
+      <div className="relative border bg-transparent rounded-2xl w-full h-[50vh] md:h-[80vh] lg:h-[80vh] xl:h-[80vh] 2xl:h-[80vh] overflow-y-auto hide-scrollbar shadow-xl " style={{
+        backgroundColor: 'rgba(241, 194, 50, 0.1)',
         borderColor: '#f1c232',
         borderRadius: '10px'
       }}>
@@ -53,13 +51,10 @@ const ModalWrapper: React.FC<{ children: React.ReactNode; onClose: () => void; t
 
         {/* Title and Close Button - Aligned horizontally */}
         <div className="flex flex-row justify-between items-center z-10 mt-4 ">
-          {/* Title Section */}
-          <div className="bg-[url('/images/Content_Title_Background.png')] bg-no-repeat bg-cover bg-center inline-block w-[40%] rounded-r-full border border-[#ffe599] rounded-l-sm pl-6 ml-2 pr-10 py-2">
-            <h2 className="block text-black text-[10px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[14px] font-bold uppercase rounded whitespace-nowrap">
-              {title}
-            </h2>
+          <div className="flex items-center gap-1 text-white text-[10px] md:text-[14px] lg:text-[14px] xl:text-[14px] 2xl:text-[14px] font-bold whitespace-nowrap ml-6 inline-block border-b border-white pb-1">
+            <Image src="/images/folk_link.png" alt="Folk Link" width={20} height={20} />
+            <span style={{color: '#F2C94C'}}>Login</span>
           </div>
-
           {/* Close Button */}
           <button
             onClick={onClose}
@@ -759,7 +754,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         <ModalWrapper onClose={onClose} title="LOGIN">
           <div className="flex flex-row gap-3 w-full md:-ml-6">
             {/* Left side - login form */}
-            <div className="w-[40%] md:w-[55%]">
+            <div className="w-[40%] md:w-[55%] mx-auto">
               <form
                 className="relative md:space-y-3 space-y-1 p-1 md:p-2  rounded-lg shadow"
                 onSubmit={(e) => {
@@ -767,14 +762,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   handleLogin()
                 }}
               >
-                <div
-                  className="absolute inset-0 border border-[#f1c232] "
-                  style={{
-                    borderRadius: '10px',
-                    opacity: '70%',
-                    background: '#783f04ff',
-                  }}
-                ></div>
                 <div>
                   <input
                     type="email"
@@ -811,19 +798,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="relative bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-red-900 text-white rounded-full md:py-3 py-2 px-6 sm:px-8 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                   >
-                    <span className="relative z-10">{loading ? "LOGGING IN..." : "LOGIN"}</span>
-                    <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
-                    <span
-                      className="absolute inset-0 rounded-full border-4 border-yellow-500"
-                      style={{
-                        borderTopWidth: "3px",
-                        borderBottomWidth: "5px",
-                        borderLeftWidth: "4px",
-                        borderRightWidth: "4px",
-                      }}
-                    ></span>
+                    <Image src="/images/folk_link.png" alt="Folk Link" width={20} height={20} />
+                    <span style={{color: '#F2C94C'}}>{loading ? "LOGGING IN..." : "Login"}</span>
                   </button>
                 </div>
                 <div className="relative text-center mt-1 md:mt-2 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm pb-1 md:pb-6">
@@ -844,57 +822,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               {/* Empty space to make the image more visible - only on larger screens */}
               <div className="h-24 md:h-32 block"></div>
 
-              {/* "Why log in?" Box */}
-              <div className="relative item-center rounded-lg md:py-4 py-1 px-1 md:px-4 space-y-1 text-black shadow hover:shadow-md transition-shadow">
-                <div
-                  className="absolute inset-0 border border-[#f1c232] "
-                  style={{
-                    borderRadius: '10px',
-                    opacity: '70%',
-                    background: '#783f04ff',
-                  }}
-                ></div>
-                <h3 className="relative text-white font-bold text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">Why log in?</h3>
-                <p className="relative text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm leading-relaxed">
-                  Elevate your experience on our platform. Access your order history, save favorites for quick
-                  reordering, and enjoy a seamless checkout.
-                </p>
-              </div>
 
-              {/* "Just browsing?" Box */}
-              <div className="relative -ml-[100%] rounded-lg p-2 md:p-4 shadow hover:shadow-md transition-shadow mt-8">
-                <div
-                  className="absolute inset-0 border border-[#f1c232] "
-                  style={{
-                    borderRadius: '10px',
-                    opacity: '70%',
-                    background: '#783f04ff',
-                  }}
-                ></div>
-                <p className="relative text-white text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm leading-relaxed text-start">
-                  <span className="font-bold">Just browsing?</span> No worries! Order your favorite meals without
-                  logging in or creating an account. Delicious food is just a few clicks away, no registration required.
-                </p>
-                <div className="pt-2 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setView("guestSuccess")}
-                    className="relative bg-[#6b2c0c] text-white rounded-full py-1.5 px-6 text-[8px] md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-bold hover:bg-red-800 shadow-md"
-                  >
-                    <span className="relative z-10">CONTINUE AS GUEST</span>
-                    <span className="absolute inset-0 rounded-full border-2 border-yellow-300"></span>
-                    <span
-                      className="absolute inset-0 rounded-full border-4 border-yellow-500"
-                      style={{
-                        borderTopWidth: "3px",
-                        borderBottomWidth: "5px",
-                        borderLeftWidth: "4px",
-                        borderRightWidth: "4px",
-                      }}
-                    ></span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </ModalWrapper>

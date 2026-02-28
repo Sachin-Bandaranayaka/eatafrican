@@ -144,7 +144,7 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
         <ClientOnly>
             <main className="min-h-screen bg-black text-white overflow-x-hidden">
                 {/* Top Bar */}
-                <div className="flex justify-between items-center p-2 bg-white">
+                <div className="flex justify-between items-center p-3 bg-white">
                     <Link href="/restaurants" className="w-8 h-8 flex items-center justify-center">
                         <ArrowLeft className="h-6 w-6 text-gray-800" />
                     </Link>
@@ -161,11 +161,11 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
                 </div>
 
                 {/* Restaurant Info Box */}
-                <div className="p-3 relative">
+                <div className="p-4 relative">
                     <div className="flex items-start gap-3">
-                        <div className="bg-gray-800 rounded-lg p-2 w-32 h-32 flex items-center justify-center">
+                        <div className="bg-gray-800 rounded-lg p-2 w-40 h-40 flex items-center justify-center">
                             {restaurant.logoUrl ? (
-                                <Image src={restaurant.logoUrl} alt="Restaurant Logo" width={80} height={80} className="rounded" />
+                                <Image src={restaurant.logoUrl} alt="Restaurant Logo" width={100} height={100} className="rounded" />
                             ) : (
                                 <div className="text-white text-center">
                                     <div className="text-xs">{restaurant.name}</div>
@@ -190,7 +190,7 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
                             </div>
 
                             <Link href="/restaurants">
-                                <button className="bg-amber-700 rounded px-4 py-1 mt-2 text-white text-xs w-full">
+                                <button className="bg-amber-700 rounded px-4 py-2 mt-2 text-white text-xs w-full">
                                     CHANGE COUNTRY SPECIALTY / LOCATION
                                 </button>
                             </Link>
@@ -209,7 +209,7 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
                 </div>
 
                 {/* Menu categories navigation */}
-                <div className="flex justify-between px-3 py-2 border-y border-gray-800">
+                <div className="flex justify-between px-3 py-3 border-y border-gray-800">
                     <button
                         className={`px-3 py-1 text-xs rounded-md ${activeCategory === "main" ? "bg-red-700 text-white" : "text-white"}`}
                         onClick={() => setActiveCategory("main")}

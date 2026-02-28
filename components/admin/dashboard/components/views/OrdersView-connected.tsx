@@ -109,78 +109,83 @@ const OrdersViewConnected = ({ restaurantId }: OrdersViewProps) => {
     return (
         <>
             {!showOrderDetails && (
-                <div className="flex flex-col w-full p-2">
-                    <div className="flex flex-row gap-1 w-full overflow-x-auto">
-                        <button
-                            onClick={() => setActiveFilter('all')}
-                            className={`flex ${activeFilter === 'all' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            ALL<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.length}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveFilter('new')}
-                            className={`flex ${activeFilter === 'new' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            NEW<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'new').length}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveFilter('processing')}
-                            className={`flex ${activeFilter === 'processing' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            PROCESSING<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => ['confirmed', 'preparing'].includes(o.status)).length}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveFilter('in_transit')}
-                            className={`flex ${activeFilter === 'in_transit' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            IN TRANSIT<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => ['ready_for_pickup', 'assigned', 'in_transit'].includes(o.status)).length}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveFilter('cancelled')}
-                            className={`flex ${activeFilter === 'cancelled' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            CANCELLED<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'cancelled').length}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveFilter('completed')}
-                            className={`flex ${activeFilter === 'completed' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
-                            COMPLETED<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'delivered').length}</span>
-                        </button>
-                    </div>
-                    <div className="flex flex-row w-full mt-2 overflow-auto max-h-[65vh]">
-                        {loading ? (
-                            <div className="flex items-center justify-center w-full py-10">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900"></div>
-                            </div>
-                        ) : filteredOrders.length === 0 ? (
-                            <div className="flex items-center justify-center w-full py-10">
-                                <p className="text-gray-500">No orders found</p>
-                            </div>
-                        ) : (
-                            <table className="w-full">
-                                <thead className="bg-[#ff9920] w-full sticky top-0">
-                                    <tr>
-                                        <th className="py-1 px-1 text-left text-black text-xs">Order</th>
-                                        <th className="py-1 text-left text-black text-xs">Location</th>
-                                        <th className="py-1 text-left text-black text-xs">Date, Time</th>
-                                        <th className="py-1 text-left text-black text-xs pl-6">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="w-full">
-                                    {filteredOrders.map((order) => (
-                                        <tr
-                                            key={order.id}
-                                            className="w-full cursor-pointer hover:bg-gray-100 border-b text-xs"
-                                            onClick={() => handleOrderClick(order)}
-                                        >
-                                            <td className="py-2">#{order.orderNumber} {order.customer?.firstName || order.customerFirstName}</td>
-                                            <td>{order.deliveryCity}</td>
-                                            <td>{new Date(order.createdAt).toLocaleString()}</td>
-                                            <td className="pl-6">
-                                                <span className={`inline-block px-2 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
-                                                    {order.status.toUpperCase().replace('_', ' ')}
-                                                </span>
-                                            </td>
+                <div
+                    style={{ backgroundColor: '#E8D7B4' }}
+                    className="w-full max-w-[768px] min-h-64 shadow-lg text-black opacity-70 mb-4 mx-auto max-h-[65vh] overflow-y-auto mt-20 p-6"
+                >
+                    <div className="flex flex-col w-full">
+                        <div className="flex flex-row gap-1 w-full overflow-x-auto">
+                            <button
+                                onClick={() => setActiveFilter('all')}
+                                className={`flex ${activeFilter === 'all' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                ALL<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.length}</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveFilter('new')}
+                                className={`flex ${activeFilter === 'new' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                NEW<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'new').length}</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveFilter('processing')}
+                                className={`flex ${activeFilter === 'processing' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                PROCESSING<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => ['confirmed', 'preparing'].includes(o.status)).length}</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveFilter('in_transit')}
+                                className={`flex ${activeFilter === 'in_transit' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                IN TRANSIT<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => ['ready_for_pickup', 'assigned', 'in_transit'].includes(o.status)).length}</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveFilter('cancelled')}
+                                className={`flex ${activeFilter === 'cancelled' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                CANCELLED<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'cancelled').length}</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveFilter('completed')}
+                                className={`flex ${activeFilter === 'completed' ? 'bg-blue-900' : 'bg-blue-500'} p-1 px-2.5 text-white text-[9px] md:text-[12px] whitespace-nowrap`}>
+                                COMPLETED<span className="flex justify-center items-center w-[20px] h-[20px] rounded-full bg-green-500 ml-1 text-black">{orders.filter(o => o.status === 'delivered').length}</span>
+                            </button>
+                        </div>
+                        <div className="flex flex-row w-full mt-2 overflow-auto max-h-[65vh]">
+                            {loading ? (
+                                <div className="flex items-center justify-center w-full py-10">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900"></div>
+                                </div>
+                            ) : filteredOrders.length === 0 ? (
+                                <div className="flex items-center justify-center w-full py-10">
+                                    <p className="text-gray-500">No orders found</p>
+                                </div>
+                            ) : (
+                                <table className="w-full">
+                                    <thead className="bg-[#ff9920] w-full sticky top-0">
+                                        <tr>
+                                            <th className="py-1 px-1 text-left text-black text-xs">Order</th>
+                                            <th className="py-1 text-left text-black text-xs">Location</th>
+                                            <th className="py-1 text-left text-black text-xs">Date, Time</th>
+                                            <th className="py-1 text-left text-black text-xs pl-6">Status</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
+                                    </thead>
+                                    <tbody className="w-full">
+                                        {filteredOrders.map((order) => (
+                                            <tr
+                                                key={order.id}
+                                                className="w-full cursor-pointer hover:bg-gray-100 border-b text-xs"
+                                                onClick={() => handleOrderClick(order)}
+                                            >
+                                                <td className="py-2">#{order.orderNumber} {order.customer?.firstName || order.customerFirstName}</td>
+                                                <td>{order.deliveryCity}</td>
+                                                <td>{new Date(order.createdAt).toLocaleString()}</td>
+                                                <td className="pl-6">
+                                                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
+                                                        {order.status.toUpperCase().replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
@@ -320,3 +325,4 @@ const OrdersViewConnected = ({ restaurantId }: OrdersViewProps) => {
 };
 
 export default OrdersViewConnected;
+

@@ -5,10 +5,11 @@ import EditMenuItemModal from "./EditMenuItemModal";
 
 interface MenuViewProps {
     restaurantId: string;
+    activeTab: string;
+    setActiveTab: (tab: string) => void;
 }
 
-const MenuViewConnected = ({ restaurantId }: MenuViewProps) => {
-    const [activeTab, setActiveTab] = useState('MEALS');
+const MenuViewConnected = ({ restaurantId, activeTab, setActiveTab }: MenuViewProps) => {
     const [menuItems, setMenuItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingItem, setEditingItem] = useState<any>(null);
@@ -137,33 +138,16 @@ const MenuViewConnected = ({ restaurantId }: MenuViewProps) => {
                 />
             )}
             <div className="relative w-full z-50">
-                <div className="flex flex-row gap-1 w-1/2 ml-2 mb-4">
-                    <button
-                        onClick={() => setActiveTab('MEALS')}
-                        className={`flex p-1 px-2 text-white text-[9px] md:text-[12px] ${activeTab === 'MEALS' ? 'bg-blue-900' : 'bg-blue-500'}`}
-                    >
-                        MEALS
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('DRINKS')}
-                        className={`flex p-1 px-2.5 text-white text-[9px] md:text-[12px] ${activeTab === 'DRINKS' ? 'bg-blue-900' : 'bg-blue-500'}`}
-                    >
-                        DRINKS
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('SPECIAL DEALS')}
-                        className={`flex p-1 px-2.5 text-white text-[9px] md:text-[12px] ${activeTab === 'SPECIAL DEALS' ? 'bg-blue-900' : 'bg-blue-500'}`}
-                    >
-                        SPECIAL DEALS
-                    </button>
-                </div>
 
                 <div className="relative w-full p-2">
                     <div className="flex flex-col w-5/6">
                         <div className="flex flex-row w-full items-center mb-3">
                             <h3 className="text-[15px] font-bold text-[#274e13]">{activeTab}</h3>
                             <button
-                                onClick={() => window.location.href = `/restaurant-owner/menu/add?restaurantId=${restaurantId}`}
+                                onClick={() => {
+                                    const type = activeTab === 'MEALS' ? 'meal' : activeTab === 'DRINKS' ? 'drink' : 'deal';
+                                    window.location.href = `/restaurant-owner/menu/add?restaurantId=${restaurantId}&type=${type}`;
+                                }}
                                 className="ml-8 bg-red-900 hover:bg-red-800 text-white font-bold py-1 px-4 rounded-lg transition-colors duration-200 shadow-lg text-[13px]"
                             >
                                 ADD {activeTab === 'MEALS' ? 'MEAL' : activeTab === 'DRINKS' ? 'DRINK' : 'DEAL'}
