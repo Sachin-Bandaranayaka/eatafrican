@@ -151,8 +151,8 @@ export default function PartnerRestaurantPage() {
                 </div>
             </div>
             {/* Portal and Login Information Only*/}
-             <div className="absolute top-2 left-0.5 z-20 ">
-                <div className="text-white text-sm font-bold mt-20 px-4 py-2 border" style={{backgroundColor: '#2F6B2F', borderColor: '#2F6B2F'}}>EAT AFRICAN RESTAURANTS PORTAL</div>
+             <div className="absolute top-2 left-0.5 z-20">
+                <div className="text-white text-xs font-bold mt-20 px-2 py-2 border w-80 whitespace-nowrap" style={{backgroundColor: '#2F6B2F', borderColor: '#2F6B2F'}}>EAT AFRICAN RESTAURANTS PORTAL</div>
                 <div className="flex items-center gap-1 font-bold text-xs mt-8 ml-10 pl-4">
                   <Image src="/images/folk_link.png" alt="Folk Link" width={30} height={30} />
                   <span style={{color: '#F2C94C'}}>Login</span>
@@ -194,7 +194,7 @@ export default function PartnerRestaurantPage() {
                     >
                 {isSubmitted ? (
                     <SuccessMessage />
-                ) : (
+                ) : ( 
                     <>
                         <div className="text-left mb-8">
                             <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">

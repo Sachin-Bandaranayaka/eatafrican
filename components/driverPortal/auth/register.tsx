@@ -1,22 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-
-// A simple icon component for the list items
-const CheckCircleIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-700 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-    </svg>
-);
+import Image from 'next/image';
 
 // The Register component props
 interface RegisterProps {
     onBackToLogin: () => void;
 }
 
-// The Register component based on the provided images
+// The Register component based on the restaurant-owner style
 export default function Register({ onBackToLogin }: RegisterProps) {
-    // State to track if the form has been submitted
+    // State to track current step
+    const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [cities, setCities] = useState<string[]>([]);
 
@@ -63,31 +58,52 @@ export default function Register({ onBackToLogin }: RegisterProps) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const steps = [
+        { id: 1, title: 'Contact & Driver Information' },
+        { id: 2, title: 'Verify Identity' }
+    ];
+
+    // Validation for step 1
+    const validateStep1 = () => {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+            setError('Please fill in all required contact details');
+            return false;
+        }
+        if (!password || password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return false;
+        }
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return false;
+        }
+        if (!formData.pickupLocation) {
+            setError('Please select a pickup location');
+            return false;
+        }
+        return true;
+    };
+
+    // Handle next button
+    const handleNext = () => {
+        setError('');
+        
+        if (currentStep === 1) {
+            if (validateStep1()) {
+                setCurrentStep(2);
+            }
+        }
+    };
+
+    // Handle previous button
+    const handlePrevious = () => {
+        setCurrentStep(currentStep - 1);
+    };
+
     // Handler for form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-
-        // Validation
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
-            setError('Please fill in all required contact details');
-            return;
-        }
-
-        if (!formData.pickupLocation) {
-            setError('Please select a pickup location');
-            return;
-        }
-
-        if (!password || password.length < 8) {
-            setError('Password must be at least 8 characters long');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
 
         setLoading(true);
 
@@ -150,237 +166,384 @@ export default function Register({ onBackToLogin }: RegisterProps) {
     };
 
     return (
-        <main className="flex justify-center min-h-screen p-4 sm:p-6 lg:p-8">
-            <div className="w-full mx-auto">
-                {/* Header Section */}
-                <div className='px-32 '>
-                    <section className="w-full bg-white bg-opacity-80 border-2 border-[#f1c232] rounded-lg flex flex-col items-center p-4 mb-6 text-center">
-                        <h1 className="text-[15px] font-bold text-red-600">EAT AFRICAN DRIVER PORTAL</h1>
-                        <button
-                            onClick={onBackToLogin}
-                            className="bg-amber-800 text-[15px] text-white font-semibold py-0.5 px-6 rounded-lg my-3 hover:bg-opacity-90 transition-colors"
-                        >
-                            LOGIN
-                        </button>
-                        <p className="text-green-600 font-bold text-[15px]">Register Your Driver Account</p>
-                    </section>
-                </div>
-
-
-                {/* Body Section */}
-                <section className="w-full min-h-[80vh] relative bg-white bg-opacity-80 border-2 border-[#f1c232] rounded-lg flex flex-col items-center p-4 sm:p-6 lg:p-8 z-10">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
+            <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+                <div
+                    className={`w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64 ${
+                        isSubmitted ? 'flex flex-col items-center justify-center text-center' : ''
+                    }`}
+                    style={{ minHeight: '600px' }}
+                >
                     {isSubmitted ? (
-                        // Thank You View (after submission)
-                        <div className="text-center w-full animate-fade-in">
-                            <h2 className="text-center text-[15px] font-bold text-green-700 mb-6">REGISTER DRIVER ACCOUNT</h2>
-
-                            <h2 className="text-[20px] font-bold text-black mb-4">Thank you for registering as a driver!</h2>
-                            <p className="text-black mb-4 text-[15px]">
-                                We've received your details and will review your submission shortly. You'll get an email confirmation once your identity has been verified.
-                            </p>
-                            <p className="text-black text-[15px]">
-                                If you have any questions in the meantime, feel free to reach out to our support team at <a href="mailto:support@eatafrican.ch" className="text-blue-600  underline">support@eatafrican.ch</a>
-                            </p>
+                        // Success Message
+                        <div className="text-center">
+                            <h1 className="text-2xl font-bold text-white mb-4 underline underline-offset-8">
+                                REGISTRATION SUCCESSFUL
+                            </h1>
+                            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mt-6">
+                                <h2 className="text-lg font-bold text-white mb-4">Thank you for registering as a driver!</h2>
+                                <p className="text-white mb-4 text-xs">
+                                    We've received your details and will review your submission shortly. You'll get an email confirmation once your identity has been verified.
+                                </p>
+                                <p className="text-white text-xs">
+                                    If you have any questions in the meantime, feel free to reach out to our support team at{' '}
+                                    <a href="mailto:support@eatafrican.ch" className="text-yellow-400 underline">
+                                        support@eatafrican.ch
+                                    </a>
+                                </p>
+                            </div>
+                            <button
+                                onClick={onBackToLogin}
+                                className="mt-6 px-8 py-2 bg-red-900 text-white font-bold rounded-full border-4 border-amber-300 hover:bg-red-800 transition-colors"
+                            >
+                                BACK TO LOGIN
+                            </button>
                         </div>
                     ) : (
-                        // Registration Form View
-                        <form onSubmit={handleSubmit} className="w-full  px-24">
-                            <h2 className="text-center text-[15px] font-bold text-green-700 mb-6">REGISTER DRIVER ACCOUNT</h2>
-
-                            {/* Error Message */}
+                        // Registration Form
+                        <>
+                            <div className="text-left mb-8">
+                                <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">
+                                    REGISTER DRIVER
+                                </h1>
+                            </div>
+                            
                             {error && (
-                                <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                <div className="mb-4 p-2 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                                     {error}
                                 </div>
                             )}
-
-                            {/* Contact Details */}
-                            <fieldset className="mb-6">
-                                <legend className="text-[15px] font-bold text-black mb-2">CONTACT DETAILS</legend>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <div>
-                                        <label htmlFor="firstName" className="block text-[15px] font-bold text-black">First Name*</label>
-                                        <input 
-                                            type="text" 
-                                            id="firstName" 
-                                            name="firstName" 
-                                            value={formData.firstName}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="lastName" className="block text-[15px] font-bold text-black">Last Name*</label>
-                                        <input 
-                                            type="text" 
-                                            id="lastName" 
-                                            name="lastName" 
-                                            value={formData.lastName}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="phone" className="block text-[15px] font-bold text-black">Phone Number*</label>
-                                        <input 
-                                            type="tel" 
-                                            id="phone" 
-                                            name="phone" 
-                                            value={formData.phone}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="email" className="block text-[15px] font-bold text-black">Email Address*</label>
-                                        <input 
-                                            type="email" 
-                                            id="email" 
-                                            name="email" 
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                </div>
-                                <p className="text-[13px] font-semibold text-black mt-2">We'll register your driver's account with this email. It will also serve as your login to access and manage your dashboard.</p>
-                            </fieldset>
-
-                            {/* Password Fields */}
-                            <fieldset className="mb-6">
-                                <legend className="text-[15px] font-bold text-black mb-2">CREATE PASSWORD</legend>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <div>
-                                        <label htmlFor="password" className="block text-[15px] font-bold text-black">Password*</label>
-                                        <input 
-                                            type="password" 
-                                            id="password" 
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                            disabled={loading}
-                                            minLength={8}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="confirmPassword" className="block text-[15px] font-bold text-black">Confirm Password*</label>
-                                        <input 
-                                            type="password" 
-                                            id="confirmPassword" 
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                            required
-                                            disabled={loading}
-                                            minLength={8}
-                                            className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" 
-                                        />
-                                    </div>
-                                </div>
-                                <p className="text-[13px] font-semibold text-black mt-2">Password must be at least 8 characters long.</p>
-                            </fieldset>
-
-                            {/* Address */}
-                            <fieldset className="mb-6">
-                                <legend className="text-[15px] font-bold text-black mb-4">YOUR ADDRESS</legend>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <label htmlFor="city" className="block text-[15px] font-bold text-black">City</label>
-                                        <input type="text" id="city" name="city" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="postalCode" className="block text-[15px] font-bold text-black">Postal Code</label>
-                                        <input type="text" id="postalCode" name="postalCode" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="street" className="block text-[15px] font-bold text-black">Street Name & Number</label>
-                                    <input type="text" id="street" name="street" className="mt-1 block w-full px-3 py-0.5 bg-white border rounded-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" />
-                                </div>
-                            </fieldset>
-
-                            {/* Preferred Pickup Location */}
-                            <fieldset className="mb-6">
-                                <legend className="text-[15px] font-bold text-black mb-2">YOUR PREFERRED PICKUP LOCATION</legend>
-                                <p className="text-[13px] font-semibold text-black mb-4">Which location would you like to pick up orders from? You'll be delivering meals from there to nearby areas and other regions.</p>
-                                <h2 className='font-bold text-[13px] mb-2'>Choose Pickup Location</h2>
-                                <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 w-44">
-                                    {cities.map(loc => (
-                                        <div key={loc} className="flex items-center">
-                                            <input id={loc} name="pickupLocation" type="radio" value={loc} onChange={handleChange} className="h-4 w-4 text-yellow-600 border-black focus:ring-yellow-500" />
-                                            <label htmlFor={loc} className="ml-3 block text-[12px] font-bold text-black">{loc}</label>
+                            
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                {/* Step 1: Contact Details & Driver Information */}
+                                <div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
+                                    {/* Contact Details */}
+                                    <div className="max-w-96">
+                                        <h2 className="text-xs font-extrabold text-[#00FF4C] mb-2">CONTACT DETAILS</h2>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                                            <div>
+                                                <label htmlFor="firstName" className="block text-xs font-bold text-white mb-1">
+                                                    First Name*
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="firstName"
+                                                    name="firstName"
+                                                    value={formData.firstName}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="lastName" className="block text-xs font-bold text-white mb-1">
+                                                    Last Name*
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="lastName"
+                                                    name="lastName"
+                                                    value={formData.lastName}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
                                         </div>
-                                    ))}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                                            <div>
+                                                <label htmlFor="phone" className="block text-xs font-bold text-white mb-1">
+                                                    Phone Number*
+                                                </label>
+                                                <input
+                                                    type="tel"
+                                                    id="phone"
+                                                    name="phone"
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="email" className="block text-xs font-bold text-white mb-1">
+                                                    Email Address*
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-white mt-1">
+                                            We'll register your driver's account with this email. It will also serve as your login.
+                                        </p>
+                                    </div>
+
+                                    {/* Password Fields */}
+                                    <div className="max-w-96 mt-4">
+                                        <h2 className="text-xs font-extrabold text-[#00FF4C] mb-2">CREATE PASSWORD</h2>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                                            <div>
+                                                <label htmlFor="password" className="block text-xs font-bold text-white mb-1">
+                                                    Password*
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    id="password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    required
+                                                    disabled={loading}
+                                                    minLength={8}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="confirmPassword" className="block text-xs font-bold text-white mb-1">
+                                                    Confirm Password*
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    id="confirmPassword"
+                                                    value={confirmPassword}
+                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    required
+                                                    disabled={loading}
+                                                    minLength={8}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-white mt-1">
+                                            Password must be at least 8 characters long.
+                                        </p>
+                                    </div>
+
+                                    {/* Address */}
+                                    <div className="max-w-96 mt-4">
+                                        <h2 className="text-xs font-extrabold text-[#00FF4C] mb-2">YOUR ADDRESS</h2>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                                            <div>
+                                                <label htmlFor="city" className="block text-xs font-bold text-white mb-1">
+                                                    City
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="city"
+                                                    name="city"
+                                                    value={formData.city}
+                                                    onChange={handleChange}
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="postalCode" className="block text-xs font-bold text-white mb-1">
+                                                    Postal Code
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="postalCode"
+                                                    name="postalCode"
+                                                    value={formData.postalCode}
+                                                    onChange={handleChange}
+                                                    disabled={loading}
+                                                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="mt-3">
+                                            <label htmlFor="street" className="block text-xs font-bold text-white mb-1">
+                                                Street Name & Number
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="street"
+                                                name="street"
+                                                value={formData.street}
+                                                onChange={handleChange}
+                                                disabled={loading}
+                                                className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm text-gray-900"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Preferred Pickup Location */}
+                                    <div className="max-w-96 mt-4">
+                                        <h2 className="text-xs font-extrabold text-[#00FF4C] mb-2">PREFERRED PICKUP LOCATION</h2>
+                                        <p className="text-xs text-white mb-3">
+                                            Which location would you like to pick up orders from?
+                                        </p>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {cities.map(loc => (
+                                                <div key={loc} className="flex items-center">
+                                                    <input
+                                                        id={loc}
+                                                        name="pickupLocation"
+                                                        type="radio"
+                                                        value={loc}
+                                                        checked={formData.pickupLocation === loc}
+                                                        onChange={handleChange}
+                                                        className="h-4 w-4 text-yellow-500 border-white focus:ring-yellow-500"
+                                                    />
+                                                    <label htmlFor={loc} className="ml-2 text-xs font-bold text-white">
+                                                        {loc}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Next Button */}
+                                    <div className="text-left mt-4 relative">
+                                        <button type="button" onClick={handleNext} className="bg-[#00FF4C] text-black font-bold py-1 px-8 rounded transition-colors">
+                                            NEXT
+                                        </button>
+                                        {/* Step Indicator */}
+                                        <div className="absolute right-4 top-0">
+                                            <div className="flex items-center justify-center space-x-2">
+                                                {steps.map((step) => (
+                                                    <React.Fragment key={step.id}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCurrentStep(step.id)}
+                                                            className={`flex items-center justify-center w-8 h-8 rounded border-2 cursor-pointer ${
+                                                                currentStep >= step.id ? 'bg-[#B37224] border-[#B37224] text-black' : 'bg-slate-400 border-slate-400 text-black'
+                                                            }`}
+                                                        >
+                                                            {step.id}
+                                                        </button>
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </fieldset>
 
-                            {/* Verify Identity */}
-                            <fieldset className="mb-6">
-                                <legend className="text-[15px] font-bold text-black mb-2">VERIFY YOUR IDENTITY</legend>
-                                <p className="text-[13px] font-bold text-black mb-2">Upload one of the following to verify your identity</p>
+                                {/* Step 2: Verify Identity */}
+                                <div style={{ display: currentStep === 2 ? 'block' : 'none' }}>
+                                    <div className="max-w-96">
+                                        <h2 className="text-xs font-extrabold text-[#00FF4C] mb-2">VERIFY YOUR IDENTITY</h2>
+                                        <p className="text-xs text-white mb-2">
+                                            Upload one of the following to verify your identity:
+                                        </p>
+                                        <ul className="list-disc list-outside pl-4 mb-3 text-xs text-white">
+                                            <li>Photo of your ID card</li>
+                                            <li>Photo of your passport</li>
+                                        </ul>
+                                        <div className="mb-3">
+                                            <label htmlFor="drivingLicense" className="block text-xs font-bold text-white mb-1">
+                                                Upload a photo of your driving license
+                                            </label>
+                                            <input
+                                                type="file"
+                                                id="drivingLicense"
+                                                name="drivingLicense"
+                                                accept="image/jpeg, image/png"
+                                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-xs text-gray-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="cv" className="block text-xs font-bold text-white mb-1">
+                                                Upload your CV
+                                            </label>
+                                            <input
+                                                type="file"
+                                                id="cv"
+                                                name="cv"
+                                                accept=".pdf, .doc, .docx"
+                                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-xs text-gray-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200"
+                                            />
+                                        </div>
+                                    </div>
 
-                                <ul className="list-disc list-outside pl-4 mb-4 text-sm text-black">
-                                    <li className="italic">Photo of your ID card</li>
-                                    <li className="italic">Photo of your passport</li>
-                                </ul>
-
-                                <div className="mb-4">
-                                    <label htmlFor="drivingLicense" className="block text-[15px] font-bold text-black mb-2">Upload a photo of your driving license</label>
-                                    <label htmlFor="drivingLicense" className="cursor-pointer block w-full bg-white rounded-md px-3 py-3 text-sm text-gray-500">
-
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="drivingLicense"
-                                        name="drivingLicense"
-                                        className="hidden"
-                                        accept="image/jpeg, image/png"
-                                    />
-                                    <p className="text-[13px] font-semibold text-black mt-1">Accepted file types: <span className='font-bold'>PDF or DOC</span>. Max size: 5MB.</p>
+                                    {/* Submit Button */}
+                                    <div className="text-left mt-4 relative">
+                                        <button
+                                            type="submit"
+                                            disabled={loading}
+                                            className="bg-[#00FF4C] text-black font-bold py-1 px-8 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {loading ? 'SUBMITTING...' : 'SUBMIT'}
+                                        </button>
+                                        {/* Step Indicator */}
+                                        <div className="absolute right-4 top-0">
+                                            <div className="flex items-center justify-center space-x-2">
+                                                {steps.map((step) => (
+                                                    <React.Fragment key={step.id}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCurrentStep(step.id)}
+                                                            className={`flex items-center justify-center w-8 h-8 rounded border-2 cursor-pointer ${
+                                                                currentStep >= step.id ? 'bg-[#B37224] border-[#B37224] text-black' : 'bg-slate-400 border-slate-400 text-black'
+                                                            }`}
+                                                        >
+                                                            {step.id}
+                                                        </button>
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-white mt-2 text-center">
+                                        By clicking "Submit", you agree to our Terms and Conditions and acknowledge you have read the Privacy Notice.
+                                    </p>
                                 </div>
 
-                                <div>
-                                    <label htmlFor="cv" className="block text-[15px] font-bold text-black mb-2">Upload your CV</label>
-                                    <label htmlFor="cv" className="cursor-pointer block w-full bg-white rounded-md px-3 py-3 text-sm text-gray-500">
-
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="cv"
-                                        name="cv"
-                                        className="hidden"
-
-                                        accept=".pdf, .doc, .docx"
-                                    />
-                                    <p className="text-[13px] font-semibold text-black mt-1">Accepted file types: <span className='font-bold'>PDF or DOC</span>. Max size: 5MB.</p>
+                                <div className="mt-4">
+                                    <p className="text-white text-xs">
+                                        Already have an account?{' '}
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                onBackToLogin();
+                                            }}
+                                            className="text-yellow-400 font-bold hover:text-yellow-300"
+                                        >
+                                            Login
+                                        </a>
+                                    </p>
                                 </div>
-                            </fieldset>
-
-                            {/* Submit Button */}
-                            <div className="text-start">
-                                <button 
-                                    type="submit" 
-                                    disabled={loading}
-                                    className="bg-red-900 text-white font-bold py-2 px-12 rounded-full border-4 border-amber-300 hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    {loading ? 'SUBMITTING...' : 'SUBMIT'}
-                                </button>
-                                <p className="text-start font-semibold text-[13px] text-black mt-4">
-                                    By clicking "Submit", you agree to our Terms and Conditions and acknowledge you have read the Privacy Notice.
-                                </p>
-                            </div>
-                        </form>
+                            </form>
+                        </>
                     )}
-                </section>
+                </div>
             </div>
-        </main>
+            <div className="hidden md:flex items-center justify-center p-4 md:p-8">
+                <div className="bg-white text-black p-6 rounded-lg shadow-lg w-full max-w-sm">
+                    <Image
+                        src="/Terminal.png"
+                        alt="Terminal"
+                        width={400}
+                        height={300}
+                        className="w-full h-auto rounded mb-4"
+                    />
+                    <h3 className="text-lg font-semibold mb-2">Drive with Eat African</h3>
+                    <p className="text-gray-700 mb-4">
+                        Join our team of delivery drivers and earn money by delivering delicious African meals to customers in your area. Flexible hours, competitive pay!
+                    </p>
+                    <div className="bg-amber-50 p-3 rounded-lg">
+                        <h4 className="font-bold text-sm mb-2">Driver Benefits:</h4>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                            <li>✓ Flexible working hours</li>
+                            <li>✓ Competitive pay rates</li>
+                            <li>✓ Keep 100% of your tips</li>
+                            <li>✓ Weekly payouts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

@@ -4,9 +4,12 @@ import Header from "./admin/dashboard/components/common/Header";
 import OrdersViewConnected from "./admin/dashboard/components/views/OrdersView-connected";
 import MenuViewConnected from "./admin/dashboard/components/views/MenuView-connected";
 import EarningsViewConnected from "./admin/dashboard/components/views/EarningsView-connected";
-import MyRestaurantViewConnected from "./admin/dashboard/components/views/MyRestaurantView-connected";
+import MyRestaurantViewConnected from "@/app/restaurant-owner/my-restaurant/MyRestaurantView-connected";
 import TeamManagementView from "./admin/dashboard/components/views/TeamManagementView";
 import AccountView from "./admin/dashboard/components/views/AccountView";
+import OnboardingPage from "@/app/restaurant-owner/onboarding/page";
+import OverviewPage from "@/app/restaurant-owner/overview/page";
+import SettingsView from "./SettingsView";
 
 interface RestaurantOwnerDashboardProps {
     restaurantId: string;
@@ -17,9 +20,11 @@ interface RestaurantOwnerDashboardProps {
     setMyRestaurantTab: (tab: string) => void;
     menuTab: string;
     setMenuTab: (tab: string) => void;
+    orderStatusTab: string;
+    setOrderStatusTab: (tab: string) => void;
 }
 
-export default function RestaurantOwnerDashboard({ restaurantId, onLogout, currentView, setCurrentView, myRestaurantTab, setMyRestaurantTab, menuTab, setMenuTab }: RestaurantOwnerDashboardProps) {
+export default function RestaurantOwnerDashboard({ restaurantId, onLogout, currentView, setCurrentView, myRestaurantTab, setMyRestaurantTab, menuTab, setMenuTab, orderStatusTab, setOrderStatusTab }: RestaurantOwnerDashboardProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dashboardRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +36,7 @@ export default function RestaurantOwnerDashboard({ restaurantId, onLogout, curre
             >
                 <main className="w-full h-[90vh] flex flex-col space-y-6">
                     <section className="flex flex-col space-y-3 z-10">
-                        <div className="flex flex-col w-full h-[80vh] mb-12 shadow-md overflow-hidden relative rounded-[8px]">
+                        <div className="flex flex-col w-full min-h-[80vh] mb-12 shadow-md overflow-y-auto relative rounded-[8px]">
                             {/* <div
                                 className="absolute inset-0"
                                 style={{
@@ -42,12 +47,15 @@ export default function RestaurantOwnerDashboard({ restaurantId, onLogout, curre
                                 }}
                             ></div> */}
                             <div className="z-10 relative p-4">
-                                {currentView === 'ORDERS' && <OrdersViewConnected restaurantId={restaurantId} />}
+                                {currentView === 'ORDERS' && <OrdersViewConnected restaurantId={restaurantId} orderStatusTab={orderStatusTab} />}
                                 {currentView === 'MENU' && <MenuViewConnected restaurantId={restaurantId} activeTab={menuTab} setActiveTab={setMenuTab} />}
-                                {currentView === 'EARNINGS' && <EarningsViewConnected restaurantId={restaurantId} />}
-                                {currentView === 'MY RESTAURANT' && <MyRestaurantViewConnected restaurantId={restaurantId} myRestaurantTab={myRestaurantTab} setMyRestaurantTab={setMyRestaurantTab} />}
+                                {currentView === 'PAYMENTS' && <EarningsViewConnected restaurantId={restaurantId} />}
+                                {(currentView === 'RESTAURANT INFO' || currentView === 'OPENING HOURS') && <MyRestaurantViewConnected restaurantId={restaurantId} myRestaurantTab={currentView === 'OPENING HOURS' ? 'OPENING HOURS' : myRestaurantTab} setMyRestaurantTab={setMyRestaurantTab} />}
                                 {currentView === 'TEAM MANAGEMENT' && <TeamManagementView />}
                                 {currentView === 'ACCOUNT' && <AccountView />}
+                                {currentView === 'ONBOARDING' && <OnboardingPage />}
+                                {currentView === 'OVERVIEW' && <OverviewPage />}
+                                {currentView === 'SETTINGS' && <SettingsView />}
                             </div>
                         </div>
                     </section>
