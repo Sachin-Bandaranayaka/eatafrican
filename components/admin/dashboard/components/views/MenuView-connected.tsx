@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import EditMenuItemModal from "./EditMenuItemModal";
+import AddMenuItemModal from "./AddMenuItemModal";
 import RegularButton from "@/app/components/RegularButton";
-import CustomDropdown from "@/app/components/DropDown";
 
 // ============================================
 // INTERFACES - Type definitions for data structures
@@ -21,6 +20,8 @@ interface MenuViewProps {
 // ============================================
 
 const ITEMS_PER_PAGE = 4;
+const MOBILE_MAIN_DISHES_ITEMS_PER_PAGE = 5;
+type AddItemType = "meal" | "drink" | "deal";
 
 // ============================================
 // MAIN COMPONENT
@@ -32,11 +33,12 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
   // STATE - Component state management
   // ============================================
   
-  const router = useRouter();
   const [menuItems, setMenuItems] = useState<any[]>([]);     // All menu items from API
   const [loading, setLoading] = useState(true);              // Loading state
   const [editingItem, setEditingItem] = useState<any>(null); // Item being edited (opens modal)
+  const [addItemType, setAddItemType] = useState<AddItemType | null>(null);
   const [currentPage, setCurrentPage] = useState(1);         // Current pagination page
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   // ============================================
   // EFFECT: Fetch menu items when restaurantId changes
@@ -53,6 +55,13 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [activeTab, restaurantId]);
+
+  useEffect(() => {
+    const syncViewport = () => setIsMobileViewport(window.innerWidth < 640);
+    syncViewport();
+    window.addEventListener("resize", syncViewport);
+    return () => window.removeEventListener("resize", syncViewport);
+  }, []);
 
   // ============================================
   // API FUNCTION: fetchMenuItems
@@ -111,7 +120,25 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
   };
 
   const filteredItems = getFilteredItems();
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  const isMainDishes = activeTab === "Main Dishes";
+  const activeAddType: AddItemType =
+    activeTab === "DRINKS" ? "drink" : activeTab === "SPECIAL DEALS" ? "deal" : "meal";
+  const addButtonLabel =
+    activeAddType === "drink" ? "ADD DRINK" : activeAddType === "deal" ? "ADD DEAL" : "ADD MEAL";
+  const itemsPerPage =
+    isMainDishes && isMobileViewport
+      ? MOBILE_MAIN_DISHES_ITEMS_PER_PAGE
+      : ITEMS_PER_PAGE;
+  const compactButtonProps = isMainDishes
+    ? { fontSize: "text-[6px] sm:text-[10px]", padding: "py-0 px-1 sm:py-0.5 sm:px-3" }
+    : {};
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   // ============================================
   // HELPER: paginatedItems
@@ -119,8 +146,8 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
   // ============================================
   
   const paginatedItems = filteredItems.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   // ============================================
@@ -142,26 +169,36 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
           onSave={fetchMenuItems}
         />
       )}
+      {addItemType && (
+        <AddMenuItemModal
+          restaurantId={restaurantId}
+          type={addItemType}
+          onClose={() => setAddItemType(null)}
+          onSave={fetchMenuItems}
+        />
+      )}
 
       {/* ============================================
       SECTION: MAIN CONTAINER
       Outer white container with menu items and pagination
       ============================================ */}
       
-      <div className="w-full flex flex-col items-center py-6">
+      <div className={`w-full flex flex-col items-center ${isMainDishes ? "py-4 sm:py-6" : "py-6"}`}>
         
         {/* OUTER WHITE CONTAINER */}
         <div
-          className="w-full max-w-[700px] shadow-md p-3 mt-12 mb-2"
+          className={`${isMainDishes
+            ? "w-[calc(100%+1rem)] -mx-2 sm:w-full sm:max-w-[700px] max-w-full p-1.5 sm:p-3 mt-24 sm:mt-12"
+            : "w-full max-w-[700px] p-3 mt-12"
+          } shadow-md mb-2 opacity-85`}
           style={{ backgroundColor: "#E8D7B4" }}
         >
           
           {/* SORT / FILTER / ADD MEAL BUTTONS */}
-          <div className="flex justify-start gap-4 mb-6 mt-2">
+          <div className={`w-full flex justify-start flex-wrap ${isMainDishes ? "gap-2 sm:gap-4 mb-4 sm:mb-6 mt-1 sm:mt-2" : "gap-4 mb-6 mt-2"}`}>
             {/* Sort Button */}
      <select
-              className="px-2 py-1 border border-white rounded-xl text-[10px] font-bold bg-white"
-              style={{ width: '90px' }}
+              className={`border border-white rounded-xl font-bold bg-white ${isMainDishes ? "w-[60px] sm:w-[90px] px-1 sm:px-2 py-0 sm:py-1 text-[6px] sm:text-[10px]" : "w-[90px] px-2 py-1 text-[10px]"}`}
             >
               <option value="">SORT BY</option>
               <option value="name">By Name</option>
@@ -171,8 +208,7 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
 
             {/* Filter Button */}
             <select
-              className="px-2 py-1 border border-white rounded-xl text-[10px] font-bold bg-white"
-              style={{ width: '90px' }}
+              className={`border border-white rounded-xl font-bold bg-white ${isMainDishes ? "w-[60px] sm:w-[90px] px-1 sm:px-2 py-0 sm:py-1 text-[6px] sm:text-[10px]" : "w-[90px] px-2 py-1 text-[10px]"}`}
             >
               <option value="">FILTER BY</option>
               <option value="all">All</option>
@@ -182,11 +218,12 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
             </select>
             {/* Add Meal Button - Navigates to add menu page */}
             <RegularButton
-              text="ADD MEAL"
+              text={addButtonLabel}
               fillColor="#ffffff"
               borderColor="#ffffff"
               fontColor="#000000"
-              onClick={() => router.push(`/restaurant-owner/menu/add?restaurantId=${restaurantId}&type=meal`)}
+              {...compactButtonProps}
+              onClick={() => setAddItemType(activeAddType)}
             />
           </div>
 
@@ -195,7 +232,7 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
           Displays paginated menu items
           ============================================ */}
           
-          <div className="space-y-4">
+          <div className={isMainDishes ? "space-y-2 sm:space-y-4" : "space-y-4"}>
             {loading ? (
               // Loading State
               <div className="text-center py-8">
@@ -211,15 +248,13 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
               paginatedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-4 p-2 mx-auto border border-gray-400 relative"
+                  className={`flex items-center mx-auto border border-gray-400 relative w-full sm:w-[640px] min-w-0 overflow-hidden ${isMainDishes ? "gap-1 sm:gap-4 p-0.5 sm:p-2 min-h-[82px] sm:min-h-[120px]" : "gap-4 p-2 min-h-[120px]"}`}
                   style={{
                     backgroundColor: "#E8D7B4",
-                    width: "640px",
-                    minHeight: "120px",
                   }}
                 >
                   {/* Vegan/Badge Label */}
-                  <button className="absolute top-2 right-2 px-2 py-1 bg-green-600 text-white text-xs font-bold rounded">
+                  <button className={`absolute top-1 sm:top-2 right-1 sm:right-2 bg-green-600 text-white font-bold rounded ${isMainDishes ? "px-0.5 sm:px-2 py-0 sm:py-1 text-[6px] sm:text-xs" : "px-2 py-1 text-xs"}`}>
                     VEGAN
                   </button>
 
@@ -228,34 +263,36 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
                     <img
                       src={item.imageUrl}
                       alt={item.name}
-                      className="w-28 h-28 rounded-md object-cover"
+                      className={isMainDishes ? "w-14 h-14 sm:w-28 sm:h-28 rounded-md object-cover" : "w-28 h-28 rounded-md object-cover"}
                     />
                   ) : (
-                    <div className="w-28 h-28 bg-gray-300 rounded-md" />
+                    <div className={isMainDishes ? "w-14 h-14 sm:w-28 sm:h-28 bg-gray-300 rounded-md" : "w-28 h-28 bg-gray-300 rounded-md"} />
                   )}
 
                   {/* Item Details */}
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     {/* Item Name */}
-                    <h3 className="text-xs font-bold text-red-800">
+                    <h3 className={isMainDishes ? "text-[8px] sm:text-xs font-bold text-red-800 truncate" : "text-xs font-bold text-red-800 truncate"}>
                       {item.name}
                     </h3>
 
                     {/* Item Description */}
-                    <p className="text-xs font-semibold text-black mt-1 mb-3">
+                    <p className={isMainDishes ? "text-[7px] sm:text-xs font-semibold text-black mt-0 sm:mt-1 mb-1 sm:mb-3 break-words line-clamp-2" : "text-xs font-semibold text-black mt-1 mb-3 break-words line-clamp-2"}>
                       {item.description || "No description"}
                     </p>
 
                     {/* Action Buttons and Price */}
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2">
+                    <div className={`flex justify-between ${isMainDishes ? "items-start sm:items-center gap-2 sm:gap-0 flex-col sm:flex-row" : "items-center"}`}>
+                      <div className={`flex max-w-full ${isMainDishes ? "gap-0 sm:gap-2 flex-wrap" : "gap-2"}`}>
                         {/* Quantity Button */}
                         <RegularButton
                           text={`Qty : ${item.quantity || 0}`}
                           fillColor="#fe981f"
                           borderColor="#ffffff"
                           fontColor="#000000"
+                          className={isMainDishes ? "max-w-full" : ""}
                           uppercase={false}
+                          {...compactButtonProps}
                         />
 
                         {/* Edit Button */}
@@ -264,6 +301,8 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
                           fillColor="#5b0e01"
                           borderColor="#ffffff"
                           fontColor="#ffffff"
+                          className={isMainDishes ? "max-w-full" : ""}
+                          {...compactButtonProps}
                           onClick={() => setEditingItem(item)}
                         />
 
@@ -273,23 +312,25 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
                           fillColor="#5b0e01"
                           borderColor="#ffffff"
                           fontColor="#ffffff"
+                          className={isMainDishes ? "max-w-full" : ""}
+                          {...compactButtonProps}
                         />
 
                         {/* Live/Offline Toggle Button */}
                         <button
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold text-black ${
+                          className={`max-w-full rounded font-bold text-black ${isMainDishes ? "px-0.5 sm:px-2 py-0 sm:py-0.5 text-[6px] sm:text-[10px]" : "px-2 py-0.5 text-[10px]"} ${
                             item.isAvailable
                               ? "bg-[#fefe3c]"
                               : "bg-gray-600"
                           }`}
                         >
                           {item.isAvailable ? "LIVE" : "OFFLINE"}
-                          <ChevronDown size={14} className="inline ml-1" />
+                          <ChevronDown size={isMainDishes ? 9 : 14} className="inline ml-1" />
                         </button>
                       </div>
 
                       {/* Price Display */}
-                      <span className="text-xs font-bold text-gray-800">
+                      <span className={isMainDishes ? "text-[8px] sm:text-xs font-bold text-gray-800" : "text-xs font-bold text-gray-800"}>
                         Fr. {item.price?.toFixed(2)}.-
                       </span>
                     </div>
@@ -306,12 +347,12 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
         ============================================ */}
         
         {!loading && filteredItems.length > 0 && (
-          <div className="flex justify-center items-center gap-1">
+          <div className={`flex flex-wrap justify-center items-center ${isMainDishes ? "gap-0.5 sm:gap-1" : "gap-1"}`}>
             {/* Previous Page Button */}
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="px-2 py-0.5 bg-red-900 text-white rounded text-[10px] font-bold disabled:opacity-50"
+              className={`bg-red-900 text-white rounded font-bold disabled:opacity-50 ${isMainDishes ? "px-0.5 sm:px-2 py-0 sm:py-0.5 text-[6px] sm:text-[10px]" : "px-2 py-0.5 text-[10px]"}`}
             >
               PREV
             </button>
@@ -321,7 +362,7 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                className={`${isMainDishes ? "px-0.5 sm:px-2 py-0 sm:py-0.5 text-[6px] sm:text-[10px]" : "px-2 py-0.5 text-[10px]"} rounded font-bold ${
                   page === currentPage
                     ? "bg-red-900 text-white"
                     : "bg-white text-gray-800 border border-gray-400"
@@ -335,7 +376,7 @@ const MenuViewConnected = ({ restaurantId, activeTab }: MenuViewProps) => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="px-2 py-0.5 bg-red-900 text-white rounded text-[10px] font-bold disabled:opacity-50"
+              className={`bg-red-900 text-white rounded font-bold disabled:opacity-50 ${isMainDishes ? "px-0.5 sm:px-2 py-0 sm:py-0.5 text-[6px] sm:text-[10px]" : "px-2 py-0.5 text-[10px]"}`}
             >
               NEXT
             </button>

@@ -172,17 +172,17 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
     }
 
     return (
-        <div className="flex justify-center w-full pt-24">
+        <div className="flex justify-center w-full pt-32 sm:pt-24">
             <div
                 style={{ backgroundColor: '#E8D7B4' }}
-                className="w-full max-w-[768px] min-h-72 shadow-lg flex text-black text-xs opacity-90 mb-4 pt-4 px-4 pb-20"
+                className="w-full max-w-[768px] min-h-72 shadow-lg flex text-black text-[10px] sm:text-xs opacity-90 mb-4 pt-4 px-4 pb-20"
             >
                 <div className="font-sans text-gray-800 mx-3 z-50 w-full">
-                    <h2 className="text-[14px] font-bold text-[#9a0000] mb-4">EARNINGS</h2>
+                    <h2 className="text-[11px] sm:text-[14px] font-bold text-[#9a0000] mb-0 sm:mb-4">EARNINGS</h2>
                     <div className="flex flex-row gap-8 w-[100%] justify-start">
-                        <div className="w-[40%]">
-                            <h3 className="flex flex-row justify-end text-[#9a0000] font-bold mb-3 text-[10px] ml-24">YOUR EARNINGS</h3>
-                            <div className="space-y-2 text-[10px] font-semibold">
+                        <div className="w-[60%] sm:w-[40%]">
+                            <h3 className="flex flex-row justify-end text-[#9a0000] font-bold mb-3 text-[7px] sm:text-[10px] ml-24 whitespace-nowrap">YOUR EARNINGS</h3>
+                            <div className="space-y-2 text-[8px] sm:text-[10px] font-semibold">
                                 <div className="flex justify-between">
                                     <span>Today</span>
                                     <span className="font-semibold">CHF {earnings.today.toFixed(2)}</span>
@@ -199,14 +199,14 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
                                     <HandButton 
                                         text="See your earning history"
                                         onClick={() => setIsHistoryModalOpen(true)}
-                                        className="text-[10px] px-3 py-1"
+                                        className="text-[8px] sm:text-[10px] px-3 py-1"
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="w-[15%] flex flex-col items-end">
-                            <h3 className="text-[#9a0000] font-bold mb-3 text-[10px]">TOTAL SALES</h3>
-                            <div className="space-y-2 text-[10px] font-semibold">
+                            <h3 className="text-[#9a0000] font-bold mb-3 text-[7px] sm:text-[10px] whitespace-nowrap">TOTAL SALES</h3>
+                            <div className="space-y-2 text-[8px] sm:text-[10px] font-semibold">
                                 <div className="flex justify-between">
                                     <span className="font-semibold">CHF {sales.today.toFixed(2)}</span>
                                 </div>
@@ -218,7 +218,7 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
                                 </div>
                             </div>
                         </div>
-                        <div style={{ backgroundColor: '#ffd96f' }} className="p-2 text-[10px] font-semibold w-[40%] -mt-2">
+                        <div style={{ backgroundColor: '#ffd96f' }} className="hidden sm:block p-2 text-[10px] font-semibold w-[40%] -mt-2">
                             <h3 className="font-bold mb-2 text-[#9a0000]">EARNINGS CALCULATION</h3>
                             <p className="text-[10px] font-normal mb-3">eatafrican.ch Commission Rate: {(COMMISSION_RATE * 100).toFixed(0)}%</p>
                             <p className="text-[10px] font-normal mb-3">Restaurant's Percentage: {((1 - COMMISSION_RATE) * 100).toFixed(0)}%</p>
@@ -227,11 +227,11 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
                     </div>
 
                     {/* PAYOUTS Table */}
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                        <h2 className="text-[14px] font-bold text-[#9a0000] mb-4">PAYOUTS</h2>
+                    <div className="mt-3 sm:mt-6 pt-3 sm:pt-6 border-t border-gray-200">
+                        <h2 className="text-[11px] sm:text-[14px] font-bold text-[#9a0000] mb-0 sm:mb-4">PAYOUTS</h2>
                         <div className="flex flex-row gap-8 w-[100%] justify-start">
-                            <div className="w-[25%]">
-                                <div className="space-y-3 text-[10px] font-semibold">
+                            <div className="w-[60%] sm:w-[25%]">
+                                <div className="space-y-3 text-[8px] sm:text-[10px] font-semibold">
                                     <div className="flex justify-between">
                                         <span className="invisible">.</span>
                                         <span className="font-semibold invisible">-</span>
@@ -240,19 +240,19 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
                                         <span>Last Payout</span>
                                         <span className="font-semibold">-</span>
                                     </div>
-                                    <div className="font-bold">Date of next payout :</div>
+                                    <div className="font-bold text-[8px] sm:text-[10px] whitespace-nowrap">Date of next payout :</div>
                                     <div className="mt-3 -ml-4">
                                         <HandButton
                                             text="See your payout history"
                                             onClick={() => setIsPayoutHistoryModalOpen(true)}
-                                            className="text-[10px] px-3 py-1"
+                                            className="text-[8px] sm:text-[10px] px-3 py-1"
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="w-[15%] flex flex-col items-end pr-8">
-                                <h3 className="text-[#9a0000] font-bold mb-3 text-[12px]">Amount</h3>
-                                <div className="space-y-3 text-[10px] font-semibold">
+                                <h3 className="text-[#9a0000] font-bold mb-3 text-[8px] sm:text-[12px] whitespace-nowrap">Amount</h3>
+                                <div className="space-y-3 text-[8px] sm:text-[10px] font-semibold">
                                     <div className="flex justify-between">
                                         <span className="font-semibold invisible">-</span>
                                     </div>
@@ -261,9 +261,9 @@ const EarningsViewConnected = ({ restaurantId }: EarningsViewProps) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="w-[55%] flex flex-col items-start">
-                                <h3 className="text-[#9a0000] font-bold mb-3 text-[12px]">Date</h3>
-                                <div className="space-y-3 text-[10px] font-semibold">
+                            <div className="w-[25%] sm:w-[55%] flex flex-col items-start">
+                                <h3 className="text-[#9a0000] font-bold mb-3 text-[8px] sm:text-[12px] whitespace-nowrap">Date</h3>
+                                <div className="space-y-3 text-[8px] sm:text-[10px] font-semibold">
                                     <div className="flex justify-between">
                                         <span className="font-semibold invisible">-</span>
                                     </div>

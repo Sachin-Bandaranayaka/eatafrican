@@ -95,7 +95,7 @@ export default function EarningsSection() {
         <section className="flex justify-center w-full pt-32">
             <div
                 style={{ backgroundColor: '#E8D7B4' }}
-                className="w-full max-w-[768px] min-h-[60vh] shadow-lg flex text-black text-xs opacity-70 mb-4"
+                className="w-full max-w-[768px] min-h-[60vh] shadow-lg flex text-black text-xs opacity-85 mb-4"
             >
                 <div className="flex-1 p-6 font-sans text-gray-800">
                     <h2 className="text-[14px] font-bold text-[#9a0000] mb-4">EARNINGS</h2>

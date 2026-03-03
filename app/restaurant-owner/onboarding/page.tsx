@@ -2,14 +2,14 @@ import HandButton from '@/app/components/HandButton';
 
 export default function RestaurantOnboarding() {
   return (
-    <div className="flex justify-center w-full pt-20">
+    <div className="flex justify-center w-full pt-32 sm:pt-20 px-0">
       <div
         style={{ backgroundColor: '#E8D7B4' }}
-        className="w-full max-w-[768px] min-h-64 shadow-lg flex text-black text-xs opacity-70 mb-4"
+        className="w-[calc(100%+2rem)] -mx-4 sm:w-full sm:mx-0 sm:max-w-[768px] min-h-64 shadow-lg flex flex-col sm:flex-row text-black text-[10px] sm:text-xs opacity-85 mb-4"
       >
         {/* Left Column */}
         <div className="flex-1 p-6" style={{ flex: 1.2 }}>
-          <p className="mb-6 text-green-700 text-xs font-bold">
+          <p className="mb-6 text-green-700 text-[10px] sm:text-xs font-bold">
             Finish the steps below to get your restaurant ready to go live.
           </p>
 
@@ -20,7 +20,7 @@ export default function RestaurantOnboarding() {
                 <strong className="font-bold">Logo</strong><br />
                 Upload your restaurant logo (PNG/JPG/WebP).<br />
                 Square works best (≥512×512).<br />
-                <HandButton text="open section" variant="inline" className="mt-4 block" />
+                <HandButton text="open section" variant="inline" className="mt-4 block text-[10px] sm:text-xs" />
               </div>
             </li>
 
@@ -29,7 +29,7 @@ export default function RestaurantOnboarding() {
               <div>
                 <strong className="font-bold">Opening Times</strong><br />
                 Add your opening times for <strong className="font-bold">Monday–Sunday</strong>.<br />
-                <HandButton text="open section" variant="inline" className="mt-4 block" />
+                <HandButton text="open section" variant="inline" className="mt-4 block text-[10px] sm:text-xs" />
               </div>
             </li>
 
@@ -39,13 +39,13 @@ export default function RestaurantOnboarding() {
                 <strong className="font-bold">Menu</strong><br />
                 Add <strong className="font-bold">at least 4 meals</strong> to your Main Dishes Menu (each needs a name and price).<br />
                 You can add Snacks/Drinks later — only Main Menu is required to submit.<br />
-                <HandButton text="open section" variant="inline" className="mt-4 block" />
+                <HandButton text="open section" variant="inline" className="mt-4 block text-[10px] sm:text-xs" />
               </div>
             </li>
           </ol>
 
           <div className="mt-8 space-y-2">
-            <p className="text-green-700 text-xs font-bold">
+            <p className="text-green-700 text-[10px] sm:text-xs font-bold">
               After you've submitted all sections
             </p>
 
@@ -97,20 +97,20 @@ export default function RestaurantOnboarding() {
 
         {/* Right Column */}
         <div className="flex-1 p-6">
-          <h3 className="text-xs font-bold mb-4 text-green-700">
+          <h3 className="text-[10px] sm:text-xs font-bold mb-4 text-green-700">
             Onboarding Status Panel
           </h3>
 
-          <p className="text-xs text-black mb-2">
+          <p className="text-[10px] sm:text-xs text-black mb-2">
             • <strong className="font-bold">Submitted</strong> shows a green ✓ when you've sent a section for review.
           </p>
 
-          <p className="text-xs text-black mb-4">
+          <p className="text-[10px] sm:text-xs text-black mb-4">
             • <strong className="font-bold">Status</strong> shows <strong className="font-bold">approved / waiting / declined — read comment.</strong>
           </p>
 
           <div className="border-t pt-4">
-            <table className="w-full text-xs">
+            <table className="w-full text-[10px] sm:text-xs">
               <thead>
                 <tr>
                   <th className="text-left font-bold">SECTION</th>
@@ -138,3 +138,4 @@ export default function RestaurantOnboarding() {
     </div>
   );
 }
+

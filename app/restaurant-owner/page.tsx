@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import RestaurantOwnerDashboard from '@/components/restaurantOwnerDashboard';
 import NotificationPanel from '@/components/NotificationPanel';
@@ -9,6 +9,11 @@ import CustomDropdown from '@/app/components/DropDown';
 
 export default function RestaurantOwnerPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const languageSelectorRef = useRef<HTMLDivElement>(null);
+    const languageOptions = ['EN', 'FR', 'ES'] as const;
+    const [selectedLanguage, setSelectedLanguage] = useState<(typeof languageOptions)[number]>('EN');
+    const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
     const [restaurant, setRestaurant] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -16,9 +21,49 @@ export default function RestaurantOwnerPage() {
     const [myRestaurantTab, setMyRestaurantTab] = useState('RESTAURANT INFO');
     const [menuTab, setMenuTab] = useState('Main Dishes');
     const [orderStatusTab, setOrderStatusTab] = useState('ALL');
+    const viewParam = searchParams.get('view');
+    const requestedMenuTabParam = searchParams.get('menuTab');
+
+    useEffect(() => {
+        if (viewParam) {
+            const allowedViews = ['ONBOARDING', 'OVERVIEW', 'MY RESTAURANT', 'MENU', 'ORDERS', 'PAYMENTS', 'SETTINGS'];
+            if (allowedViews.includes(viewParam)) {
+                setCurrentView(viewParam);
+            }
+        }
+
+        if (requestedMenuTabParam) {
+            const allowedMenuTabs = ['Main Dishes', 'DRINKS', 'SPECIAL DEALS'];
+            if (allowedMenuTabs.includes(requestedMenuTabParam)) {
+                setMenuTab(requestedMenuTabParam);
+            }
+        }
+    }, [viewParam, requestedMenuTabParam]);
 
     useEffect(() => {
         checkAuth();
+    }, []);
+
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            if (!languageSelectorRef.current?.contains(event.target as Node)) {
+                setIsLanguageDropdownOpen(false);
+            }
+        };
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsLanguageDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+            document.removeEventListener('keydown', handleEscape);
+        };
     }, []);
 
     const checkAuth = async () => {
@@ -40,6 +85,12 @@ export default function RestaurantOwnerPage() {
             }
 
             setUser(userData);
+            const normalizedLanguage = (userData.language ?? 'en').toUpperCase();
+            if (normalizedLanguage === 'FR' || normalizedLanguage === 'ES') {
+                setSelectedLanguage(normalizedLanguage);
+            } else {
+                setSelectedLanguage('EN');
+            }
             await fetchRestaurant(token, userData.id);
         } catch (error) {
             console.error('Auth error:', error);
@@ -122,37 +173,73 @@ export default function RestaurantOwnerPage() {
     }
 
     return (
-        <div className="relative w-full min-h-screen bg-black text-white overflow-hidden font-sans p-8">
+        <div className={`relative w-full min-h-screen bg-black text-white font-sans ${
+            currentView === 'PAYMENTS' ? 'p-2 sm:p-8' : 'p-4 sm:p-8'
+        } ${
+            currentView === 'MENU'
+                ? 'overflow-x-hidden sm:overflow-x-visible overflow-y-hidden'
+                : currentView === 'ORDERS'
+                    ? 'overflow-x-hidden overflow-y-hidden'
+                    : 'overflow-hidden'
+        }`}>
             {/* Language Selector and Notification */}
-            <div className="absolute top-3 left-0 z-50 ml-10 flex items-center gap-4">
-                <div className="flex items-center pointer-events-auto">
-                    <select className="bg-black text-white font-bold px-1 py-4 pl-8 rounded text-xs appearance-none cursor-pointer">
-                        <option value="en">EN</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
-                    </select>
-                    <ChevronDown size={18} strokeWidth={4} className="text-white ml-1" />
+            <div className="absolute top-3 left-0 z-50 ml-1 flex items-center gap-2 sm:gap-4 origin-top scale-90 sm:scale-100">
+                <div ref={languageSelectorRef} className="relative pointer-events-auto">
+                    <button
+                        type="button"
+                        onClick={() => setIsLanguageDropdownOpen((open) => !open)}
+                        className="relative bg-black text-white font-bold px-1 py-3 sm:py-4 pl-6 sm:pl-8 pr-6 sm:pr-8 rounded text-[10px] sm:text-xs cursor-pointer focus:outline-none focus:ring-0"
+                        aria-label="Open language selector"
+                    >
+                        {selectedLanguage}
+                        <ChevronDown
+                            size={16}
+                            strokeWidth={4}
+                            className={`absolute right-2 top-1/2 -translate-y-1/2 text-white transform transition-transform duration-300 ${
+                                isLanguageDropdownOpen ? 'rotate-180' : 'rotate-0'
+                            }`}
+                        />
+                    </button>
+                    {isLanguageDropdownOpen && (
+                        <div className="absolute left-0 mt-1 w-full rounded bg-black/95 border border-white/20 shadow-lg z-[60] overflow-hidden">
+                            {languageOptions.map((language) => (
+                                <button
+                                    key={language}
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectedLanguage(language);
+                                        setIsLanguageDropdownOpen(false);
+                                    }}
+                                    className="w-full px-3 py-2 text-left text-xs font-bold text-white hover:bg-white/10"
+                                >
+                                    {language}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
-                <NotificationPanel />
+                <div className="ml-8 sm:ml-32">
+                    <NotificationPanel />
+                </div>
             </div>
 
             {/* Portal and Login Information */}
-            <div className="absolute top-2 left-0.5 z-20">
+            <div className="absolute top-2 -left-1 sm:left-0.5 z-20 origin-top-left scale-90 sm:scale-100">
                 <div
-                    className="text-white text-xs font-bold mt-20 px-2 py-2 border w-80 whitespace-nowrap"
+                    className="text-white text-[9px] sm:text-xs font-bold mt-[3.75rem] sm:mt-20 px-[14px] sm:px-8 py-[5px] sm:py-2 border inline-block whitespace-nowrap"
                     style={{ backgroundColor: '#2F6B2F', borderColor: '#2F6B2F' }}
                 >
                     EAT AFRICAN RESTAURANTS PORTAL
                 </div>
                 <div className="ml-4">
-                    <div className="flex flex-row items-center -ml-2">
+                    <div className="flex flex-row items-center -ml-2 gap-1 sm:gap-0">
                         <CustomDropdown
-                            options={['ONBOARDING', 'OVERVIEW', 'RESTAURANT INFO', 'MENU', 'ORDERS', 'PAYMENTS', 'OPENING HOURS', 'TEAM MANAGEMENT', 'ACCOUNT', 'SETTINGS']}
+                            options={['ONBOARDING', 'OVERVIEW', 'MY RESTAURANT', 'MENU', 'ORDERS', 'PAYMENTS', 'SETTINGS']}
                             defaultOption={currentView}
                             backgroundColor="#2F6B2F"
                             onOptionSelect={(option) => setCurrentView(option)}
                         />
-                        {currentView === 'RESTAURANT INFO' && (
+                        {currentView === 'MY RESTAURANT' && (
                             <CustomDropdown
                                 options={['RESTAURANT INFO', 'OPENING HOURS']}
                                 defaultOption={myRestaurantTab}
@@ -184,12 +271,12 @@ export default function RestaurantOwnerPage() {
             </div>
 
             {/* Top Right Buttons */}
-            <div className="absolute top-4 right-12 z-50 w-fit flex items-center space-x-6">
+            <div className="absolute top-4 right-4 sm:right-12 z-50 w-fit flex items-center space-x-3 sm:space-x-6 origin-top-right scale-90 sm:scale-100">
                 <button
                     onClick={handleLogout}
                     className="group flex items-center pointer-events-auto"
                 >
-                    <span className="relative text-xs font-bold text-yellow-500 pr-4 pb-1">
+                    <span className="relative text-[10px] sm:text-xs font-bold text-yellow-500 pr-3 sm:pr-4 pb-1">
                         LOGOUT
                         <span
                             className="absolute bottom-0 h-[1.5px] bg-white transition-all
@@ -197,7 +284,7 @@ export default function RestaurantOwnerPage() {
                             style={{ left: '-1rem', width: 'calc(100% + 2rem)' }}
                         />
                     </span>
-                    <span className="relative w-10 h-10 -ml-3">
+                    <span className="relative w-8 h-8 sm:w-10 sm:h-10 -ml-2 sm:-ml-3">
                         <Image
                             src="/images/UserIcon (1).png"
                             alt="Profile"
@@ -206,7 +293,7 @@ export default function RestaurantOwnerPage() {
                         />
                     </span>
                 </button>
-                <button className="relative w-8 h-8 hover:scale-110 transition pointer-events-auto">
+                <button className="relative w-7 h-7 sm:w-8 sm:h-8 hover:scale-110 transition pointer-events-auto">
                     <Image src="/images/cart_icon.png" alt="Cart" fill className="object-contain" />
                 </button>
             </div>
@@ -223,7 +310,9 @@ export default function RestaurantOwnerPage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
             </div>
 
-            <div className="relative z-10">
+            <div className={`relative z-10 origin-top ${
+                (currentView === 'MY RESTAURANT' || currentView === 'MENU' || currentView === 'ORDERS') ? 'scale-100' : 'scale-90 sm:scale-100'
+            }`}>
                 <RestaurantOwnerDashboard
                     restaurantId={restaurant.id}
                     onLogout={handleLogout}
@@ -240,3 +329,15 @@ export default function RestaurantOwnerPage() {
         </div>
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+

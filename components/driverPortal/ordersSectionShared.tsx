@@ -215,23 +215,27 @@ export function DriverOrdersSectionView({
     };
 
     return (
-        <section className="flex justify-center w-full pt-28">
+        <section
+            className={`flex justify-center w-full ${mode === "new" ? "pt-[26rem] sm:pt-28" : "pt-28"}`}
+        >
             <div
                 style={{ backgroundColor: '#E8D7B4' }}
-                className="w-full max-w-[768px] min-h-[60vh] shadow-lg flex text-black text-xs opacity-70 mb-4"
+                className={`w-full max-w-[768px] min-h-[60vh] shadow-lg flex text-black opacity-85 mb-4 ${
+                    mode === "new" ? "text-[10px] sm:text-xs" : "text-xs"
+                }`}
             >
-                <div className="flex-1 p-4">
+                <div className={`flex-1 ${mode === "new" ? "p-2.5 sm:p-4" : "p-4"}`}>
                     <div className="flex flex-col w-full">
                         {mode === "new" && (
-                            <div className="flex flex-row items-center justify-between gap-3 w-full mb-2">
-                                <h2 className="text-lg font-bold" style={{ color: '#990000' }}>NEW DELIVERIES</h2>
+                            <div className="flex flex-row items-center justify-between gap-2 sm:gap-3 w-full mb-1 sm:mb-2">
+                                <h2 className="text-sm sm:text-lg font-bold" style={{ color: '#990000' }}>NEW DELIVERIES</h2>
                                 <div className="flex flex-row items-center gap-3">
                                     <span className="text-[6px] md:text-[10px] font-semibold whitespace-nowrap" style={{ color: '#14532d' }}>
                                         Your Pick Up Zone is set to {pickupZone}
                                     </span>
                                     <button
                                         onClick={() => setShowPickupZoneModal(true)}
-                                        className="text-white font-bold py-1 px-2 rounded-md transition-colors duration-200 shadow-lg text-[8px] md:text-[9px] bg-red-900 hover:bg-red-800"
+                                        className="text-white font-bold py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-md transition-colors duration-200 shadow-lg text-[7px] sm:text-[8px] md:text-[9px] bg-red-900 hover:bg-red-800"
                                     >
                                         CHANGE PICK UP ZONE
                                     </button>
@@ -268,9 +272,9 @@ export function DriverOrdersSectionView({
                         )}
 
                         {showPickupZoneModal && mode === "new" && (
-                            <div style={{ backgroundColor: '#fed86e', opacity: 0.95 }} className="absolute top-32 right-4 border-2 border-gray-300 p-5 rounded-none shadow-xl z-30 w-72">
+                            <div style={{ backgroundColor: '#fed86e', opacity: 0.95 }} className="absolute top-28 sm:top-32 right-2 sm:right-4 border-2 border-gray-300 p-3 sm:p-5 rounded-none shadow-xl z-30 w-56 sm:w-72">
                                 <div className="flex flex-col">
-                                    <h3 style={{ color: '#a52a2a' }} className="font-bold mb-2">Change Pick Up Zone</h3>
+                                    <h3 style={{ color: '#a52a2a' }} className="font-bold mb-2 text-[11px] sm:text-base">Change Pick Up Zone</h3>
                                     {zones.map((zone) => (
                                         <label key={zone} className="flex items-center space-x-1 cursor-pointer my-0.5">
                                             <input
@@ -279,10 +283,10 @@ export function DriverOrdersSectionView({
                                                 value={zone}
                                                 checked={selectedZone === zone}
                                                 onChange={() => setSelectedZone(zone)}
-                                                className="form-radio h-4 w-4"
+                                                className="form-radio h-3.5 w-3.5 sm:h-4 sm:w-4"
                                                 style={{ borderColor: '#e7964a' }}
                                             />
-                                            <span className="text-black font-semibold" style={{ color: '#3b36d8' }}>{zone}</span>
+                                            <span className="text-black font-semibold text-[10px] sm:text-sm" style={{ color: '#3b36d8' }}>{zone}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -293,7 +297,7 @@ export function DriverOrdersSectionView({
                             </div>
                         )}
 
-                        <div className="flex flex-row w-full mt-2 overflow-auto max-h-[65vh]">
+                        <div className={`flex flex-row w-full overflow-auto max-h-[65vh] ${mode === "new" ? "mt-1 sm:mt-2" : "mt-2"}`}>
                             {loading ? (
                                 <div className="flex items-center justify-center w-full py-10">
                                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900" />
@@ -342,13 +346,13 @@ export function DriverOrdersSectionView({
                                                 </>
                                             ) : (
                                                 <>
-                                                    <th className="py-2 text-left text-black pl-2 font-semibold text-sm">
+                                                    <th className="py-1 sm:py-2 text-left text-black pl-2 font-semibold text-[9px] sm:text-sm">
                                                         Order
                                                     </th>
-                                                    <th className="py-2 text-left text-black font-semibold text-sm">
+                                                    <th className="py-1 sm:py-2 text-left text-black font-semibold text-[9px] sm:text-sm">
                                                         Location
                                                     </th>
-                                                    <th className="py-2 text-left text-black font-semibold text-sm">
+                                                    <th className="py-1 sm:py-2 text-left text-black font-semibold text-[9px] sm:text-sm">
                                                         Date,Time
                                                     </th>
                                                 </>
@@ -359,16 +363,18 @@ export function DriverOrdersSectionView({
                                         {displayOrders.map((order: any) => (
                                             <tr
                                                 key={order.id}
-                                                className="w-full cursor-pointer hover:bg-gray-100 border-b"
+                                                className={`w-full cursor-pointer hover:bg-gray-100 border-b ${
+                                                    mode === "new" ? "leading-tight" : ""
+                                                }`}
                                                 onClick={() => handleOrderClick(order)}
                                             >
-                                                <td className="py-2 pl-2">
+                                                <td className={mode === "new" ? "py-1 sm:py-2 pl-2 text-[9px] sm:text-xs" : "py-2 pl-2"}>
                                                     {order.restaurant?.name}, {order.restaurant?.city}
                                                 </td>
-                                                <td className="py-2">
+                                                <td className={mode === "new" ? "py-1 sm:py-2 text-[9px] sm:text-xs" : "py-2"}>
                                                     {order.deliveryAddress?.street}, {order.deliveryAddress?.city}
                                                 </td>
-                                                <td className="py-2">
+                                                <td className={mode === "new" ? "py-1 sm:py-2 text-[9px] sm:text-xs" : "py-2"}>
                                                     {new Date(order.deliveryTime).toLocaleString()}
                                                 </td>
                                             </tr>

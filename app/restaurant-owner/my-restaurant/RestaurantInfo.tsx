@@ -90,8 +90,9 @@ const RestaurantInfo = ({ restaurant: propRestaurant, loading: propLoading }: Re
     return (
         <div
             style={{ backgroundColor: '#E8D7B4' }}
-            className="w-full max-w-[900px] min-h-[30rem] shadow-lg text-black opacity-70 mb-4 ml-auto mr-0 max-h-[95vh] overflow-y-auto mt-20 p-6"
+            className="w-[calc(100%+4rem)] -mx-8 sm:w-full sm:mx-0 sm:max-w-[900px] min-h-[30rem] shadow-lg text-black opacity-85 mb-4 ml-0 sm:ml-auto mr-0 max-h-[95vh] overflow-y-auto mt-28 sm:mt-16 p-4 sm:p-6"
         >
+            <div className="origin-top-left scale-[0.8] sm:scale-100">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
                 {/* Left Column - Contact and Location Information */}
                 <div className="space-y-6">
@@ -234,8 +235,10 @@ const RestaurantInfo = ({ restaurant: propRestaurant, loading: propLoading }: Re
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     );
 };
 
 export default RestaurantInfo;
+

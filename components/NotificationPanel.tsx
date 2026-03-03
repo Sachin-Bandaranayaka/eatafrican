@@ -103,10 +103,10 @@ export default function NotificationPanel() {
     return (
         <div className="relative pointer-events-auto">
             <button 
-                className="relative w-8 h-8 hover:scale-110 transition cursor-pointer" 
+                className="relative w-6 h-6 sm:w-8 sm:h-8 hover:scale-110 transition cursor-pointer" 
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <Bell size={24} className="text-white" />
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                         {unreadCount > 9 ? '9+' : unreadCount}

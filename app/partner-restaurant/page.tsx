@@ -1,15 +1,30 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import RegistrationForm from '@/components/restaurantRegistration/RegistrationForm';
 import SuccessMessage from '@/components/restaurantRegistration/SuccessMessage';
 
 export default function PartnerRestaurantPage() {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const currentLanguage = (() => {
+        const value = (searchParams.get('lang') ?? 'en').toLowerCase();
+        return value === 'fr' || value === 'es' ? value : 'en';
+    })();
+
+    const handleLanguageChange = (nextLanguage: string) => {
+        const nextParams = new URLSearchParams(searchParams.toString());
+        nextParams.set('lang', nextLanguage);
+        const query = nextParams.toString();
+        router.push(query ? `${pathname}?${query}` : pathname);
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -77,7 +92,7 @@ export default function PartnerRestaurantPage() {
                     lastName,
                     phone,
                     role: 'restaurant_owner',
-                    language: 'en'
+                    language: currentLanguage
                 })
             });
 
@@ -140,19 +155,15 @@ export default function PartnerRestaurantPage() {
     return (
         <div className="relative w-full min-h-screen bg-black text-white overflow-hidden font-sans p-8">
             {/* Language Selector */}
-            <div className="absolute top-3 left-0 z-20 ml-10">
-                <div className="flex items-center">
-                    <select className="bg-black text-white font-bold px-1 py-4 pl-8 rounded text-xs appearance-none">
-                        <option value="en">EN</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
-                    </select>
-                    <ChevronDown size={18} strokeWidth={4} className="text-white ml-1" />
-                </div>
+            <div className="absolute top-3 left-0 z-20 ml-1">
+                <LanguageSelector
+                    currentLanguage={currentLanguage}
+                    onLanguageChange={handleLanguageChange}
+                />
             </div>
             {/* Portal and Login Information Only*/}
              <div className="absolute top-2 left-0.5 z-20">
-                <div className="text-white text-xs font-bold mt-20 px-2 py-2 border w-80 whitespace-nowrap" style={{backgroundColor: '#2F6B2F', borderColor: '#2F6B2F'}}>EAT AFRICAN RESTAURANTS PORTAL</div>
+                <div className="text-white text-xs font-bold mt-20 px-8 py-2 border inline-block whitespace-nowrap" style={{backgroundColor: '#2F6B2F', borderColor: '#2F6B2F'}}>EAT AFRICAN RESTAURANTS PORTAL</div>
                 <div className="flex items-center gap-1 font-bold text-xs mt-8 ml-10 pl-4">
                   <Image src="/images/folk_link.png" alt="Folk Link" width={30} height={30} />
                   <span style={{color: '#F2C94C'}}>Login</span>
@@ -245,3 +256,63 @@ export default function PartnerRestaurantPage() {
     </div>
     );
 }
+
+function LanguageSelector({
+    currentLanguage,
+    onLanguageChange,
+}: {
+    currentLanguage: 'en' | 'fr' | 'es';
+    onLanguageChange: (nextLanguage: string) => void;
+}) {
+    const selectRef = useRef<HTMLSelectElement>(null);
+
+    const openSelect = () => {
+        const select = selectRef.current;
+        if (!select) return;
+
+        const picker = select as HTMLSelectElement & { showPicker?: () => void };
+        if (typeof picker.showPicker === 'function') {
+            picker.showPicker();
+            return;
+        }
+
+        select.focus();
+        select.click();
+    };
+
+    return (
+        <div className="relative">
+            <select
+                ref={selectRef}
+                value={currentLanguage}
+                onChange={(e) => onLanguageChange(e.target.value)}
+                className="bg-black text-white font-bold px-1 py-4 pl-8 pr-8 rounded text-xs appearance-none cursor-pointer"
+            >
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="es">ES</option>
+            </select>
+            <button
+                type="button"
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    openSelect();
+                }}
+                onClick={openSelect}
+                className="absolute right-0 top-0 z-10 h-full w-8"
+                aria-label="Open language selector"
+            >
+                <ChevronDown size={18} strokeWidth={4} className="mx-auto text-white" />
+            </button>
+        </div>
+    );
+}
+
+
+
+
+
+
+
+
+

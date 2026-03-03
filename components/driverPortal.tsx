@@ -308,7 +308,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
         <div className="flex flex-col justify-center items-center">
             <div
                 ref={dashboardRef}
-                className="z-0 w-1/2 h-[85vh] bg-transparent xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[80%] md:mt-0 ml-3"
+                className="z-0 w-full md:w-1/2 h-[85vh] bg-transparent xs:p-6 flex flex-col md:flex-row space-y-4 xs:space-y-6 md:space-y-0 md:space-x-6 font-sans text-gray-900 -mt-[80%] md:mt-0 ml-0 md:ml-3"
             >
                 <main className="w-full h-[90vh] p-2 md:p-0 flex flex-col space-y-4 xs:space-y-6">
                     {renderCurrentView()}

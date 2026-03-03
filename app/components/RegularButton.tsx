@@ -26,10 +26,10 @@ const RegularButton: React.FC<RegularButtonProps> = ({
   fontColor = '#FFFFFF',
   hoverFillColor,
   borderWidth = '1px',
-  fontSize = 'text-[10px]',
+  fontSize = 'text-[9px] sm:text-[10px]',
   fontWeight = 'font-bold',
-  padding = 'py-0.5 px-4',
-  borderRadius = 'rounded-lg',
+  padding = 'py-0.5 px-3 sm:px-4',
+  borderRadius = 'rounded-md sm:rounded-lg',
   uppercase = true,
   className = '',
   disabled = false,
@@ -40,7 +40,7 @@ const RegularButton: React.FC<RegularButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${borderRadius} ${fontSize} ${fontWeight} ${padding} ${uppercase ? 'uppercase' : ''} ${className}`}
+      className={`inline-flex items-center justify-center leading-tight whitespace-nowrap ${borderRadius} ${fontSize} ${fontWeight} ${padding} ${uppercase ? 'uppercase' : ''} ${className}`}
       style={{
         backgroundColor: fillColor,
         borderColor: borderColor,

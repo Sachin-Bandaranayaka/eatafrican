@@ -13,6 +13,7 @@ interface DropdownProps {
   backgroundColor?: string;
   textColor?: string;
   width?: string; // optional manual override
+  mobileWidth?: string; // optional mobile-only width override
   OpenIcon?: React.ComponentType<{ size?: number; strokeWidth?: number }>;
   CloseIcon?: React.ComponentType<{ size?: number; strokeWidth?: number }>;
   onOptionSelect?: (option: string) => void;
@@ -24,6 +25,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
   backgroundColor = '#2F6B2F',
   textColor = '#FFFFFF',
   width,
+  mobileWidth,
   OpenIcon = ChevronDown,
   CloseIcon = ChevronDown,
   onOptionSelect = () => {}
@@ -117,10 +119,12 @@ const CustomDropdown: React.FC<DropdownProps> = ({
   };
 
   const ActiveIcon = isOpen ? CloseIcon : OpenIcon;
+  const isMobileViewport =
+    typeof window !== 'undefined' && window.innerWidth < 640;
 
   /* ---------------- Portal dropdown ---------------- */
   const dropdown =
-    isOpen && buttonRef.current
+    buttonRef.current
       ? createPortal(
           <div
             ref={dropdownRef}
@@ -132,25 +136,34 @@ const CustomDropdown: React.FC<DropdownProps> = ({
               left:
                 buttonRef.current.getBoundingClientRect().left +
                 window.scrollX,
-              width: buttonRef.current.offsetWidth,
+              width: isMobileViewport
+                ? Math.max(48, Math.floor(buttonRef.current.offsetWidth * 0.65))
+                : buttonRef.current.offsetWidth,
+              maxWidth: isMobileViewport ? '20vw' : undefined,
               backgroundColor,
               color: textColor
             }}
-            className="rounded-lg shadow-lg z-[9999]"
+            className={`rounded-md sm:rounded-lg shadow-lg z-[9999] origin-top transform transition-all duration-200 ease-out ${
+              isOpen
+                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+                : 'opacity-0 -translate-y-1 scale-95 pointer-events-none'
+            } max-h-[45vh] sm:max-h-none overflow-y-auto overflow-x-hidden`}
           >
             {options.map((option, index) => (
               <button
                 key={option}
                 onClick={() => selectOption(option)}
                 onMouseEnter={() => setFocusedIndex(index)}
-                className={`w-full px-2 h-8 text-[10px] font-bold text-left flex items-center
+                className={`w-full pl-1 pr-0.5 sm:px-2 h-3.5 sm:h-8 text-[6px] sm:text-[10px] font-bold text-left leading-none flex items-center transition-colors duration-150 ease-out
                   ${
                     focusedIndex === index
-                      ? 'bg-gray-600'
-                      : 'hover:bg-gray-600'
-                  }`}
+                      ? 'bg-black/25'
+                      : 'hover:bg-black/15'
+                  } overflow-hidden`}
               >
-                {option}
+                <span className="block w-full min-w-0 truncate">
+                  {option}
+                </span>
               </button>
             ))}
           </div>,
@@ -160,27 +173,27 @@ const CustomDropdown: React.FC<DropdownProps> = ({
 
   return (
     /* ⬇️ ORIGINAL STYLES PRESERVED */
-    <div className="flex items-center gap-1 font-bold text-[10px] mt-8 ml-2 pl-1">
+    <div className="flex items-center gap-0 sm:gap-1 font-bold text-[8px] sm:text-[10px] mt-5 sm:mt-8 ml-1 sm:ml-2 pl-0 sm:pl-1">
       <div
         ref={wrapperRef}
-        style={{ width: computedWidth }}
+        style={{ width: isMobileViewport && mobileWidth ? mobileWidth : computedWidth }}
         onKeyDown={handleKeyDown}
-        className="relative"
+        className="relative min-w-[56px] sm:min-w-0 max-w-[20vw] sm:max-w-none"
       >
         <button
           ref={buttonRef}
           onClick={() => setIsOpen((v) => !v)}
           style={{ backgroundColor, color: textColor }}
-          className="w-full px-3 py-1 rounded-lg flex items-center justify-between"
+          className="w-full h-3.5 sm:h-auto pl-1.5 pr-0.5 sm:px-3 py-0 sm:py-1 rounded-[5px] sm:rounded-lg text-[6px] sm:text-[10px] leading-none flex items-center justify-between"
         >
           <span className="truncate whitespace-nowrap overflow-hidden">
             {currentView}
           </span>
           <ActiveIcon
-            size={18}
+            size={16}
             strokeWidth={4}
-            className={`transition-transform ${
-              isOpen ? 'rotate-180' : ''
+            className={`w-[10px] h-[10px] sm:w-[18px] sm:h-[18px] transform transition-transform duration-200 ease-out ${
+              isOpen ? 'rotate-180' : 'rotate-0'
             }`}
           />
         </button>

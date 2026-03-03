@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 // The Register component props
 interface RegisterProps {
@@ -166,10 +165,10 @@ export default function Register({ onBackToLogin }: RegisterProps) {
     };
 
     return (
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
-            <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+        <div className="relative z-10 min-h-screen p-4">
+            <div className="flex items-center justify-center p-4 md:p-8">
                 <div
-                    className={`w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64 ${
+                    className={`w-full max-w-md md:max-w-96 p-2 md:p-8 ${
                         isSubmitted ? 'flex flex-col items-center justify-center text-center' : ''
                     }`}
                     style={{ minHeight: '600px' }}
@@ -520,30 +519,7 @@ export default function Register({ onBackToLogin }: RegisterProps) {
                     )}
                 </div>
             </div>
-            <div className="hidden md:flex items-center justify-center p-4 md:p-8">
-                <div className="bg-white text-black p-6 rounded-lg shadow-lg w-full max-w-sm">
-                    <Image
-                        src="/Terminal.png"
-                        alt="Terminal"
-                        width={400}
-                        height={300}
-                        className="w-full h-auto rounded mb-4"
-                    />
-                    <h3 className="text-lg font-semibold mb-2">Drive with Eat African</h3>
-                    <p className="text-gray-700 mb-4">
-                        Join our team of delivery drivers and earn money by delivering delicious African meals to customers in your area. Flexible hours, competitive pay!
-                    </p>
-                    <div className="bg-amber-50 p-3 rounded-lg">
-                        <h4 className="font-bold text-sm mb-2">Driver Benefits:</h4>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                            <li>✓ Flexible working hours</li>
-                            <li>✓ Competitive pay rates</li>
-                            <li>✓ Keep 100% of your tips</li>
-                            <li>✓ Weekly payouts</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
+

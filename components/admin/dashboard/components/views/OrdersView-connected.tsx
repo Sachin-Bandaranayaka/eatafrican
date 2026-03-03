@@ -272,6 +272,8 @@ const OrdersViewConnected = ({ restaurantId, orderStatusTab }: OrdersViewProps) 
     };
 
     const filteredOrders = getFilteredOrders();
+    const activeFilterLabel = FILTER_CONFIGS.find(f => f.id === activeFilter)?.label || 'ALL';
+    const tableTitle = `${activeFilterLabel} ORDERS`;
 
     // ============================================
     // RENDER
@@ -284,6 +286,7 @@ const OrdersViewConnected = ({ restaurantId, orderStatusTab }: OrdersViewProps) 
                     orders={filteredOrders}
                     loading={loading}
                     error={error}
+                    tableTitle={tableTitle}
                     onOrderClick={handleOrderClick}
                 />
             )}

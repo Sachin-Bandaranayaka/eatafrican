@@ -24,7 +24,7 @@ export default function OrdersSection({ setShowOrderDetails }: accountSectionPro
         <section className="flex justify-center w-full pt-32">
             <div
                 style={{ backgroundColor: '#E8D7B4' }}
-                className="w-full max-w-[900px] shadow-lg text-black opacity-70 mb-6 p-4"
+                className="w-full max-w-[900px] shadow-lg text-black opacity-85 mb-6 p-4"
             >
                 <h2 className="text-[14px] font-bold text-[#9a0000] mb-2">ACCOUNT SETTINGS</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-2">

@@ -21,23 +21,24 @@ const HandButton: React.FC<HandButtonProps> = ({
     return (
       <span 
         onClick={onClick}
-        className={`text-xs font-bold cursor-pointer hover:opacity-80 ${className}`}
+        className={`inline-flex items-center gap-0 sm:gap-1 max-w-full text-[8px] sm:text-xs leading-none sm:leading-tight break-words font-bold cursor-pointer hover:opacity-80 ${className}`}
         style={{ color: textColor }}
       >
-        {emoji} {text}
+        <span className="shrink-0">{emoji}</span>
+        <span>{text}</span>
       </span>
     );
   }
 
   return (
-    <div className={`p-4 pt-0 ${className}`}>
+    <div className={`p-1 sm:p-4 pt-0 ${className}`}>
       <button
         onClick={onClick}
-        className="text-xs font-bold flex items-center hover:opacity-80 transition-opacity cursor-pointer"
+        className="text-[8px] sm:text-xs leading-none sm:leading-tight font-bold flex flex-wrap items-center gap-0 sm:gap-1 hover:opacity-80 transition-opacity cursor-pointer"
         style={{ color: textColor }}
       >
-        <span className="mr-1">{emoji}</span>
-        {text}
+        <span className="shrink-0">{emoji}</span>
+        <span>{text}</span>
       </button>
     </div>
   );

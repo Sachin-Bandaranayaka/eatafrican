@@ -45,7 +45,9 @@ const MyRestaurantViewConnected = ({ restaurantId, myRestaurantTab, setMyRestaur
     };
 
     return (
-        <div className="relative w-full p-2 z-50">
+        <div className={`relative w-full z-50 ${
+            (myRestaurantTab === 'RESTAURANT INFO' || myRestaurantTab === 'RESTAURANT_INFORMATION') ? 'p-0 sm:p-2' : 'p-2'
+        }`}>
             {/* Restaurant Information Tab */}
             {(myRestaurantTab === 'RESTAURANT INFO' || myRestaurantTab === 'RESTAURANT_INFORMATION') && (
                 <RestaurantInfo restaurant={restaurant} loading={loading} />
