@@ -1,6 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import RegularButton from "@/app/components/RegularButton";
 
 interface OrdersSectionProps {
     setShowOrderDetails: Dispatch<SetStateAction<boolean>>;
@@ -20,7 +21,7 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
     const [loading, setLoading] = useState(true);
     const [driverId, setDriverId] = useState<string | null>(null);
 
-    const [zones, setZones] = useState<string[]>(["Basel", "Bern", "Luzern", "Olten", "Zürich"]);
+    const [zones, setZones] = useState<string[]>(["Basel", "Bern", "Zurich"]);
 
     useEffect(() => {
         fetchCities();
@@ -31,7 +32,11 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
             const response = await fetch('/api/cities');
             const data = await response.json();
             const cityNames = data.map((city: any) => city.name);
-            setZones(cityNames);
+            // Filter to only keep Basel, Bern, and Zurich
+            const filteredCities = cityNames.filter((city: string) => 
+                ["Basel", "Bern", "Zurich"].includes(city)
+            );
+            setZones(filteredCities.length > 0 ? filteredCities : ["Basel", "Bern", "Zurich"]);
         } catch (error) {
             console.error('Error fetching cities:', error);
         }
@@ -185,12 +190,12 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
 
     return (
         <section className="flex flex-col space-y-3 z-10">
-            <div className="flex flex-col w-full h-[80vh] mb-12 shadow-md overflow-hidden border-2 border-[#f1c232] relative -mt-2 rounded-[8px]">
+            <div className="flex flex-col w-full h-[60vh] mb-12 shadow-md overflow-hidden border-2 border-[#f1c232] relative -mt-2 rounded-[8px]">
                 <div
                     className="absolute inset-0"
                     style={{
                         backgroundColor: "white",
-                        opacity: '70%',
+                        opacity: '85%',
                         zIndex: 1,
                         borderRadius: "8px"
                     }}
@@ -249,35 +254,27 @@ export default function OrdersSection({ setShowOrderDetails, setSelectedOrder }:
 
                         {/* Change Pickup Zone Modal */}
                         {showPickupZoneModal && (
-                            <div className="absolute top-12 right-4 bg-yellow-200 border-2 border-gray-300 p-5 rounded-lg shadow-xl z-30 w-72">
+                            <div style={{ backgroundColor: '#fed86e', opacity: 0.95 }} className="absolute top-32 right-4 border-2 border-gray-300 p-5 rounded-none shadow-xl z-30 w-72">
                                 <div className="flex flex-col">
+                                    <h3 style={{ color: '#a52a2a' }} className="font-bold mb-2">Change Pick Up Zone</h3>
                                     {zones.map((zone) => (
-                                        <label key={zone} className="flex items-center space-x-1 cursor-pointer">
+                                        <label key={zone} className="flex items-center space-x-1 cursor-pointer my-0.5">
                                             <input
                                                 type="radio"
                                                 name="pickupZone"
                                                 value={zone}
                                                 checked={selectedZone === zone}
                                                 onChange={() => setSelectedZone(zone)}
-                                                className="form-radio h-4 w-4 text-red-900"
+                                                className="form-radio h-4 w-4"
+                                                style={{ borderColor: '#e7964a' }}
                                             />
-                                            <span className="text-black font-medium">{zone}</span>
+                                            <span className="text-black font-semibold" style={{ color: '#3b36d8' }}>{zone}</span>
                                         </label>
                                     ))}
                                 </div>
                                 <div className="flex justify-center gap-3 mt-2">
-                                    <button 
-                                        onClick={handleSave} 
-                                        className="bg-red-900 hover:bg-red-800 text-white font-bold py-1 px-4 rounded-md shadow-md text-sm"
-                                    >
-                                        SAVE
-                                    </button>
-                                    <button 
-                                        onClick={handleCancel} 
-                                        className="bg-red-900 hover:bg-red-800 text-white font-bold py-1 px-4 rounded-md shadow-md text-sm"
-                                    >
-                                        CANCEL
-                                    </button>
+                                    <RegularButton text="Save" onClick={handleSave} fillColor="#5b0e01" />
+                                    <RegularButton text="Cancel" onClick={handleCancel} fillColor="#5b0e01" />
                                 </div>
                             </div>
                         )}
