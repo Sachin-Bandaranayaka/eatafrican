@@ -35,10 +35,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Fetch user details from database
+    // Use email for lookup since Supabase Auth UUIDs may differ from custom users table UUIDs
     const { data: userData, error: dbError } = await supabaseAdmin
       .from('users')
       .select('*')
-      .eq('id', signInData.user.id)
+      .eq('email', signInData.user.email)
       .single();
 
     if (dbError || !userData) {
