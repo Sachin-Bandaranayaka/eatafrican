@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCart } from '@/lib/cart-context';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ interface OrderDetails {
   restaurantName?: string;
 }
 
-export default function CheckoutSuccessPage() {
+function CheckoutSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
@@ -44,7 +44,7 @@ export default function CheckoutSuccessPage() {
   const fetchOrderDetails = async (id: string) => {
     try {
       const response = await fetch(`/api/orders/${id}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch order details');
       }
@@ -109,7 +109,7 @@ export default function CheckoutSuccessPage() {
         {/* Order Details Card */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Confirmation</h2>
-          
+
           <div className="space-y-4">
             <div className="flex justify-between items-center py-3 border-b">
               <span className="text-gray-600 font-medium">Order Number</span>
@@ -185,41 +185,41 @@ export default function CheckoutSuccessPage() {
           <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Enjoy your meal!</h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3 justify-center">
-              <Image 
-                src="/flags/ethiopia.png" 
-                alt="Ethiopia" 
-                width={36} 
-                height={24} 
+              <Image
+                src="/flags/ethiopia.png"
+                alt="Ethiopia"
+                width={36}
+                height={24}
                 className="rounded"
               />
               <span className="text-gray-700">ጣዕሙ ይውሰድ! (Enjoy your meal!)</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
-              <Image 
-                src="/flags/nigeria.png" 
-                alt="Nigeria" 
-                width={36} 
-                height={24} 
+              <Image
+                src="/flags/nigeria.png"
+                alt="Nigeria"
+                width={36}
+                height={24}
                 className="rounded"
               />
               <span className="text-gray-700">Make you chop well-well!</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
-              <Image 
-                src="/flags/ghana.png" 
-                alt="Ghana" 
-                width={36} 
-                height={24} 
+              <Image
+                src="/flags/ghana.png"
+                alt="Ghana"
+                width={36}
+                height={24}
                 className="rounded"
               />
               <span className="text-gray-700">Medi wo aduan!</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
-              <Image 
-                src="/flags/kenya.png" 
-                alt="Kenya" 
-                width={36} 
-                height={24} 
+              <Image
+                src="/flags/kenya.png"
+                alt="Kenya"
+                width={36}
+                height={24}
                 className="rounded"
               />
               <span className="text-gray-700">Chakula Chema!</span>
@@ -251,5 +251,22 @@ export default function CheckoutSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center relative z-10">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading order details...</p>
+          </div>
+        </div>
+      }
+    >
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }
