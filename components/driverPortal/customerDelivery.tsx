@@ -30,7 +30,7 @@ export default function CustomerDelivery({ order, setShowCustomerDelivery, setSh
                     className="absolute inset-0"
                     style={{
                         backgroundColor: "white",
-                        opacity: '70%',
+                        opacity: '85%',
                         zIndex: 1,
                         borderRadius: "8px"
                     }}

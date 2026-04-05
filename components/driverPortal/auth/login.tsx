@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, KeyRound, ArrowLeft } from 'lucide-react';
-import Register from './register'; // Assuming this component exists and is styled correctly
+import Image from 'next/image';
+import { ChevronDown } from 'lucide-react';
+import Register from './register';
+import RegularButton from '@/app/components/RegularButton';
 
 // Main component to simulate the entire application flow
 export default function App({ onLoginSuccess: onGlobalLoginSuccess }: { onLoginSuccess: () => void; }) {
@@ -31,58 +33,23 @@ function DriverPortalAuth({ onLoginSuccess, onRegisterClick }: DriverPortalAuthP
     const handleBackToLoginClick = () => setAuthView('login');
     const handleResetSubmit = () => setAuthView('reset_sent');
 
-    // Styled container for auth forms, consistent with SuperAdminLogin
-    const AuthContainer = ({ children }: { children: React.ReactNode }) => (
-        <main className="flex justify-center min-h-screen ">
-            <div className="w-5/6 md:w-full px-2 md:px-32 md:mx-auto">
-                <section className="relative bg-white bg-opacity-80 border-2 border-[#f1c232] rounded-lg flex flex-col items-center justify-center p-3 z-10">
-                    <div className="md:w-full">
-                        <h1 className="text-center font-bold text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] md:px-32 text-red-600 mb-2">
-                            EAT AFRICAN DRIVER PORTAL
-                        </h1>
-                        {children}
-                        {authView === 'login' && (
-                            <div className="text-center mt-4">
-                                <a
-                                    href="#"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        onRegisterClick();
-                                    }}
-                                    className="text-green-600 font-bold text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
-                                >
-                                    Register Your Driver Account
-                                </a>
-                            </div>
-                        )}
-                    </div>
-                </section>
-            </div>
-        </main>
-    );
-
     // Render the correct view based on the auth state
     switch (authView) {
         case 'forgot':
             return (
-                <AuthContainer>
-                    <ForgotPasswordView onSubmit={handleResetSubmit} onBackToLogin={handleBackToLoginClick} />
-                </AuthContainer>
+                <ForgotPasswordView onSubmit={handleResetSubmit} onBackToLogin={handleBackToLoginClick} />
             );
         case 'reset_sent':
             return (
-                <AuthContainer>
-                    <ResetPasswordMessageView onBackToLogin={handleBackToLoginClick} />
-                </AuthContainer>
+                <ResetPasswordMessageView onBackToLogin={handleBackToLoginClick} />
             );
         default: // 'login'
             return (
-                <AuthContainer>
-                    <LoginView
-                        onLoginClick={onLoginSuccess}
-                        onForgotPasswordClick={handleForgotPasswordClick}
-                    />
-                </AuthContainer>
+                <LoginView
+                    onLoginClick={onLoginSuccess}
+                    onForgotPasswordClick={handleForgotPasswordClick}
+                    onRegisterClick={onRegisterClick}
+                />
             );
     }
 }
@@ -91,9 +58,10 @@ function DriverPortalAuth({ onLoginSuccess, onRegisterClick }: DriverPortalAuthP
 interface LoginViewProps {
     onLoginClick: () => void;
     onForgotPasswordClick: () => void;
+    onRegisterClick: () => void;
 }
 
-function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
+function LoginView({ onLoginClick, onForgotPasswordClick, onRegisterClick }: LoginViewProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -143,64 +111,96 @@ function LoginView({ onLoginClick, onForgotPasswordClick }: LoginViewProps) {
     };
 
     return (
-        <div className="w-full flex flex-col items-center">
-            <h2 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-green-700 mb-2">LOGIN</h2>
-            
-            {error && (
-                <div className="w-full md:px-36 mb-3">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-xs">
-                        {error}
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
+            <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+                <div
+                    className="w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64"
+                    style={{ minHeight: '500px' }}
+                >
+                    <div className="text-left mb-8">
+                        <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">
+                            DRIVER LOGIN
+                        </h1>
                     </div>
+                    
+                    {error && (
+                        <div className="mb-4 p-2 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                            {error}
+                        </div>
+                    )}
+                    
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-bold text-white mb-1">
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                disabled={loading}
+                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-gray-900"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-bold text-white mb-1">
+                                Password
+                            </label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                disabled={loading}
+                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-gray-900"
+                            />
+                        </div>
+                        <div className="text-left">
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onForgotPasswordClick();
+                                }}
+                                className="text-sm font-bold text-yellow-400 hover:text-yellow-300"
+                            >
+                                Forgot Password?
+                            </a>
+                        </div>
+                        <div className="flex justify-start">
+                            <RegularButton
+                                type="submit"
+                                text={loading ? 'LOGGING IN...' : 'LOGIN'}
+                                fillColor="#00fe3c"
+                                fontColor="#000000"
+                                borderColor="#fbbf24"
+                                // borderWidth="4px"
+                                disabled={loading}
+                                // borderRadius="rounded-full"
+                                // padding="py-2 px-8"
+                            />
+                        </div>
+                        <div className="mt-6">
+                            <p className="text-white text-sm">
+                                Don't have an account?{' '}
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        onRegisterClick();
+                                    }}
+                                    className="text-yellow-400 font-bold hover:text-yellow-300"
+                                >
+                                    Register as Driver
+                                </a>
+                            </p>
+                        </div>
+                    </form>
                 </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="w-full md:px-36">
-                <div className="space-y-1">
-                    <label htmlFor="email" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Email</label>
-                    <input 
-                        id="email" 
-                        type="email" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={loading}
-                        className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" 
-                    />
-                </div>
-                <div className="space-y-1 mt-3">
-                    <label htmlFor="password" className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-gray-700">Password</label>
-                    <input 
-                        id="password" 
-                        type="password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading}
-                        className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" 
-                    />
-                </div>
-                <div className="text-center mt-3">
-                    <a
-                        href="#"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onForgotPasswordClick();
-                        }}
-                        className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-red-600"
-                    >
-                        Forgot Password?
-                    </a>
-                </div>
-                <div className="flex flex-row text-center justify-center mt-3">
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 hover:bg-amber-900 disabled:opacity-50 disabled:cursor-not-allowed text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
-                    >
-                        {loading ? 'LOGGING IN...' : 'LOGIN'}
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     );
 }
@@ -212,38 +212,75 @@ interface ForgotPasswordViewProps {
 }
 
 function ForgotPasswordView({ onSubmit, onBackToLogin }: ForgotPasswordViewProps) {
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        // Simulate API call
+        setTimeout(() => {
+            setLoading(false);
+            onSubmit();
+        }, 1000);
+    };
+
     return (
-        <div className="w-full flex flex-col items-center text-center">
-            <h2 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-green-700 mb-2">RESET PASSWORD</h2>
-            <p className="text-black font-semibold mb-4 px-12 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]">
-                Enter the email address associated with your account, and we’ll send you instructions to reset your password.
-            </p>
-            <form className="w-full px-24 md:px-36 space-y-3">
-                <div className="space-y-1 text-left">
-                    <input id="reset-email" type="email" className="w-full border border-gray-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500" />
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
+            <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+                <div
+                    className="w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64"
+                    style={{ minHeight: '400px' }}
+                >
+                    <div className="text-left mb-8">
+                        <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">
+                            RESET PASSWORD
+                        </h1>
+                    </div>
+                    
+                    <p className="text-white mb-6 text-sm">
+                        Enter the email address associated with your account, and we'll send you instructions to reset your password.
+                    </p>
+                    
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label htmlFor="reset-email" className="block text-sm font-bold text-white mb-1">
+                                Email
+                            </label>
+                            <input
+                                id="reset-email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                disabled={loading}
+                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-gray-900"
+                            />
+                        </div>
+                        <div className="flex justify-start">
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="px-8 py-2 bg-red-900 text-white font-bold rounded-full border-4 border-amber-300 hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {loading ? 'SUBMITTING...' : 'SUBMIT'}
+                            </button>
+                        </div>
+                        <div className="mt-4">
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onBackToLogin();
+                                }}
+                                className="text-sm font-bold text-yellow-400 hover:text-yellow-300"
+                            >
+                                Back To Login
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <div className="md:w-full">
-                    <a
-                        href="#"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onBackToLogin();
-                        }}
-                        className="w-full text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-blue-400"
-                    >
-                        Back To Login
-                    </a>
-                </div>
-                <div className="flex flex-row text-center justify-center">
-                    <button
-                        type="button"
-                        onClick={onSubmit}
-                        className="md:w-1/2 px-2 py-0.5 text-white font-semibold rounded-lg bg-amber-800 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]"
-                    >
-                        SUBMIT
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     );
 }
@@ -255,24 +292,39 @@ interface ResetPasswordMessageViewProps {
 
 function ResetPasswordMessageView({ onBackToLogin }: ResetPasswordMessageViewProps) {
     return (
-        <div className="w-full flex flex-col items-center text-center">
-            <h2 className="text-[9px] md:text-[15px] lg:text-[15px] xl:text-[15px] 2xl:text-[15px] font-bold text-green-700 mb-2 uppercase">Password Reset Instructions Sent</h2>
-            <div className="text-black space-y-3 font-semibold mb-4 px-12 text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]">
-                <p>
-                    You will receive an email shortly with a link to reset your password. If you don’t see it, kindly check your spam or junk folder.
-                </p>
-                <p>For your security, the link will expire in 30 minutes.</p>
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen p-4">
+            <div className="flex items-center justify-center md:justify-start p-4 md:p-8">
+                <div
+                    className="w-full max-w-md md:max-w-96 p-2 md:p-8 md:ml-64"
+                    style={{ minHeight: '400px' }}
+                >
+                    <div className="text-left mb-8">
+                        <h1 className="text-2xl font-bold text-white mb-2 underline underline-offset-8">
+                            PASSWORD RESET SENT
+                        </h1>
+                    </div>
+                    
+                    <div className="text-white space-y-4 mb-6">
+                        <p className="text-sm">
+                            You will receive an email shortly with a link to reset your password. If you don't see it, kindly check your spam or junk folder.
+                        </p>
+                        <p className="text-sm">
+                            For your security, the link will expire in 30 minutes.
+                        </p>
+                    </div>
+                    
+                    <a
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onBackToLogin();
+                        }}
+                        className="text-sm font-bold text-yellow-400 hover:text-yellow-300"
+                    >
+                        Back To Login
+                    </a>
+                </div>
             </div>
-            <a
-                href="#"
-                onClick={(e) => {
-                    e.preventDefault();
-                    onBackToLogin();
-                }}
-                className="text-[7px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px] font-bold text-blue-400 mt-3 mb-3"
-            >
-                Back To Login
-            </a>
         </div>
     );
 }

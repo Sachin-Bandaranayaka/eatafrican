@@ -99,18 +99,6 @@ export default function RestaurantsClient() {
     return (
         <ClientOnly>
             <main className="relative min-h-screen overflow-hidden text-white">
-                {/* Background image */}
-                <div className="fixed inset-0 z-0">
-                    <Image
-                        src="/images/background-collage-desktop.png"
-                        alt="Food background"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-black/70"></div>
-                </div>
-
                 {/* Content container */}
                 <div className="relative z-10 min-h-screen flex flex-col">
                     {/* Use the shared SiteHeader component */}
@@ -204,7 +192,10 @@ export default function RestaurantsClient() {
                     </div>
 
                     {/* Footer */}
-                    <SiteFooter />
+                    <SiteFooter 
+                        onOpenComponent={(component) => console.log('Open component:', component)} 
+                        onCloseComponent={() => console.log('Close component')} 
+                    />
                 </div>
 
                 {/* Modals */}

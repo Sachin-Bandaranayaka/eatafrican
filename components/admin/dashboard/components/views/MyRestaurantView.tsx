@@ -16,10 +16,10 @@ const MyRestaurantView = () => {
                         RESTAURANT INFORMATION
                     </button>
                     <button
-                        onClick={() => setMyRestaurantTab('OPENING_TIME')}
-                        className={`flex p-1 px-2.5 text-white text-[9px] md:text-[12px] ${myRestaurantTab === 'OPENING_TIME' ? 'bg-blue-900' : 'bg-blue-500'}`}
+                        onClick={() => setMyRestaurantTab('OPENING_HOURS')}
+                        className={`flex p-1 px-2.5 text-white text-[9px] md:text-[12px] ${myRestaurantTab === 'OPENING_HOURS' ? 'bg-blue-900' : 'bg-blue-500'}`}
                     >
-                        OPENING TIME
+                        OPENING HOURS
                     </button>
                 </div>
             </div>
@@ -68,7 +68,7 @@ const MyRestaurantView = () => {
                     </div>
                 </div>
             )}
-            {myRestaurantTab === 'OPENING_TIME' && (
+            {myRestaurantTab === 'OPENING_HOURS' && (
                 <div className="p-6">
                     <h3 className="font-bold text-gray-800">Opening Time Management</h3>
                     <p>UI for managing opening times goes here.</p>

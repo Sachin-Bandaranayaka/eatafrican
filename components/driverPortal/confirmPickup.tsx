@@ -71,7 +71,7 @@ export default function ConfirmPickup({ order, setShowConfirmPickup, setShowConf
                 className="absolute inset-0"
                 style={{
                     backgroundColor: "white",
-                    opacity: '70%',
+                    opacity: '85%',
                     zIndex: 1,
                     borderRadius: "8px"
                 }}
