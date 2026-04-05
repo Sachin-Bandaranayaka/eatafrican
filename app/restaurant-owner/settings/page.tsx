@@ -181,7 +181,7 @@ export default function RestaurantSettings() {
                             onClick={() => router.back()}
                             className="text-gray-600 hover:text-gray-800"
                         >
-                            ← Back
+                            Back
                         </button>
                     </div>
 
@@ -368,3 +368,4 @@ export default function RestaurantSettings() {
         </div>
     );
 }
+
